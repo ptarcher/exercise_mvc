@@ -1,0 +1,93 @@
+====================================================================================================================
+Table Name: t_exercise_totals
+Description of Table: Totals from each Training Session
+--------------------------------------------------------------------------------------------------------------------
+Column Name     | Description                                                     | Type              | Key
+--------------------------------------------------------------------------------------------------------------------
+session_date    | Start Date and Time of the exercise session                     | date & time       | Primary
+description     | Description of the exercise session                             | text              |
+training_type   | Training Aim for the exercise session                           | text              | FK: t_training_types:type
+duration        | The ammount of time the session lasted                          | time              |
+distance        | Distance travelled in the session                               | double precession |
+start_lat       | Start latitude of the session                                   | double precession |
+start_long      | Start longitude of the session                                  | double precession | 
+start_elevation | Start elevation of the session                                  | double precession |
+stop_lat        | Stop  latitude of the session                                   | double precession |
+stop_long       | Stop  longitude of the session                                  | double precession |
+stop_elevation  | Stop  elevation of the session                                  | double precession |
+avg_heartrate   | Average Heart Rate of the session                               | double precession |
+avg_power       | Average Power output of the session                             | double precession |
+avg_cadence     | Average Cadence of the session                                  | double precession |
+avg_speed       | Average Speed of the session                                    | double precession |
+energy_used     | Total Energy used over the session                              | double precession |
+
+
+=================================================================================================================
+Table Name: t_exercise_data
+Description of Table:
+-----------------------------------------------------------------------------------------------------------------
+Column Name  | Description                                                     | Type              | Foreign Key
+-----------------------------------------------------------------------------------------------------------------
+session_date | Start Date and Time of the exercise session                     | date & time       | Primary, FK: t_exercise_totals:session_date
+time         | Number of seconds into the session when data point was recorded | time              | Primary
+heartrate    | Heart Rate data point                                           | double precession |
+postion_lat  | GPS latitude  position data point                               | double precession |
+postion_long | GPS longitude position data point                               | double precession |
+elevation    | Height above sea level data point                               | double precession |
+power        | Power output data point                                         | double precession | 
+temperature  | Temperature data point                                          | double precession |
+cadence      | Cadence data point                                              | double precession |
+speed        | Speed data point                                                | double precession |
+distance     | Distance into the session                                       | double precession |
+
+# Could include averages to make grapghing it easy
+#heartrate_avg | Average Heart Rate data point                                  | double precession |
+#power_avg    | Average Power output data point                                 | double precession |
+#cadence_avg  | Average Cadence data point                                      | double precession | 
+#speed_avg    | Average Speed data point                                        | double precession |
+
+==============================================================================================================
+Table Name: t_training_categories
+Description of Table: List of training categories
+--------------------------------------------------------------------------------------------------------------
+Column Name               | Description                                                     | Type   | Key
+--------------------------------------------------------------------------------------------------------------
+category                  | Category of the training                                        | text   | Primary 
+description               | Description of the training categor                             | text   |
+
+==============================================================================================================
+Table Name: t_training_types
+Description of Table: List of training types
+--------------------------------------------------------------------------------------------------------------
+Column Name               | Description                                                     | Type   | Key
+--------------------------------------------------------------------------------------------------------------
+type_short                | Short version of the training type                              | text   | Primary
+type                      | Type of the training                                            | text   |  
+category                  | Category of the training type                                   | text   | FK: t_training_categories:category
+description               | Description of the training type                                | text   |
+
+
+==============================================================================================================
+Table Name: t_routes
+Description of Table: 
+--------------------------------------------------------------------------------------------------------------
+Column Name               | Description                                                     | Type   | Key
+--------------------------------------------------------------------------------------------------------------
+description               | Description of the route                                        | text   | Primary
+point_index               | The order of the GPS                                            | int    | Primary
+point_lat                 | GPS latitude  point                                             | double |
+point_long                | GPS longitude point                                             | double |
+
+======================================================================================================
+Table Name: t_daily_vitals
+Description of Table:
+-------------------------------------------------------------------------------------------------------------------
+Column Name               | Description                                                     | Type        | Key
+-------------------------------------------------------------------------------------------------------------------
+timestamp                 | Timestamp of the measurement                                    | date & time | Primary
+weight                    | in kilograms                                                    | double
+height                    | in meters                                                       | double
+percentage_body_muscle    | Percentage of total body mass which is muscle                   | double
+percentage_body_hydration | Percentage of total body mass which is water                    | double
+percentage_body_fat       | Percentage of total body mass which is fat                      | double
+

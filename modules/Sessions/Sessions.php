@@ -1,0 +1,123 @@
+<?php
+/*
+ *  Description: Display simple single digits of the current weather.
+ *  Date:        02/06/2009
+ *  
+ *  Author:      Paul Archer <ptarcher@gmail.com>
+ *
+ * Copyright (C) 2009  Paul Archer
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+require_once('core/Module.php');
+require_once('modules/Sessions/UploadForm.php');
+
+class ModuleSessions extends CoreModule {
+    var $module_description = array(
+        'name'        => 'Session',
+        'description' => 'View, create and edit exercise sessions',
+        'version'     => '0.1',
+        'author'      => 'Paul Archer',
+    );
+
+    static function _getHooks() {
+        $hooks = array(
+            array("hook"     => "navigator",
+                  "category" => "Sessions", 
+                  "name"     => "View Sessions", 
+                  "module"   => "Sessions", 
+                  "action"   => "view"),
+            array("hook"     => "navigator",
+                  "category" => "Sessions", 
+                  "name"     => "New Session", 
+                  "module"   => "Sessions", 
+                  "action"   => "create"),
+            array("hook"     => "navigator",
+                  "category" => "Sessions", 
+                  "name"     => "Upload from File", 
+                  "module"   => "Sessions", 
+                  "action"   => "viewUpload"),
+        );
+
+        return $hooks;
+    }
+    
+    function index() {
+        $this->view();
+    }
+
+    function view() {
+        $sessions = $this->api->getSessions();
+
+        $view = CoreView::factory('sessions');
+        $view->sessions = $sessions;
+        echo $view->render();
+    }
+
+    function create() {
+        $exercise_types = $this->api->getExerciseTypes();
+
+        $this->view->renderCreate($exercise_types);
+    }
+
+    function doCreate() {
+        // TODO: Check if it was successful
+        $this->api->createSession($_SESSION['userid'], 
+                                  $_POST['date'],
+                                  $_POST['type'],
+                                  $_POST['description'],
+                                  $_POST['duration'],
+                                  $_POST['distance'],
+                                  $_POST['avg_hr'],
+                                  $_POST['avg_speed'],
+                                  $_POST['comments']);
+
+        // TODO: Display it was successful
+        $this->view->renderCreate($exercise_types);
+    }
+
+    /*
+    function viewUpload() {
+        //$exercise_types = $this->api->getExerciseTypes();
+        $this->view->renderUpload($exercise_types);
+    }*/
+
+    function viewUpload() {
+        $form = new SessionUploadForm();
+        if ($form->validate()) {
+            $upload = $form->getSubmitValue('form_upload');
+            print_r($upload);
+
+            exec('/usr/bin/fitdecode -r '.$upload['tmp_name'], $xml_records);
+            exec('/usr/bin/fitdecode -l '.$upload['tmp_name'], $xml_laps);
+            exec('/usr/bin/fitdecode -s '.$upload['tmp_name'], $xml_session);
+
+            //print_r($xml_session);
+            print_r($xml_laps);
+        }
+
+        $view = CoreView::factory('sessionsfileupload');
+        $view->addForm($form);
+        $view->sessions = $sessions;
+        $view->subTemplate = 'genericForm.tpl';
+        echo $view->render();
+    }
+
+
+    function doUpload() {
+    }
+}
+
+?>

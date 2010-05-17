@@ -1,0 +1,28 @@
+/* shamelessly taken from wordpress 2.5 - thank you guys!!! */
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font: 12px "Lucida Grande", "Lucida Sans Unicode", Tahoma, Verdana,
+		sans-serif;
+}
+
+form {
+	margin-left: 8px;
+	padding: 16px 16px 40px 16px;
+	font-weight: bold;
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+form p {
+	margin-bottom: 24px;
+}
+
+a {
+	text-decoration: none;
+}
