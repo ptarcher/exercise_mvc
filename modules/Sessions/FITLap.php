@@ -55,6 +55,8 @@ class FITLap {
 }
 
 function parseLaps($xml_laps) {
+    $lap_array = array();
+
     $parser = xml_parser_create();
     xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
     xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
@@ -64,29 +66,27 @@ function parseLaps($xml_laps) {
     // loop through the structures
     foreach ($tags as $key => $value) {
         if ($key == "lap") {
-            echo "Found a lap<br>\n";
             $molranges = $value;
             // each contiguous pair of array entries are the 
             // lower and upper range for each molecule definition
-
             for ($i=0; $i < count($molranges); $i+=2) {
                 $offset = $molranges[$i] + 1;
                 $len = $molranges[$i + 1] - $offset;
-                $tdb[] = parseLap(array_slice($values, $offset, $len));
+                $lap_array[] = parseLap(array_slice($values, $offset, $len));
             }
         } else {
             continue;
         }
     }
-    return $tdb;
+    return $lap_array;
 }
 
-function parseLap($mvalues) 
+function parseLap($lap_values) 
 {
-    for ($i=0; $i < count($mvalues); $i++) {
-        $mol[$mvalues[$i]["tag"]] = $mvalues[$i]["value"];
+    for ($i=0; $i < count($lap_values); $i++) {
+        $lap[$lap_values[$i]["tag"]] = $lap_values[$i]["value"];
     }
-    return new FITLap($mol);
+    return new FITLap($lap);
 }
 
 ?>

@@ -110,10 +110,9 @@ class ModuleSessions extends CoreModule {
             $xml_session = implode("\n", $xml_session);
 
             //print_r($xml_session);
-            print_r($xml_laps);
-            $laps = parseLaps($xml_laps);
-            print_r($laps);
-
+            $laps     = parseLaps($xml_laps);
+            //$sessions = parseSessions($xml_laps);
+            //$records  = parseRecords($xml_laps);
         }
 
         $view = CoreView::factory('sessionsfileupload');
