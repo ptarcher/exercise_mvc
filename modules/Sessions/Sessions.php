@@ -22,7 +22,9 @@
  */
 
 require_once('core/Module.php');
+require_once('core/View.php');
 require_once('modules/Sessions/UploadForm.php');
+require_once('modules/Sessions/FITLap.php');
 
 class ModuleSessions extends CoreModule {
     var $module_description = array(
@@ -98,14 +100,20 @@ class ModuleSessions extends CoreModule {
         $form = new SessionUploadForm();
         if ($form->validate()) {
             $upload = $form->getSubmitValue('form_upload');
-            print_r($upload);
 
             exec('/usr/bin/fitdecode -r '.$upload['tmp_name'], $xml_records);
             exec('/usr/bin/fitdecode -l '.$upload['tmp_name'], $xml_laps);
             exec('/usr/bin/fitdecode -s '.$upload['tmp_name'], $xml_session);
 
+            $xml_records = implode("\n", $xml_records);
+            $xml_laps    = implode("\n", $xml_laps);
+            $xml_session = implode("\n", $xml_session);
+
             //print_r($xml_session);
             print_r($xml_laps);
+            $laps = parseLaps($xml_laps);
+            print_r($laps);
+
         }
 
         $view = CoreView::factory('sessionsfileupload');
