@@ -25,6 +25,8 @@ require_once('core/Module.php');
 require_once('core/View.php');
 require_once('modules/Sessions/UploadForm.php');
 require_once('modules/Sessions/FITLap.php');
+require_once('modules/Sessions/FITSession.php');
+require_once('modules/Sessions/FITRecords.php');
 
 class ModuleSessions extends CoreModule {
     var $module_description = array(
@@ -111,8 +113,10 @@ class ModuleSessions extends CoreModule {
 
             //print_r($xml_session);
             $laps     = parseLaps($xml_laps);
-            //$sessions = parseSessions($xml_laps);
-            //$records  = parseRecords($xml_laps);
+            $sessions = parseSessions($xml_session);
+            $records  = parseRecords($xml_records);
+
+            print_r($records);
         }
 
         $view = CoreView::factory('sessionsfileupload');
