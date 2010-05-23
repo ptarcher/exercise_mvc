@@ -64,7 +64,6 @@ class ModuleSessions extends CoreModule {
 
     function view() {
         $sessions = $this->api->getSessions();
-
         $view = CoreView::factory('sessions');
         $view->sessions = $sessions;
         echo $view->render();
@@ -115,8 +114,52 @@ class ModuleSessions extends CoreModule {
             $laps     = parseLaps($xml_laps);
             $sessions = parseSessions($xml_session);
             $records  = parseRecords($xml_records);
+    
+            /* There should only be one session */
+            if (is_array($sessions)) {
+                $session = $sessions[0];
+            }
 
-            print_r($records);
+            /* Insert the session data into the database */
+            
+            $this->api->createSession($session['timestamp'],
+                                      'E1',
+                                      'Untitled',
+                                      $session['total_timer_time'],
+                                      $session['total_distance'],
+                                      $session['avg_heart_rate'],
+                                      $session['avg_speed'],
+                                      '');
+
+
+            /*
+            $now = strftime('%FT%T%z');
+            $ftime = strptime($now, '%FT%T%z');
+            $unixTimestamp = mktime($ftime['tm_hour'],
+                                   $ftime['tm_min'],
+                                   $ftime['tm_sec'],
+                                   1 ,
+                                   $ftime['tm_yday'] + 1,
+                                   $ftime['tm_year'] + 1900); 
+            print_r($unixTimestamp);
+            echo "\n<br>\n";
+            print_r(time());
+            */
+            
+            /* Add the matching data points */
+            foreach($records as $record) {
+                $this->api->insertSessionData($session['timestamp'],
+                                              $record['timestamp'],
+                                              $record['distance'],
+                                              $record['heart_rate'],
+                                              $record['speed'],
+                                              $record['position_lat'],
+                                              $record['position_long']);
+            }
+
+            //print_r($laps);
+            //print_r($session);
+            //print_r($records);
         }
 
         $view = CoreView::factory('sessionsfileupload');

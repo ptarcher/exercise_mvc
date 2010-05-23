@@ -121,7 +121,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     :comment,
                     :userid)";
         $stmt = $this->dbQueries->dbh->prepare($sql);
-        
+
         // TODO: Add the types
         $stmt->bindParam(":session_date",  $session_date);
         $stmt->bindParam(":type_short",    $type_short,         PDO::PARAM_STR);
@@ -148,6 +148,55 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(":userid",        $_SESSION['userid'], PDO::PARAM_STR);
 
         $stmt->execute() or die("Unable to execute $sql");
+    }
+
+    function insertSessionData($session_date, $time, $distance, $heartrate, $speed, $latitude, $longitude) {
+        $sql = "INSERT INTO t_exercise_data
+                   (session_date,
+                    time,
+                    distance,
+                    heartrate,
+                    speed,
+                    latitude,
+                    longitude,
+                    userid)
+                VALUES 
+                   (:session_date,
+                    :time,
+                    :distance,
+                    :heartrate,
+                    :speed,
+                    :latitude,
+                    :longitude,
+                    :userid)";
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+                    print_r($session_date);
+                    echo "\n";
+                    print_r($time);
+                    echo "\n";
+                    print_r($distance);
+                    echo "\n";
+                    print_r($heartrate);
+                    echo "\n";
+                    print_r($speed);
+                    echo "\n";
+                    print_r($latitude);
+                    echo "\n";
+                    print_r($longitude);
+                    echo "\n";
+
+        // TODO: Add the types
+        $stmt->bindParam(":session_date",  $session_date);
+        $stmt->bindParam(":time",          $time);
+        $stmt->bindParam(":distance",      $distance);
+        $stmt->bindParam(":heartrate",     $heartrate);
+        $stmt->bindParam(":speed",         $speed);
+        $stmt->bindParam(":latitude",      $latitude);
+        $stmt->bindParam(":longitude",     $longitude);
+        $stmt->bindParam(":userid",        $_SESSION['userid'], PDO::PARAM_STR);
+
+        $stmt->execute() or die("Unable to execute $sql".print_r($stmt));
     }
 
 

@@ -21,37 +21,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class FITRecord {
-/*
-    var $timestamp;
-    var $start_time;
-    var $start_position_lat;
-    var $start_position_long;
-    var $total_elapsed_time;
-    var $total_timer_time;
-    var $total_distance;
-    var $message_index;
-    var $total_calories;
-    var $avg_speed;
-    var $max_speed;
-    var $total_ascent;
-    var $total_descent;
-    var $first_lap_index;
-    var $num_laps;
-    var $event;
-    var $event_type;
-    var $sport;
-    var $avg_heart_rate;
-    var $max_heart_rate;
-*/
-
-    function FITRecord($xml_struct) 
-    {
-        foreach ($xml_struct as $key => $value)
-            $this->$key = $xml_struct[$key];
-    }
-}
-
 function parseRecords($xml) {
     $record_array = array();
 
@@ -64,7 +33,7 @@ function parseRecords($xml) {
 
     // loop through the structures
     foreach ($tags as $key => $value) {
-        if ($key == "session") {
+        if ($key == "record") {
             $molranges = $value;
             // each contiguous pair of array entries are the 
             // lower and upper range for each molecule definition
@@ -85,7 +54,7 @@ function parseRecord($record_values)
     for ($i=0; $i < count($record_values); $i++) {
         $record[$record_values[$i]["tag"]] = $record_values[$i]["value"];
     }
-    return new FITRecord($record);
+    return $record;
 }
 
 ?>
