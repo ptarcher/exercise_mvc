@@ -21,39 +21,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class FITLap {
-    var $timestamp;
-    var $start_time;
-    var $start_position_lat;
-    var $start_position_long;
-    var $end_position_lat;
-    var $end_position_long;
-    var $total_elapsed_time;
-    var $total_timer_time;
-    var $total_distance;
-    var $swc_lat;
-    var $swc_long;
-    var $message_index;
-    var $total_calories;
-    var $avg_speed;
-    var $max_speed;
-    var $total_ascent;
-    var $total_descent;
-    var $event;
-    var $event_type;
-    var $avg_heart_rate;
-    var $max_heart_rate;
-    var $intensity;
-    var $lap_trigger;
-    var $sport;
-
-    function FITLap($xml_struct) 
-    {
-        foreach ($xml_struct as $key => $value)
-            $this->$key = $xml_struct[$key];
-    }
-}
-
 function parseLaps($xml_laps) {
     $lap_array = array();
 
@@ -86,7 +53,7 @@ function parseLap($lap_values)
     for ($i=0; $i < count($lap_values); $i++) {
         $lap[$lap_values[$i]["tag"]] = $lap_values[$i]["value"];
     }
-    return new FITLap($lap);
+    return $lap;
 }
 
 ?>
