@@ -42,31 +42,6 @@ class dbQueries
 
     }
 
-    function queryExerciseSessions() {
-        $sql = "SELECT 
-                    session_date,
-                    type_short,
-                    description,
-                    duration,
-                    distance,
-                    avg_heartrate,
-                    avg_speed,
-                    comment
-                FROM 
-                    t_exercise_totals
-                WHERE 
-                    userid = '$this->userid'
-                ORDER BY
-                    session_date DESC
-                LIMIT 
-                    100";
-        $stmt = $this->dbh->prepare($sql);
-        $stmt->execute();
-
-        // Reverse the array as the date is descending
-        return new exerciseSession($stmt->fetchAll(PDO::FETCH_ASSOC));
-    }
-
     function __destruct() {
         $this->dbh = null;
     }
