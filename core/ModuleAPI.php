@@ -23,7 +23,6 @@
 
 require_once('libraries/database/dbQueries.php');
 
-
 class CoreModuleAPI {
     var $dbh;
 
