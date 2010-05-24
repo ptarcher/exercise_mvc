@@ -164,7 +164,6 @@ class ModuleSessions extends CoreModule {
 
         $view = CoreView::factory('sessionsfileupload');
         $view->addForm($form);
-        $view->sessions = $sessions;
         $view->subTemplate = 'genericForm.tpl';
         echo $view->render();
     }
