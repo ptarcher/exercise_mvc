@@ -28,7 +28,7 @@ class dbQueries
     function __construct() {
         /* Connect to the database */
         try {
-            $this->dbh = new PDO(DB_TYPE.':host='.DB_HOST.';dbname='.DB_NAME,DB_USER,DB_PASSWORD);
+            $this->dbh = new PDO(DB_TYPE.':host='.DB_HOST.';dbname='.DB_NAME.';port='.DB_PORT,DB_USER,DB_PASSWORD);
 
         } catch (PDOException $e) {
             $debug=true;
@@ -39,7 +39,6 @@ class dbQueries
             }
             die();
         }
-
     }
 
     function __destruct() {
