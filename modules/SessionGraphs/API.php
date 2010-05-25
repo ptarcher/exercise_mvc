@@ -54,9 +54,7 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     userid       = :userid AND
                     session_date = :session_date
                 ORDER BY
-                    \"time\"     DESC
-                LIMIT 
-                    100";
+                    \"time\"     DESC";
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         $stmt->bindParam(":userid",       $_SESSION['userid'], PDO::PARAM_STR);
@@ -77,7 +75,7 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
 
     	// Get time in seconds since the start of the session
         $sql = "SELECT 
-                    extract(EPOCH from \"time\") as \"time\",
+                    (extract(EPOCH from \"time\") * 1000) AS \"time\",
                     ".$field."
                 FROM 
                     t_exercise_data
@@ -85,9 +83,7 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     userid       = :userid  AND
                     session_date = :session_date
                 ORDER BY
-                    \"time\"     DESC
-                LIMIT 
-                    100";
+                    \"time\"     DESC";
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         $stmt->bindParam(":userid",       $_SESSION['userid'], PDO::PARAM_STR);
@@ -110,9 +106,7 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     userid       = :userid  AND
                     session_date = :session_date
                 ORDER BY
-                    \"time\"     DESC
-                LIMIT 
-                    100";
+                    \"time\"     DESC";
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         $stmt->bindParam(":userid",       $_SESSION['userid'], PDO::PARAM_STR);

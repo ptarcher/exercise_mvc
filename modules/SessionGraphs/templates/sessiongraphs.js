@@ -6,8 +6,8 @@ $(function () {
 
     var options = {
         lines: { show: true },
-        points: { show: true },
-        xaxis: { tickDecimals: 0, tickSize: 1 }
+        //points: { show: true },
+        xaxis: { mode: "time", timeformat: "%H:%M:%S" }
     };
     var data = [];
     var placeholder = $("#placeholder");
