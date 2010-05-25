@@ -114,6 +114,7 @@ class ModuleSessions extends CoreModule {
             $laps     = parseLaps($xml_laps);
             $sessions = parseSessions($xml_session);
             $records  = parseRecords($xml_records);
+
     
             /* There should only be one session */
             if (is_array($sessions)) {
@@ -121,7 +122,6 @@ class ModuleSessions extends CoreModule {
             }
 
             /* Insert the session data into the database */
-            
             $this->api->createSession($session['timestamp'],
                                       'E1',
                                       'Untitled',
@@ -131,30 +131,44 @@ class ModuleSessions extends CoreModule {
                                       $session['avg_speed'],
                                       '');
 
+            /* Find the seconds since epoch so we can do simple maths */
+            $ftime = strptime($session['start_time'], '%FT%T%z');
+            $session_epoch = mktime($ftime['tm_hour'],
+                                    $ftime['tm_min'],
+                                    $ftime['tm_sec'],
+                                    1 ,
+                                    $ftime['tm_yday'] + 1,
+                                    $ftime['tm_year'] + 1900); 
 
-            /*
-            $now = strftime('%FT%T%z');
-            $ftime = strptime($now, '%FT%T%z');
-            $unixTimestamp = mktime($ftime['tm_hour'],
-                                   $ftime['tm_min'],
-                                   $ftime['tm_sec'],
-                                   1 ,
-                                   $ftime['tm_yday'] + 1,
-                                   $ftime['tm_year'] + 1900); 
-            print_r($unixTimestamp);
-            echo "\n<br>\n";
-            print_r(time());
-            */
-            
+            $last_interval = -1;
             /* Add the matching data points */
             foreach($records as $record) {
-                $this->api->insertSessionData($session['timestamp'],
-                                              $record['timestamp'],
-                                              $record['distance'],
-                                              $record['heart_rate'],
-                                              $record['speed'],
-                                              $record['position_lat'],
-                                              $record['position_long']);
+                /* Convert the timestamp into an interval */
+                $ftime = strptime($record['timestamp'], '%FT%T%z');
+                $record_epoch = mktime($ftime['tm_hour'],
+                                       $ftime['tm_min'],
+                                       $ftime['tm_sec'],
+                                       1 ,
+                                       $ftime['tm_yday'] + 1,
+                                       $ftime['tm_year'] + 1900);
+                $record_interval = $record_epoch - $session_epoch;
+
+                /* Skip duplicates, they will cause issues in graphs */
+                if ($last_interval != $record_interval) {
+                    /* TODO: add the other factors */
+                    $this->api->insertSessionData($session['timestamp'],
+                                                  $record_interval,
+                                                  $record['distance'],
+                                                  $record['heart_rate'],
+                                                  $record['speed'],
+                                                  $record['position_lat'],
+                                                  $record['position_long'],
+                                                  $record['altitude'],
+                                                  $record['cadence'],
+                                                  $record['temperature'],
+                                                  $record['power']);
+                }
+                $last_interval = $record_interval;
             }
 
             //print_r($laps);
