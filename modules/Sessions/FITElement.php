@@ -1,11 +1,11 @@
 <?php
 /*
- *  Description: Configuration Settings
- *  Date:        02/06/2009
+ *  Description: Base FIT XML Element
+ *  Date:        26/05/2010
  *  
  *  Author:      Paul Archer <ptarcher@gmail.com>
  *
- * Copyright (C) 2009 Paul Archer
+ * Copyright (C) 2009  Paul Archer
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -21,13 +21,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* The database settings */
-define('DB_USER',     'ptarcher');
-define('DB_PASSWORD', 'thomas');
-define('DB_HOST',     'localhost');
-define('DB_PORT',     '5433');
-//define('DB_TYPE',     'mysql');
-define('DB_TYPE',     'pgsql');
-define('DB_NAME',     'exercise');
+class FITElement {
+    function __construct($xml_struct)
+    {
+        foreach ($xml_struct as $key => $value)
+            $this->$key = $xml_struct[$key];
+    }
+}
 
 ?>

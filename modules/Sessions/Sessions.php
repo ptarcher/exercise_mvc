@@ -121,17 +121,17 @@ class ModuleSessions extends CoreModule {
             }
 
             /* Insert the session data into the database */
-            $this->api->createSession($session['timestamp'],
+            $this->api->createSession($session->timestamp,
                                       'E1',
                                       'Untitled',
-                                      $session['total_timer_time'],
-                                      $session['total_distance'],
-                                      $session['avg_heart_rate'],
-                                      $session['avg_speed'],
+                                      $session->total_timer_time,
+                                      $session->total_distance,
+                                      $session->avg_heart_rate,
+                                      $session->avg_speed,
                                       '');
 
             /* Find the seconds since epoch so we can do simple maths */
-            $ftime = strptime($session['start_time'], '%FT%T%z');
+            $ftime = strptime($session->start_time, '%FT%T%z');
             $session_epoch = mktime($ftime['tm_hour'],
                                     $ftime['tm_min'],
                                     $ftime['tm_sec'],
@@ -143,7 +143,7 @@ class ModuleSessions extends CoreModule {
             /* Add the matching data points */
             foreach($records as $record) {
                 /* Convert the timestamp into an interval */
-                $ftime = strptime($record['timestamp'], '%FT%T%z');
+                $ftime = strptime($record->timestamp, '%FT%T%z');
                 $record_epoch = mktime($ftime['tm_hour'],
                                        $ftime['tm_min'],
                                        $ftime['tm_sec'],
@@ -155,17 +155,17 @@ class ModuleSessions extends CoreModule {
                 /* Skip duplicates, they will cause issues in graphs */
                 if ($last_interval != $record_interval) {
                     /* TODO: add the other factors */
-                    $this->api->insertSessionData($session['timestamp'],
+                    $this->api->insertSessionData($session->timestamp,
                                                   $record_interval,
-                                                  $record['distance'],
-                                                  $record['heart_rate'],
-                                                  $record['speed'],
-                                                  $record['position_lat'],
-                                                  $record['position_long'],
-                                                  $record['altitude'],
-                                                  $record['cadence'],
-                                                  $record['temperature'],
-                                                  $record['power']);
+                                                  $record->distance,
+                                                  $record->heart_rate,
+                                                  $record->speed,
+                                                  $record->position_lat,
+                                                  $record->position_long,
+                                                  $record->altitude,
+                                                  $record->cadence,
+                                                  $record->temperature,
+                                                  $record->power);
                 }
                 $last_interval = $record_interval;
             }

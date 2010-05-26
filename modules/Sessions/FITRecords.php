@@ -20,14 +20,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-class FITElement {
-    function __construct($xml_struct)
-    {
-        foreach ($xml_struct as $key => $value)
-            $this->$key = $xml_struct[$key];
-    }
-}
+require_once "modules/Sessions/FITElement.php";
 
 class FITRecord extends FITElement {
     var $timestamp;

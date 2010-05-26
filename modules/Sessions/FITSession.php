@@ -21,6 +21,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once "modules/Sessions/FITElement.php";
+
+class FITSession extends FITElement {
+    var $timestamp;
+    var $start_time;
+    var $start_position_lat;
+    var $start_position_long;
+    var $total_elapsed_time;
+    var $total_timer_time;
+    var $total_distance;
+    var $message_index;
+    var $total_calories;
+    var $avg_speed;
+    var $max_speed;
+    var $total_ascent;
+    var $total_descent;
+    var $first_lap_index;
+    var $num_laps;
+    var $event;
+    var $event_type;
+    var $sport;
+    var $avg_heart_rate;
+    var $max_heart_rate;
+}
+
 function parseSessions($xml) {
     $session_array = array();
 
@@ -54,7 +79,7 @@ function parseSession($session_values)
     for ($i=0; $i < count($session_values); $i++) {
         $session[$session_values[$i]["tag"]] = $session_values[$i]["value"];
     }
-    return $session;
+    return new FITSession($session);
 }
 
 ?>
