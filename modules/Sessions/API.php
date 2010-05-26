@@ -99,7 +99,10 @@ class ModuleSessionsAPI extends CoreModuleAPI {
     }
 
 
-    function createSession($session_date, $type_short, $description, $duration, $distance, $avg_heartrate, $avg_speed, $comment) {
+    function createSession($session_date, $type_short, 
+                           $description,  $duration, 
+                           $distance,     $avg_heartrate, 
+                           $avg_speed,    $comment) {
         $sql = "INSERT INTO t_exercise_totals
                    (session_date,
                     type_short,
@@ -133,14 +136,20 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(":comment",       $comment,            PDO::PARAM_STR);
         $stmt->bindParam(":userid",        $_SESSION['userid'], PDO::PARAM_STR);
 
-        $stmt->execute() or die("Unable to execute $sql");
+        $stmt->execute();
     }
 
     function deleteSession($session_date) {
-        $sql = "DELETE FROM t_exercise_totals
+        $sql = "BEGIN;
+                DELETE FROM t_exercise_data
                 WHERE
                     session_date = :session_date AND
-                    userid       = :userid";
+                    userid       = :userid;
+                DELETE FROM t_exercise_totals
+                WHERE
+                    session_date = :session_date AND
+                    userid       = :userid;
+                COMMIT";
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         // TODO: Add the types
@@ -189,7 +198,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         //$stmt->bindParam(":temperature",   $temperature);
         $stmt->bindParam(":userid",        $_SESSION['userid'], PDO::PARAM_STR);
 
-        $stmt->execute() or die("Unable to execute $sql".print_r($stmt));
+        $stmt->execute(); //or die("Unable to execute $sql");
     }
 
 
