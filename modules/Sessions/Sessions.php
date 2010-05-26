@@ -114,7 +114,6 @@ class ModuleSessions extends CoreModule {
             $laps     = parseLaps($xml_laps);
             $sessions = parseSessions($xml_session);
             $records  = parseRecords($xml_records);
-
     
             /* There should only be one session */
             if (is_array($sessions)) {

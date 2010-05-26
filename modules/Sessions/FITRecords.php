@@ -21,6 +21,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+class FITElement {
+    function __construct($xml_struct)
+    {
+        foreach ($xml_struct as $key => $value)
+            $this->$key = $xml_struct[$key];
+    }
+}
+
+class FITRecord extends FITElement {
+    var $timestamp;
+    var $position_lat;
+    var $position_long;
+    var $distance;
+    var $speed;
+    var $heart_rate;
+}
+
 function parseRecords($xml) {
     $record_array = array();
 
@@ -54,7 +71,7 @@ function parseRecord($record_values)
     for ($i=0; $i < count($record_values); $i++) {
         $record[$record_values[$i]["tag"]] = $record_values[$i]["value"];
     }
-    return $record;
+    return new FITRecord($record);
 }
 
 ?>
