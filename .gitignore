@@ -1,0 +1,14 @@
+# Don't publish configuration changes
+config.php
+
+# Ignore ctags
+tags
+
+# Ignore all dotfiles...
+.*
+
+# except for .gitignore
+!.gitignore
+
+# Ignore tmp files
+tmp/
