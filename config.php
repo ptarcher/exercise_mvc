@@ -22,10 +22,10 @@
  */
 
 /* The database settings */
-define('DB_USER',     'username');
-define('DB_PASSWORD', 'password');
+define('DB_USER',     'ptarcher');
+define('DB_PASSWORD', 'thomas');
 define('DB_HOST',     'localhost');
-define('DB_PORT',     '3306');
+define('DB_PORT',     '5433');
 //define('DB_TYPE',     'mysql');
 define('DB_TYPE',     'pgsql');
 define('DB_NAME',     'exercise');
