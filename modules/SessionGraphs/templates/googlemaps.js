@@ -25,7 +25,7 @@ function LoadGPXFileIntoGoogleMap(map, filename)
 
 function GoogleMaps_Init()
 {
-    var url  = "http://localhost/~ptarcher/exercise_mvc/index.php?module=APIAccess&method=SessionGraphs.getGPXData&format=gpx&session_date="+encodeURIComponent(session_date);
+    var url  = "index.php?module=APIAccess&method=SessionGraphs.getGPXData&format=gpx&session_date="+encodeURIComponent(session_date);
 
     MyMap = new GMap2(document.getElementById("map"));
     MyMap.addControl(new GLargeMapControl());
