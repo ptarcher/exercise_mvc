@@ -35,8 +35,8 @@ class LoginForm extends CoreForm
 		$this->addElements( $formElements );
 
 		$formRules = array(
-			array('form_login',    sprintf(Translate('General_Required'), Translate('Login_Login')), 'required'),
-			array('form_password', sprintf(Translate('General_Required'), Translate('Login_Password')), 'required'),
+			array('form_login',    sprintf('The %s is required', 'Login'), 'required'),
+			array('form_password', sprintf('The %s is required', 'Password'), 'required'),
 		);
 		$this->addRules( $formRules );
 
