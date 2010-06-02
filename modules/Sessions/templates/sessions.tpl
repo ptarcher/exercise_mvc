@@ -10,7 +10,7 @@
     <!-- TODO: Move this into the module code -->
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/sprintf.js"></script>
-    <script type="text/javascript" src="libraries/javascript/jquery.js"></script>
+    <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="modules/Sessions/templates/sessions.js"></script>
 </head>
 
