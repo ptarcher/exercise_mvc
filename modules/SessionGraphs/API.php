@@ -40,33 +40,10 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
 		return self::$instance;
 	}
 	
-    function getSessionData($session_date) {
-    	// Get time in seconds since the start of the session
-        $sql = "SELECT 
-                    session_date,
-                    extract(EPOCH from \"time\") as \"time\",
-                    distance,
-                    speed,
-                    heartrate
-                FROM 
-                    t_exercise_data
-                WHERE 
-                    userid       = :userid AND
-                    session_date = :session_date
-                ORDER BY
-                    \"time\"     DESC";
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-
-        $stmt->bindParam(":userid",       $_SESSION['userid'], PDO::PARAM_STR);
-        $stmt->bindParam(":session_date", $session_date,       PDO::PARAM_STR);
-
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
     function getSessionDataField($session_date, $field) {
-        $valid_fields = array('distance','speed','heartrate');
+        $valid_fields = array('distance','speed','heartrate',
+                              'altitude','power','temperature',
+                              'cadence');
 
         // Make sure field is a valid field
         if (!in_array($field, $valid_fields)) {
@@ -91,9 +68,18 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
 
         $stmt->execute();
 
+        /* TODO: Do this in a more generic way */
         $data = $stmt->fetchAll(PDO::FETCH_NUM);
-        return array("label" => $field, "data" => $data);
+        $rows = array();
+        foreach ($data as $row) {
+            for ($i = 0; $i < count($row); $i++) {
+                $myrow[$i] = doubleval($row[$i]);
+            }
+            $rows[] = $myrow;
+        }
+        return $rows;
     }
+
 
     function getGPXData($session_date) {
     	// Get time in seconds since the start of the session
