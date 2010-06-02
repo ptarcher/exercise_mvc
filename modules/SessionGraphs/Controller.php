@@ -22,6 +22,7 @@
  */
 
 require_once('core/Module.php');
+require_once('core/View.php');
 
 class ModuleSessionGraphs extends CoreModule {
     var $module_description = array(

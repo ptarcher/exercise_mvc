@@ -1,12 +1,12 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: outputfilter.cachebuster.php 1499 2009-10-14 00:58:50Z vipsoft $
  * 
- * @category Piwik
+ * @category Core
  * @package SmartyPlugins
  */
 

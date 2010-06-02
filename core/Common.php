@@ -1,23 +1,23 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  *
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: Common.php 1818 2010-01-31 04:23:06Z vipsoft $
  *
- * @category Piwik
- * @package Piwik
+ * @category Core
+ * @package Core
  */
 
 /**
- * Static class providing functions used by both the CORE of Piwik and the visitor Tracking engine.
+ * Static class providing functions used by both the CORE of Core and the visitor Tracking engine.
  *
  * This is the only external class loaded by the /piwik.php file.
  * This class should contain only the functions that are used in
  * both the CORE and the piwik.php statistics logging engine.
  *
- * @package Piwik
+ * @package Core
  */
 class Common
 {
@@ -228,7 +228,7 @@ class Common
 	 *
 	 * How this method works:
 	 * - The variable returned has been htmlspecialchars to avoid the XSS security problem.
-	 * - The single quotes are not protected so "Piwik's amazing" will still be "Piwik's amazing".
+	 * - The single quotes are not protected so "Core's amazing" will still be "Core's amazing".
 	 *
 	 * - Transformations are:
 	 * 		- '&' (ampersand) becomes '&amp;'

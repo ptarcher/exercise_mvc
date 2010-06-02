@@ -33,7 +33,7 @@ class Translate
 
 	public function loadEnglishTranslation()
 	{
-		require PIWIK_INCLUDE_PATH . '/lang/en.php';
+		require CORE_INCLUDE_PATH . '/lang/en.php';
 		$this->mergeTranslationArray($translations);
 		$this->setLocale();
 		$this->englishLanguageLoaded = true;
@@ -48,7 +48,7 @@ class Translate
 			return;
 		}
 		
-		require PIWIK_INCLUDE_PATH . '/lang/' . $language . '.php';
+		require CORE_INCLUDE_PATH . '/lang/' . $language . '.php';
 		$this->mergeTranslationArray($translations);
 		$this->setLocale();
 	}
@@ -60,7 +60,7 @@ class Translate
 			$GLOBALS['translations'] = array();
 		}
 		// we could check that no string overlap here
-		$GLOBALS['translations'] = array_merge($GLOBALS['Piwik_translations'], array_filter($translation, 'strlen'));
+		$GLOBALS['translations'] = array_merge($GLOBALS['Core_translations'], array_filter($translation, 'strlen'));
 	}
 	
 	/**

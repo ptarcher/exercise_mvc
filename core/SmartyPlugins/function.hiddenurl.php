@@ -1,12 +1,12 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: function.hiddenurl.php 1420 2009-08-22 13:23:16Z vipsoft $
  * 
- * @category Piwik
+ * @category Core
  * @package SmartyPlugins
  */
 
@@ -32,8 +32,8 @@
  */
 function smarty_function_hiddenurl($params, &$smarty)
 {
-	$queryStringModified = Piwik_Url::getCurrentQueryStringWithParametersModified( $params );
-	$urlValues = Piwik_Common::getArrayFromQueryString($queryStringModified);
+	$queryStringModified = Core_Url::getCurrentQueryStringWithParametersModified( $params );
+	$urlValues = Core_Common::getArrayFromQueryString($queryStringModified);
 	
 	$out = '';
 	foreach($urlValues as $name => $value)

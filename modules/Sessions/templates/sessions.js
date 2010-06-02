@@ -1,14 +1,14 @@
 function getDeleteSessionAJAX( idSession )
 {
-	var ajaxRequest = piwikHelper.getStandardAjaxConf();
-	piwikHelper.toggleAjaxLoading();
+	var ajaxRequest = coreHelper.getStandardAjaxConf();
+	coreHelper.toggleAjaxLoading();
 		
 	var parameters = {};
 	parameters.module = 'APIAccess';
 	parameters.format = 'json';
  	parameters.method =  'Sessions.deleteSession';
  	parameters.idSession = idSession;
- 	parameters.token_auth = piwik.token_auth;
+ 	parameters.token_auth = core.token_auth;
 	
 	ajaxRequest.data = parameters;
 	
@@ -17,8 +17,8 @@ function getDeleteSessionAJAX( idSession )
 
 function getAddSessionAJAX( row )
 {
-	var ajaxRequest = piwikHelper.getStandardAjaxConf();
-	piwikHelper.toggleAjaxLoading();
+	var ajaxRequest = coreHelper.getStandardAjaxConf();
+	coreHelper.toggleAjaxLoading();
 
 	var parameters    = {};
     parameters.module = 'APIAccess';
@@ -40,8 +40,8 @@ function getAddSessionAJAX( row )
 
 function getUpdateSessionAJAX( row )
 {
-	var ajaxRequest = piwikHelper.getStandardAjaxConf();
-	piwikHelper.toggleAjaxLoading();
+	var ajaxRequest = coreHelper.getStandardAjaxConf();
+	coreHelper.toggleAjaxLoading();
 	
     // TODO, Add all the session paramaters
 	var parameters    = {};
@@ -64,7 +64,7 @@ function getUpdateSessionAJAX( row )
 
 $(document).ready( function() {
 	$('.addRowSession').click( function() {
-		piwikHelper.ajaxHideError();
+		coreHelper.ajaxHideError();
 		$(this).toggle();
 		
 		var numberOfRows = $('table#editSessions')[0].rows.length;
@@ -86,13 +86,13 @@ $(document).ready( function() {
 		;
 		$('#'+newRowId).keypress( submitSessionOnEnter );
 		$('.addsession').click( function(){ $.ajax( getAddSessionAJAX($('tr#'+newRowId)) ); } );
-		$('.cancel').click(function() { piwikHelper.ajaxHideError(); $(this).parents('tr').remove();  $('.addRowSession').toggle(); });
+		$('.cancel').click(function() { coreHelper.ajaxHideError(); $(this).parents('tr').remove();  $('.addRowSession').toggle(); });
 	
 	 } );
 	
 	// when click on deleteuser, the we ask for confirmation and then delete the user
 	$('.deleteSession').click( function() {
-			piwikHelper.ajaxHideError();
+			coreHelper.ajaxHideError();
 			var idRow = $(this).attr('id');
 			var nameToDelete = $(this).parent().parent().find('input#description').val() || $(this).parent().parent().find('td#description').html();
 			var session_date = $(this).parent().parent().find('#date').html();
@@ -105,7 +105,7 @@ $(document).ready( function() {
 	var alreadyEdited = new Array;
 	$('.editSession')
 		.click( function() {
-			piwikHelper.ajaxHideError();
+			coreHelper.ajaxHideError();
 			var idRow = $(this).attr('id');
 			if(alreadyEdited[idRow]==1) return;
 			alreadyEdited[idRow] = 1;

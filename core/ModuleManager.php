@@ -1,33 +1,33 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: ModuleManager.php 1632 2009-12-08 22:48:44Z matt $
  * 
- * @category Piwik
- * @package Piwik
+ * @category Core
+ * @package Core
  */
 
 /**
- * @see core/PluginsFunctions/Menu.php
- * @see core/PluginsFunctions/AdminMenu.php
- * @see core/PluginsFunctions/WidgetsList.php
- * @see core/PluginsFunctions/Sql.php
+ * @see core/ModulesFunctions/Menu.php
+ * @see core/ModulesFunctions/AdminMenu.php
+ * @see core/ModulesFunctions/WidgetsList.php
+ * @see core/ModulesFunctions/Sql.php
  */
  /*
-require_once PIWIK_INCLUDE_PATH . '/core/PluginsFunctions/Menu.php';
-require_once PIWIK_INCLUDE_PATH . '/core/PluginsFunctions/AdminMenu.php';
-require_once PIWIK_INCLUDE_PATH . '/core/PluginsFunctions/WidgetsList.php';
-require_once PIWIK_INCLUDE_PATH . '/core/PluginsFunctions/Sql.php';
+require_once CORE_INCLUDE_PATH . '/core/ModulesFunctions/Menu.php';
+require_once CORE_INCLUDE_PATH . '/core/ModulesFunctions/AdminMenu.php';
+require_once CORE_INCLUDE_PATH . '/core/ModulesFunctions/WidgetsList.php';
+require_once CORE_INCLUDE_PATH . '/core/ModulesFunctions/Sql.php';
 */
 require_once ('libraries/Event/Dispatcher.php');
 require_once ('libraries/Event/Notification.php');
 
 /**
- * @package Piwik
- * @subpackage Piwik_ModuleManager
+ * @package Core
+ * @subpackage Core_ModuleManager
  */
 class ModuleManager
 {
@@ -36,21 +36,21 @@ class ModuleManager
 	 */
 	public $dispatcher;
 	
-	protected $pluginsToLoad = array();
+	protected $modulesToLoad = array();
 	protected $languageToLoad = null;
 
-	protected $doLoadPlugins = true;
-	protected $loadedPlugins = array();
+	protected $doLoadModules = true;
+	protected $loadedModules = array();
 	
-	protected $doLoadAlwaysActivatedPlugins = true;
-	protected $pluginToAlwaysActivate = array( 'CoreHome', 'CoreUpdater', 'CoreAdminHome', 'CorePluginsAdmin' );
+	protected $doLoadAlwaysActivatedModules = true;
+	protected $moduleToAlwaysActivate = array( 'CoreHome', 'CoreUpdater', 'CoreAdminHome', 'CoreModulesAdmin' );
 
 	static private $instance = null;
 	
 	/**
-	 * Returns the singleton Piwik_ModuleManager
+	 * Returns the singleton Core_ModuleManager
 	 *
-	 * @return Piwik_ModuleManager
+	 * @return Core_ModuleManager
 	 */
 	static public function getInstance()
 	{
@@ -67,185 +67,185 @@ class ModuleManager
 		$this->dispatcher = Event_Dispatcher::getInstance();
 	}
 	
-	public function isPluginAlwaysActivated( $name )
+	public function isModuleAlwaysActivated( $name )
 	{
-		return in_array( $name, $this->pluginToAlwaysActivate);
+		return in_array( $name, $this->moduleToAlwaysActivate);
 	}
 	
-	public function isPluginActivated( $name )
+	public function isModuleActivated( $name )
 	{
-		return in_array( $name, $this->pluginsToLoad)
-			|| $this->isPluginAlwaysActivated( $name );		
+		return in_array( $name, $this->modulesToLoad)
+			|| $this->isModuleAlwaysActivated( $name );		
 	}
 	
-	public function isPluginLoaded( $name )
+	public function isModuleLoaded( $name )
 	{
-		return isset($this->loadedPlugins[$name]);
+		return isset($this->loadedModules[$name]);
 	}
 	
 	/**
-	 * Reads the directories inside the plugins/ directory and returns their names in an array
+	 * Reads the directories inside the modules/ directory and returns their names in an array
 	 *
 	 * @return array
 	 */
-	public function readPluginsDirectory()
+	public function readModulesDirectory()
 	{
-		$pluginsName = glob( INCLUDE_PATH . '/plugins/*', GLOB_ONLYDIR);
-		$pluginsName = $pluginsName === false ? array() : array_map('basename', $pluginsName);
-		return $pluginsName;
+		$modulesName = glob( INCLUDE_PATH . '/modules/*', GLOB_ONLYDIR);
+		$modulesName = $modulesName === false ? array() : array_map('basename', $modulesName);
+		return $modulesName;
 	}
 
-	public function deactivatePlugin($pluginName)
+	public function deactivateModule($moduleName)
 	{
-		$plugins = $this->pluginsToLoad;
-		$key = array_search($pluginName,$plugins);
+		$modules = $this->modulesToLoad;
+		$key = array_search($moduleName,$modules);
 		if($key !== false)
 		{
-			unset($plugins[$key]);
+			unset($modules[$key]);
 		}
 	}
 	
-	public function setPluginsToLoad( array $pluginsToLoad )
+	public function setModulesToLoad( array $modulesToLoad )
 	{
-		// case no plugins to load
-		if(is_null($pluginsToLoad))
+		// case no modules to load
+		if(is_null($modulesToLoad))
 		{
-			$pluginsToLoad = array();
+			$modulesToLoad = array();
 		}
-		$this->pluginsToLoad = $pluginsToLoad;
-		$this->loadPlugins();
+		$this->modulesToLoad = $modulesToLoad;
+		$this->loadModules();
 	}
 	
-	public function doNotLoadPlugins()
+	public function doNotLoadModules()
 	{
-		$this->doLoadPlugins = false;
+		$this->doLoadModules = false;
 	}
 
-	public function doNotLoadAlwaysActivatedPlugins()
+	public function doNotLoadAlwaysActivatedModules()
 	{
-		$this->doLoadAlwaysActivatedPlugins = false;
+		$this->doLoadAlwaysActivatedModules = false;
 	}
 	
-	public function postLoadPlugins()
+	public function postLoadModules()
 	{
-		$plugins = $this->getLoadedPlugins();
-		foreach($plugins as $plugin)
+		$modules = $this->getLoadedModules();
+		foreach($modules as $module)
 		{
-			$this->loadTranslation( $plugin, $this->languageToLoad );
-			$plugin->postLoad();
+			$this->loadTranslation( $module, $this->languageToLoad );
+			$module->postLoad();
 		}
 	}
 	
 	/**
-	 * Returns an array containing the plugins class names (eg. 'Piwik_UserCountry' and NOT 'UserCountry')
+	 * Returns an array containing the modules class names (eg. 'Core_UserCountry' and NOT 'UserCountry')
 	 *
 	 * @return array
 	 */
-	public function getLoadedPluginsName()
+	public function getLoadedModulesName()
 	{
-		return array_map('get_class', $this->getLoadedPlugins());
+		return array_map('get_class', $this->getLoadedModules());
 	}
 	
 	/**
 	 * Returns an array of key,value with the following format: array(
-	 * 		'UserCountry' => Piwik_Plugin $pluginObject,
-	 * 		'UserSettings' => Piwik_Plugin $pluginObject,
+	 * 		'UserCountry' => Core_Module $moduleObject,
+	 * 		'UserSettings' => Core_Module $moduleObject,
 	 * 	);
 	 *
 	 * @return array 
 	 */
-	public function getLoadedPlugins()
+	public function getLoadedModules()
 	{
-		return $this->loadedPlugins;
+		return $this->loadedModules;
 	}
 
 	/**
-	 * Returns the given Piwik_Plugin object 
+	 * Returns the given Core_Module object 
 	 *
 	 * @param string $name
-	 * @return Piwik_Piwik
+	 * @return Core_Core
 	 */
-	public function getLoadedPlugin($name)
+	public function getLoadedModule($name)
 	{
-		if(!isset($this->loadedPlugins[$name]))
+		if(!isset($this->loadedModules[$name]))
 		{
-			throw new Exception("The plugin '$name' has not been loaded.");
+			throw new Exception("The module '$name' has not been loaded.");
 		}
-		return $this->loadedPlugins[$name];
+		return $this->loadedModules[$name];
 	}
 	
 	/**
-	 * Load the plugins classes installed.
-	 * Register the observers for every plugin.
+	 * Load the modules classes installed.
+	 * Register the observers for every module.
 	 * 
 	 */
-	public function loadPlugins()
+	public function loadModules()
 	{
-		$this->pluginsToLoad = array_unique($this->pluginsToLoad);
+		$this->modulesToLoad = array_unique($this->modulesToLoad);
 
-		if($this->doLoadAlwaysActivatedPlugins)
+		if($this->doLoadAlwaysActivatedModules)
 		{
-			$this->pluginsToLoad = array_merge($this->pluginsToLoad, $this->pluginToAlwaysActivate);
+			$this->modulesToLoad = array_merge($this->modulesToLoad, $this->moduleToAlwaysActivate);
 		}
 		
-		foreach($this->pluginsToLoad as $pluginName)
+		foreach($this->modulesToLoad as $moduleName)
 		{
-			if(!$this->isPluginLoaded($pluginName))
+			if(!$this->isModuleLoaded($moduleName))
 			{
-				$newPlugin = $this->loadPlugin($pluginName);	
-				if($this->doLoadPlugins
-					&& $this->isPluginActivated($pluginName))
+				$newModule = $this->loadModule($moduleName);	
+				if($this->doLoadModules
+					&& $this->isModuleActivated($moduleName))
 				{
-					$this->addPluginObservers( $newPlugin );
-					$this->addLoadedPlugin( $pluginName, $newPlugin);
+					$this->addModuleObservers( $newModule );
+					$this->addLoadedModule( $moduleName, $newModule);
 				}
 			}
 		}
 	}
 	
 	/**
-	 * Loads the plugin filename and instanciates the plugin with the given name, eg. UserCountry
-	 * Do NOT give the class name ie. Piwik_UserCountry, but give the plugin name ie. UserCountry 
+	 * Loads the module filename and instanciates the module with the given name, eg. UserCountry
+	 * Do NOT give the class name ie. Core_UserCountry, but give the module name ie. UserCountry 
 	 *
-	 * @param Piwik_Plugin $pluginName
+	 * @param Core_Module $moduleName
 	 */
-	public function loadPlugin( $pluginName )
+	public function loadModule( $moduleName )
 	{
-		if(isset($this->loadedPlugins[$pluginName]))
+		if(isset($this->loadedModules[$moduleName]))
 		{
-			return $this->loadedPlugins[$pluginName];
+			return $this->loadedModules[$moduleName];
 		}
-		$pluginFileName = $pluginName . '/' . $pluginName . '.php';
-		$pluginClassName = $pluginName;
+		$moduleFileName = $moduleName . '/' . $moduleName . '.php';
+		$moduleClassName = $moduleName;
 		
-		if( !Common::isValidFilename($pluginName))
+		if( !Common::isValidFilename($moduleName))
 		{
-			throw new Exception("The plugin filename '$pluginFileName' is not a valid filename");
+			throw new Exception("The module filename '$moduleFileName' is not a valid filename");
 		}
 		
-		$path = INCLUDE_PATH . '/plugins/' . $pluginFileName;
+		$path = INCLUDE_PATH . '/modules/' . $moduleFileName;
 
 		if(!file_exists($path))
 		{
-			throw new Exception("Unable to load plugin '$pluginName' because '$path' couldn't be found.
-			You can manually uninstall the plugin by removing the line <code>Plugins[] = $pluginName</code> from the Piwik config file.");
+			throw new Exception("Unable to load module '$moduleName' because '$path' couldn't be found.
+			You can manually uninstall the module by removing the line <code>Modules[] = $moduleName</code> from the Core config file.");
 		}
 
 		// Don't remove this.
-		// Our autoloader can't find plugins/PluginName/PluginName.php
-		require_once $path; // prefixed by PIWIK_INCLUDE_PATH
+		// Our autoloader can't find modules/ModuleName/ModuleName.php
+		require_once $path; // prefixed by CORE_INCLUDE_PATH
 		
-		if(!class_exists($pluginClassName, false))
+		if(!class_exists($moduleClassName, false))
 		{
-			throw new Exception("The class $pluginClassName couldn't be found in the file '$path'");
+			throw new Exception("The class $moduleClassName couldn't be found in the file '$path'");
 		}
-		$newPlugin = new $pluginClassName();
+		$newModule = new $moduleClassName();
 		
-		if(!($newPlugin instanceof Piwik_Plugin))
+		if(!($newModule instanceof Core_Module))
 		{
-			throw new Exception("The plugin $pluginClassName in the file $path must inherit from Piwik_Plugin.");
+			throw new Exception("The module $moduleClassName in the file $path must inherit from Core_Module.");
 		}
-		return $newPlugin;
+		return $newModule;
 	}
 	
 	public function setLanguageToLoad( $code )
@@ -254,82 +254,82 @@ class ModuleManager
 	}
 
 	/**
-	 * @param Piwik_Plugin $plugin
+	 * @param Core_Module $module
 	 */
-	public function unloadPlugin( $plugin )
+	public function unloadModule( $module )
 	{
-		if(!($plugin instanceof Piwik_Plugin ))
+		if(!($module instanceof Core_Module ))
 		{
-			$plugin = $this->loadPlugin( $plugin );
+			$module = $this->loadModule( $module );
 		}
-		$hooks = $plugin->getListHooksRegistered();
+		$hooks = $module->getListHooksRegistered();
 			
 		foreach($hooks as $hookName => $methodToCall)
 		{
-			$success = $this->dispatcher->removeObserver( array( $plugin, $methodToCall), $hookName );
+			$success = $this->dispatcher->removeObserver( array( $module, $methodToCall), $hookName );
 			if($success !== true)
 			{
-				throw new Exception("Error unloading plugin = ".$plugin->getClassName() . ", method = $methodToCall, hook = $hookName ");
+				throw new Exception("Error unloading module = ".$module->getClassName() . ", method = $methodToCall, hook = $hookName ");
 			}
 		}
-		unset($this->loadedPlugins[$plugin->getClassName()]);
+		unset($this->loadedModules[$module->getClassName()]);
 	}
 	
-	public function unloadPlugins()
+	public function unloadModules()
 	{
-		$pluginsLoaded = $this->getLoadedPlugins();
-		foreach($pluginsLoaded as $plugin)
+		$modulesLoaded = $this->getLoadedModules();
+		foreach($modulesLoaded as $module)
 		{
-			$this->unloadPlugin($plugin);
+			$this->unloadModule($module);
 		}
 	}
 
-	private function installPlugins()
+	private function installModules()
 	{
-		foreach($this->getLoadedPlugins() as $plugin)
+		foreach($this->getLoadedModules() as $module)
 		{		
-			$this->installPlugin($plugin);
+			$this->installModule($module);
 		}
 	}
 	
-	private function installPlugin( Piwik_Plugin $plugin )
+	private function installModule( Core_Module $module )
 	{
 		try{
-			$plugin->install();
+			$module->install();
 		} catch(Exception $e) {
-			throw new Piwik_ModuleManager_PluginException($plugin->getName(), $plugin->getClassName(), $e->getMessage());		}	
+			throw new Core_ModuleManager_ModuleException($module->getName(), $module->getClassName(), $e->getMessage());		}	
 	}
 	
 	
 	/**
-	 * For the given plugin, add all the observers of this plugin.
+	 * For the given module, add all the observers of this module.
 	 */
-	private function addPluginObservers( Piwik_Plugin $plugin )
+	private function addModuleObservers( Core_Module $module )
 	{
-		$hooks = $plugin->getListHooksRegistered();
+		$hooks = $module->getListHooksRegistered();
 		
 		foreach($hooks as $hookName => $methodToCall)
 		{
-			$this->dispatcher->addObserver( array( $plugin, $methodToCall), $hookName );
+			$this->dispatcher->addObserver( array( $module, $methodToCall), $hookName );
 		}
 	}
 	
 	/**
-	 * Add a plugin in the loaded plugins array
+	 * Add a module in the loaded modules array
 	 *
-	 * @param string plugin name without prefix (eg. 'UserCountry')
-	 * @param Piwik_Plugin $newPlugin
+	 * @param string module name without prefix (eg. 'UserCountry')
+	 * @param Core_Module $newModule
 	 */
-	private function addLoadedPlugin( $pluginName, Piwik_Plugin $newPlugin )
+	private function addLoadedModule( $moduleName, Core_Module $newModule )
 	{
-		$this->loadedPlugins[$pluginName] = $newPlugin;
+		$this->loadedModules[$moduleName] = $newModule;
 	}
 	
 	/**
-	 * @param Piwik_Plugin $plugin
+	 * @param Core_Module $module
 	 * @param string $langCode
 	 */
-	private function loadTranslation( $plugin, $langCode )
+	private function loadTranslation( $module, $langCode )
 	{
 		// we are certainly in Tracker mode, Zend is not loaded
 		if(!class_exists('Zend_Loader', false))
@@ -337,7 +337,7 @@ class ModuleManager
 			return ;
 		}
 		
-		$infos = $plugin->getInformation();		
+		$infos = $module->getInformation();		
 		if(!isset($infos['translationAvailable']))
 		{
 			$infos['translationAvailable'] = false;
@@ -349,9 +349,9 @@ class ModuleManager
 			return;
 		}
 		
-		$pluginName = $plugin->getClassName();
+		$moduleName = $module->getClassName();
 		
-		$path = PIWIK_INCLUDE_PATH . '/plugins/' . $pluginName .'/lang/%s.php';
+		$path = CORE_INCLUDE_PATH . '/modules/' . $moduleName .'/lang/%s.php';
 		
 		$defaultLangPath = sprintf($path, $langCode);
 		$defaultEnglishLangPath = sprintf($path, 'en');
@@ -368,81 +368,81 @@ class ModuleManager
 		}
 		else
 		{
-			throw new Exception("Language file not found for the plugin '$pluginName'.");
+			throw new Exception("Language file not found for the module '$moduleName'.");
 		}
-		Piwik_Translate::getInstance()->mergeTranslationArray($translations);
+		Core_Translate::getInstance()->mergeTranslationArray($translations);
 	}
 	
 	/**
 	 * @return array
 	 */
-	public function getInstalledPluginsName()
+	public function getInstalledModulesName()
 	{
 		if(!class_exists('Zend_Registry', false))
 		{
-			throw new Exception("Not possible to list installed plugins (case Tracker module)");
+			throw new Exception("Not possible to list installed modules (case Tracker module)");
 		}
-		$pluginNames = Zend_Registry::get('config')->PluginsInstalled->PluginsInstalled->toArray();
-		return $pluginNames;
+		$moduleNames = Zend_Registry::get('config')->ModulesInstalled->ModulesInstalled->toArray();
+		return $moduleNames;
 	}
 	
-	public function getInstalledPlugins()
+	public function getInstalledModules()
 	{
-		$plugins = $this->getLoadedPlugins();
-		$installed = $this->getInstalledPluginsName();
-		return array_intersect_key($plugins, array_combine($installed, array_fill(0, count($installed), 1)));
+		$modules = $this->getLoadedModules();
+		$installed = $this->getInstalledModulesName();
+		return array_intersect_key($modules, array_combine($installed, array_fill(0, count($installed), 1)));
 	}
 
-	private function installPluginIfNecessary( Piwik_Plugin $plugin )
+	private function installModuleIfNecessary( Core_Module $module )
 	{
-		$pluginName = $plugin->getClassName();
+		$moduleName = $module->getClassName();
 		
-		// is the plugin already installed or is it the first time we activate it?
-		$pluginsInstalled = $this->getInstalledPluginsName();
-		if(!in_array($pluginName,$pluginsInstalled))
+		// is the module already installed or is it the first time we activate it?
+		$modulesInstalled = $this->getInstalledModulesName();
+		if(!in_array($moduleName,$modulesInstalled))
 		{
-			$this->installPlugin($plugin);
-			$pluginsInstalled[] = $pluginName;
-			Zend_Registry::get('config')->PluginsInstalled = array('PluginsInstalled' => $pluginsInstalled);	
+			$this->installModule($module);
+			$modulesInstalled[] = $moduleName;
+			Zend_Registry::get('config')->ModulesInstalled = array('ModulesInstalled' => $modulesInstalled);	
 		}
 		
-		$information = $plugin->getInformation();
+		$information = $module->getInformation();
 		
-		// if the plugin is to be loaded during the statistics logging
-		if(isset($information['TrackerPlugin'])
-			&& $information['TrackerPlugin'] === true)
+		// if the module is to be loaded during the statistics logging
+		if(isset($information['TrackerModule'])
+			&& $information['TrackerModule'] === true)
 		{
-			$pluginsTracker = Zend_Registry::get('config')->Plugins_Tracker->Plugins_Tracker;
-			if(is_null($pluginsTracker))
+			$modulesTracker = Zend_Registry::get('config')->Modules_Tracker->Modules_Tracker;
+			if(is_null($modulesTracker))
 			{
-				$pluginsTracker = array();
+				$modulesTracker = array();
 			}
 			else
 			{
-				$pluginsTracker = $pluginsTracker->toArray();
+				$modulesTracker = $modulesTracker->toArray();
 			}
-			if(!in_array($pluginName, $pluginsTracker))
+			if(!in_array($moduleName, $modulesTracker))
 			{
-				$pluginsTracker[] = $pluginName;
-				Zend_Registry::get('config')->Plugins_Tracker = array('Plugins_Tracker' => $pluginsTracker);
+				$modulesTracker[] = $moduleName;
+				Zend_Registry::get('config')->Modules_Tracker = array('Modules_Tracker' => $modulesTracker);
 			}
 		}
 	}
 }
 
 /**
- * @package Piwik
- * @subpackage Piwik_ModuleManager
+ * @package Core
+ * @subpackage Core_ModuleManager
  */
-class ModuleManager_PluginException extends Exception 
+class ModuleManager_ModuleException extends Exception 
 {
-	function __construct($pluginName, $className, $message)
+	function __construct($moduleName, $className, $message)
 	{
-		parent::__construct("There was a problem installing the plugin ". $pluginName . ": " . $message. "
-				If this plugin has already been installed, and if you want to hide this message</b>, you must add the following line under the 
-				[PluginsInstalled] 
+		parent::__construct("There was a problem installing the module ". $moduleName . ": " . $message. "
+				If this module has already been installed, and if you want to hide this message</b>, you must add the following line under the 
+				[ModulesInstalled] 
 				entry in your config/config.ini.php file:
-				PluginsInstalled[] = $className" );
+				ModulesInstalled[] = $className" );
 	}
 }
 

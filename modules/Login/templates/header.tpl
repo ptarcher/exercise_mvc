@@ -29,5 +29,5 @@
 <!-- shamelessly taken from wordpress 2.5 - thank you guys!!! -->
 
 <div id="logo">
-	<a href="http://piwik.org" title="{$linkTitle}"><span class="h1"><span style="color: rgb(245, 223, 114);">B</span><span style="color: rgb(241, 175, 108);">i</span><span style="color: rgb(241, 117, 117);">k</span><span style="color: rgb(155, 106, 58);">e</span> <span class="description">Your bike management system</span></span></a>
+	<a href="http://archers.homelinux.com/~ptarcher/exercise_mvc/" title="{$linkTitle}"><span class="h1"><span style="color: rgb(245, 223, 114);">B</span><span style="color: rgb(241, 175, 108);">i</span><span style="color: rgb(241, 117, 117);">k</span><span style="color: rgb(155, 106, 58);">e</span> <span class="description">Your bike management system</span></span></a>
 </div>

@@ -1,12 +1,12 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: function.postEvent.php 1420 2009-08-22 13:23:16Z vipsoft $
  * 
- * @category Piwik
+ * @category Core
  * @package SmartyPlugins
  */
 
@@ -21,8 +21,8 @@
  * 		{postEvent name="template_footerUserCountry"}
  * </pre>
  * 
- * Plugins can then hook on this event by using the Piwik_AddAction function: 
- * 	Piwik_AddAction('template_footerUserCountry', 'functionToHookOnThisEvent');
+ * Plugins can then hook on this event by using the Core_AddAction function: 
+ * 	Core_AddAction('template_footerUserCountry', 'functionToHookOnThisEvent');
  * 
  * @param string $name The name of the event
  * @return string The string eventually modified by the plugins listening to this event

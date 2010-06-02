@@ -1,13 +1,13 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: Proxy.php 1530 2009-10-22 22:40:18Z matt $
  * 
- * @category Piwik
- * @package Piwik
+ * @category Core
+ * @package Core
  */
 
 /**
@@ -23,8 +23,8 @@ class API_Proxy_NoDefaultValue {}
  * 
  * It will also log the performance of API calls (time spent, parameter values, etc.) if logger available
  * 
- * @package Piwik
- * @subpackage Piwik_API
+ * @package Core
+ * @subpackage Core_API
  */
 class API_Proxy
 {
@@ -45,7 +45,7 @@ class API_Proxy
 	/**
 	 * Singleton, returns instance
 	 *
-	 * @return Piwik_API_Proxy
+	 * @return Core_API_Proxy
 	 */
 	static public function getInstance()
 	{
@@ -78,7 +78,7 @@ class API_Proxy
 	 * 
 	 * The method will introspect the methods, their parameters, etc. 
 	 * 
-	 * @param string ModuleName eg. "Piwik_UserSettings_API"
+	 * @param string ModuleName eg. "Core_UserSettings_API"
 	 */
 	public function registerClass( $className )
 	{
@@ -115,11 +115,11 @@ class API_Proxy
 	 * It also logs the API calls, with the parameters values, the returned value, the performance, etc.
 	 * You can enable logging in config/global.ini.php (log_api_call)
 	 * 
-	 * @param string The class name (eg. Piwik_Referers_API)
+	 * @param string The class name (eg. Core_Referers_API)
 	 * @param string The method name
 	 * @param array The parameters pairs (name=>value)
 	 * 
-	 * @throws Piwik_Access_NoAccessException 
+	 * @throws Core_Access_NoAccessException 
 	 */
 	public function call($className, $methodName, $parametersRequest )
 	{
@@ -142,7 +142,7 @@ class API_Proxy
 
 			// call the method
 			$returnedValue = call_user_func_array(array($object, $methodName), $finalParameters);
-		} catch(Piwik_Access_NoAccessException $e) {
+		} catch(Core_Access_NoAccessException $e) {
 			throw $e;
 		}
 
@@ -167,8 +167,8 @@ class API_Proxy
 	}
 	
 	/**
-	 * Returns the 'moduleName' part of 'Piwik_moduleName_API' classname 
-	 * @param string "Piwik_Referers_API"
+	 * Returns the 'moduleName' part of 'Core_moduleName_API' classname 
+	 * @param string "Core_Referers_API"
 	 * @return string "Referers"
 	 */ 
 	public function getModuleNameFromClassName( $className )
@@ -210,9 +210,9 @@ class API_Proxy
 	}
 	
 	/**
-	 * Includes the class Piwik_UserSettings_API by looking up plugins/UserSettings/API.php
+	 * Includes the class Core_UserSettings_API by looking up plugins/UserSettings/API.php
 	 *
-	 * @param string api class name eg. "Piwik_UserSettings_API"
+	 * @param string api class name eg. "Core_UserSettings_API"
 	 */
 	private function includeApiFile($fileName)
 	{
@@ -221,7 +221,7 @@ class API_Proxy
 
 		if(is_file($path))
 		{
-			require_once $path; // prefixed by PIWIK_INCLUDE_PATH
+			require_once $path; // prefixed by CORE_INCLUDE_PATH
 		}
 		else
 		{

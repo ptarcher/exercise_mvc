@@ -1,13 +1,13 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: ResponseBuilder.php 1420 2009-08-22 13:23:16Z vipsoft $
  * 
- * @category Piwik
- * @package Piwik
+ * @category Core
+ * @package Core
  */
 
 require_once('core/DataRender.php');
@@ -16,8 +16,8 @@ require_once('core/DataRender/xml.php');
 require_once('core/DataRender/gpx.php');
 
 /**
- * @package Piwik
- * @subpackage Piwik_API
+ * @package Core
+ * @subpackage Core_API
  */
 class API_ResponseBuilder
 {
@@ -33,12 +33,12 @@ class API_ResponseBuilder
 	/**
 	 * This method processes the data resulting from the API call.
 	 * 
-	 * - If the data resulted from the API call is a Piwik_DataTable then 
+	 * - If the data resulted from the API call is a Core_DataTable then 
 	 * 		- we apply the standard filters if the parameters have been found
 	 * 		  in the URL. For example to offset,limit the Table you can add the following parameters to any API
 	 *  	  call that returns a DataTable: filter_limit=10&filter_offset=20
 	 * 		- we apply the filters that have been previously queued on the DataTable
-	 *        @see Piwik_DataTable::queueFilter()
+	 *        @see Core_DataTable::queueFilter()
 	 * 		- we apply the renderer that generate the DataTable in a given format (XML, PHP, HTML, JSON, etc.) 
 	 * 		  the format can be changed using the 'format' parameter in the request.
 	 *        Example: format=xml
@@ -62,8 +62,8 @@ class API_ResponseBuilder
 		// If the returned value is an object DataTable we
 		// apply the set of generic filters if asked in the URL
 		// and we render the DataTable according to the format specified in the URL
-		if($value instanceof Piwik_DataTable
-			|| $value instanceof Piwik_DataTable_Array)
+		if($value instanceof Core_DataTable
+			|| $value instanceof Core_DataTable_Array)
 		{
 			return $this->handleDataTable($value);
 		}
@@ -154,7 +154,7 @@ class API_ResponseBuilder
 	 */	
 	protected function caseRendererPHPSerialize($defaultSerializeValue = 1)
 	{
-		$serialize = Piwik_Common::getRequestVar('serialize', $defaultSerializeValue, 'int', $this->request);
+		$serialize = Core_Common::getRequestVar('serialize', $defaultSerializeValue, 'int', $this->request);
 		if($serialize)
 		{
 			return true;
@@ -165,7 +165,7 @@ class API_ResponseBuilder
 	/**
 	 * Apply the specified renderer to the DataTable
 	 * 
-	 * @param Piwik_DataTable
+	 * @param Core_DataTable
 	 * @return string
 	 */
 	protected function getRenderedDataTable($dataTable)
@@ -177,7 +177,7 @@ class API_ResponseBuilder
 		{
 			// if the original dataStructure is a simpleDataTable 
 			// and has only one column, we return the value
-			if($dataTable instanceof Piwik_DataTable_Simple)
+			if($dataTable instanceof Core_DataTable_Simple)
 			{
 				$columns = $dataTable->getFirstRow()->getColumns();
 				if(count($columns) == 1)
@@ -195,13 +195,13 @@ class API_ResponseBuilder
 			return $dataTable;
 		}
 		
-		$renderer = Piwik_DataTable_Renderer::factory($format);
+		$renderer = Core_DataTable_Renderer::factory($format);
 		$renderer->setTable($dataTable);
-		$renderer->setRenderSubTables(Piwik_Common::getRequestVar('expanded', false, 'int', $this->request));
+		$renderer->setRenderSubTables(Core_Common::getRequestVar('expanded', false, 'int', $this->request));
 		if($format == 'php')
 		{
 			$renderer->setSerialize( $this->caseRendererPHPSerialize());
-			$renderer->setPrettyDisplay(Piwik_Common::getRequestVar('prettyDisplay', false, 'int', $this->request));
+			$renderer->setPrettyDisplay(Core_Common::getRequestVar('prettyDisplay', false, 'int', $this->request));
 		}
 		else if($format == 'html')
 		{
@@ -257,7 +257,7 @@ class API_ResponseBuilder
 
 	protected function handleScalar($scalar)
 	{
-		$dataTable = new Piwik_DataTable_Simple();
+		$dataTable = new Core_DataTable_Simple();
 		$dataTable->addRowsFromArray( array($scalar) );
 		return $this->getRenderedDataTable($dataTable);
 	}
@@ -265,9 +265,9 @@ class API_ResponseBuilder
 	protected function handleDataTable($datatable)
 	{
 		// if the flag disable_generic_filters is defined we skip the generic filters
-		if('false' == Piwik_Common::getRequestVar('disable_generic_filters', 'false', 'string', $this->request))
+		if('false' == Core_Common::getRequestVar('disable_generic_filters', 'false', 'string', $this->request))
 		{
-			$genericFilter = new Piwik_API_DataTableGenericFilter($datatable, $this->request);
+			$genericFilter = new Core_API_DataTableGenericFilter($datatable, $this->request);
 			$genericFilter->filter();
 		}
 		
@@ -275,7 +275,7 @@ class API_ResponseBuilder
 		$datatable->queueFilter('SafeDecodeLabel');
 		
 		// if the flag disable_queued_filters is defined we skip the filters that were queued
-		if(Piwik_Common::getRequestVar('disable_queued_filters', 'false', 'string', $this->request) == 'false')
+		if(Core_Common::getRequestVar('disable_queued_filters', 'false', 'string', $this->request) == 'false')
 		{
 			$datatable->applyQueuedFilters();
 		}
@@ -314,7 +314,7 @@ class API_ResponseBuilder
 		}
 		else
 		{
-			//$dataTable = new Piwik_DataTable();
+			//$dataTable = new Core_DataTable();
 			//$dataTable->addRowsFromSimpleArray($array);
 			//return $this->getRenderedDataTable($dataTable);
 		}

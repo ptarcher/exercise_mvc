@@ -1,20 +1,20 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: DocumentationGenerator.php 1466 2009-09-11 00:58:22Z vipsoft $
  * 
- * @category Piwik
- * @package Piwik
+ * @category Core
+ * @package Core
  */
 
 /**
- * @package Piwik
- * @subpackage Piwik_API
+ * @package Core
+ * @subpackage Core_API
  */
-class Piwik_API_DocumentationGenerator
+class Core_API_DocumentationGenerator
 {
 	protected $countPluginsLoaded = 0;
 
@@ -23,12 +23,12 @@ class Piwik_API_DocumentationGenerator
 	 */
 	public function __construct()
 	{
-		$plugins = Piwik_PluginsManager::getInstance()->getLoadedPluginsName();
+		$plugins = Core_PluginsManager::getInstance()->getLoadedPluginsName();
 		foreach( $plugins as $plugin )
 		{		
-			$plugin = Piwik::unprefixClass($plugin);
+			$plugin = Core::unprefixClass($plugin);
 			try {
-				Piwik_API_Proxy::getInstance()->registerClass('Piwik_'.$plugin.'_API');
+				Core_API_Proxy::getInstance()->registerClass('Core_'.$plugin.'_API');
 			}
 			catch(Exception $e){
 			}
@@ -45,16 +45,16 @@ class Piwik_API_DocumentationGenerator
 	public function getAllInterfaceString( $outputExampleUrls = true, $prefixUrls = '' )
 	{
 		$str = '';
-		$token_auth = "&token_auth=" . Piwik::getCurrentUserTokenAuth();
+		$token_auth = "&token_auth=" . Core::getCurrentUserTokenAuth();
 		$parametersToSet = array(
-								'idSite' 	=> Piwik_Common::getRequestVar('idSite', 1, 'int'),
-								'period' 	=> Piwik_Common::getRequestVar('period', 'day', 'string'),
-								'date'		=> Piwik_Common::getRequestVar('date', 'today', 'string')
+								'idSite' 	=> Core_Common::getRequestVar('idSite', 1, 'int'),
+								'period' 	=> Core_Common::getRequestVar('period', 'day', 'string'),
+								'date'		=> Core_Common::getRequestVar('date', 'today', 'string')
 							);
 		
-		foreach(Piwik_API_Proxy::getInstance()->getMetadata() as $class => $info)
+		foreach(Core_API_Proxy::getInstance()->getMetadata() as $class => $info)
 		{
-			$moduleName = Piwik_API_Proxy::getInstance()->getModuleNameFromClassName($class);
+			$moduleName = Core_API_Proxy::getInstance()->getModuleNameFromClassName($class);
 			$str .= "\n<h2 id='$moduleName'>Module ".$moduleName."</h2>";
 			
 			foreach($info as $methodName => $infoMethod)
@@ -66,7 +66,7 @@ class Piwik_API_DocumentationGenerator
 				if($outputExampleUrls)
 				{
 					// we prefix all URLs with $prefixUrls
-					// used when we include this output in the Piwik official documentation for example
+					// used when we include this output in the Core official documentation for example
 					$str .= "<span class=\"example\">";
 					$exampleUrl = $this->getExampleUrl($class, $methodName, $parametersToSet);
 					if($exampleUrl !== false)
@@ -151,14 +151,14 @@ class Piwik_API_DocumentationGenerator
 		}
 		
 		// we try to give an URL example to call the API
-		$aParameters = Piwik_API_Proxy::getInstance()->getParametersList($class, $methodName);
-		$moduleName = Piwik_API_Proxy::getInstance()->getModuleNameFromClassName($class);
+		$aParameters = Core_API_Proxy::getInstance()->getParametersList($class, $methodName);
+		$moduleName = Core_API_Proxy::getInstance()->getModuleNameFromClassName($class);
 		$urlExample = '?module=API&method='.$moduleName.'.'.$methodName.'&';
 		foreach($aParameters as $nameVariable=> $defaultValue)
 		{
 			// if there isn't a default value for a given parameter, 
 			// we need a 'know default value' or we can't generate the link
-			if($defaultValue instanceof Piwik_API_Proxy_NoDefaultValue)
+			if($defaultValue instanceof Core_API_Proxy_NoDefaultValue)
 			{
 				if(isset($knowExampleDefaultParametersValues[$nameVariable]))
 				{
@@ -185,12 +185,12 @@ class Piwik_API_DocumentationGenerator
 	 */
 	protected function getStrListParameters($class, $name)
 	{
-		$aParameters = Piwik_API_Proxy::getInstance()->getParametersList($class, $name);
+		$aParameters = Core_API_Proxy::getInstance()->getParametersList($class, $name);
 		$asParameters = array();
 		foreach($aParameters as $nameVariable=> $defaultValue)
 		{
 			$str = $nameVariable;
-			if(!($defaultValue instanceof Piwik_API_Proxy_NoDefaultValue))
+			if(!($defaultValue instanceof Core_API_Proxy_NoDefaultValue))
 			{
 				$str .= " = '$defaultValue'";
 			}

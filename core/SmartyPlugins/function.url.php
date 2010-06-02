@@ -1,12 +1,12 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: function.url.php 1420 2009-08-22 13:23:16Z vipsoft $
  * 
- * @category Piwik
+ * @category Core
  * @package SmartyPlugins
  */
 
@@ -20,7 +20,7 @@
  * {url module="API" method="getKeywords"} will rewrite the URL modifying the parameters module=API method=getKeywords
  * </pre>
  * 
- * @see Piwik_Url::getCurrentQueryStringWithParametersModified()
+ * @see Core_Url::getCurrentQueryStringWithParametersModified()
  * @param $name=$value of the parameters to modify in the generated URL
  * @return	string Something like index.php?module=X&action=Y 
  */

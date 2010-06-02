@@ -1,19 +1,19 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: modifier.translate.php 1420 2009-08-22 13:23:16Z vipsoft $
  * 
- * @category Piwik
+ * @category Core
  * @package SmartyPlugins
  */
 
 require_once('core/Translate.php');
 
 /**
- * Read the translation string from the given index (read form the selected language in Piwik).
+ * Read the translation string from the given index (read form the selected language in Core).
  * The translations strings are located either in /lang/xx.php or within the plugin lang directory.
  * 
  * Example:

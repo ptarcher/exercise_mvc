@@ -1,21 +1,21 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  *
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: Access.php 1834 2010-02-10 08:32:03Z vipsoft $
  *
- * @category Piwik
- * @package Piwik
+ * @category Core
+ * @package Core
  */
 
 /**
  * Class to handle User Access:
- * - loads user access from the Piwik_Auth_Result object 
+ * - loads user access from the Core_Auth_Result object 
  * - provides easy to use API to check the permissions for the current (check* methods)
  * 
- * In Piwik there are mainly 4 access levels
+ * In Core there are mainly 4 access levels
  * - no access
  * - VIEW access
  * - ADMIN access
@@ -32,8 +32,8 @@
  * There is only one Super User. He has ADMIN access to all the websites 
  * and he only can change the main configuration settings.
  *
- * @package Piwik
- * @subpackage Piwik_Access
+ * @package Core
+ * @subpackage Core_Access
  */
 class Access
 {	
@@ -53,16 +53,16 @@ class Access
 	protected $isSuperUser = false;
 
 	/**
-	 * List of available permissions in Piwik
+	 * List of available permissions in Core
 	 *
 	 * @var array
 	 */
 	static private $availableAccess = array('noaccess', 'view', 'admin', 'superuser');
 
 	/**
-	 * Authentification object (see Piwik_Auth)
+	 * Authentification object (see Core_Auth)
 	 *
-	 * @var Piwik_Auth
+	 * @var Core_Auth
 	 */
 	private $auth = null;
 	
@@ -127,8 +127,8 @@ class Access
  *
  * Exception thrown when a user doesn't  have sufficient access.
  * 
- * @package Piwik
- * @subpackage Piwik_Access
+ * @package Core
+ * @subpackage Core_Access
  */
-class Piwik_Access_NoAccessException extends Exception
+class Core_Access_NoAccessException extends Exception
 {}

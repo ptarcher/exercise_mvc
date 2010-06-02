@@ -55,7 +55,6 @@ class CoreModule {
     }
 
     function __destruct() {
-        $this->view = null;
         $this->api  = null;
     }
 }

@@ -31,7 +31,7 @@ class CoreNavigator
 	/**
 	 * Returns the singleton CoreNavigator
 	 *
-	 * @return Piwik_ModuleManager
+	 * @return Core_ModuleManager
 	 */
 	static public function getInstance()
 	{

@@ -1,13 +1,13 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
- * @link http://piwik.org
+ * @link http://core.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: View.php 1834 2010-02-10 08:32:03Z vipsoft $
  * 
- * @category Piwik
- * @package Piwik
+ * @category Core
+ * @package Core
  */
 
 require_once('core/iView.php');
@@ -17,7 +17,7 @@ require_once('libraries/HTML/QuickForm/Renderer/ArraySmarty.php');
 /**
  * View class to render the user interface
  *
- * @package Piwik
+ * @package Core
  */
 class CoreView implements iView
 {
@@ -56,7 +56,7 @@ class CoreView implements iView
 		}
 		$this->smarty->error_reporting = $error_reporting;
 
-		$this->smarty->assign('tag', 'piwik=' . Version::VERSION);
+		$this->smarty->assign('tag', 'core=' . Version::VERSION);
 		if($filter)
 		{
 			$this->smarty->load_filter('output', 'cachebuster');
@@ -64,8 +64,8 @@ class CoreView implements iView
 			$this->smarty->load_filter('output', 'trimwhitespace');
 		}
 
-		// global value accessible to all templates: the piwik base URL for the current request
-		$this->piwikUrl = Url::getCurrentUrlWithoutFileName();
+		// global value accessible to all templates: the core base URL for the current request
+		$this->coreUrl = Url::getCurrentUrlWithoutFileName();
         */
 
         /* The navigation menu */
@@ -104,10 +104,10 @@ class CoreView implements iView
 			//$this->userLogin = Helper::getCurrentUserLogin();
 			
 			//$this->url = Url::getCurrentUrl();
-			//$this->token_auth = Piwik::getCurrentUserTokenAuth();
-			//$this->userHasSomeAdminAccess = Piwik::isUserHasSomeAdminAccess();
-			//$this->userIsSuperUser = Piwik::isUserIsSuperUser();
-			//$this->piwik_version = Version::VERSION;
+			//$this->token_auth = Core::getCurrentUserTokenAuth();
+			//$this->userHasSomeAdminAccess = Core::isUserHasSomeAdminAccess();
+			//$this->userIsSuperUser = Core::isUserIsSuperUser();
+			//$this->core_version = Version::VERSION;
 			//$this->latest_version_available = UpdateCheck::isNewestVersionAvailable();
 
 			//$this->loginModule = Zend_Registry::get('auth')->getName();
@@ -118,7 +118,7 @@ class CoreView implements iView
 		//$this->totalTimeGeneration = Zend_Registry::get('timer')->getTime();
         /*
 		try {
-			$this->totalNumberOfQueries = Piwik::getQueryCount();
+			$this->totalNumberOfQueries = Core::getQueryCount();
 		}
 		catch(Exception $e){
 			$this->totalNumberOfQueries = 0;

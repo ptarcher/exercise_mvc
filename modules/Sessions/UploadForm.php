@@ -1,13 +1,13 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  *
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: Form.php 1736 2009-12-26 21:48:30Z vipsoft $
  *
- * @category Piwik_Plugins
- * @package Piwik_Login
+ * @category Core_Plugins
+ * @package Core_Sessions
  */
 
 require_once('core/Form.php');
@@ -15,7 +15,7 @@ require_once('core/Translate.php');
 
 /**
  *
- * @package Piwik_Login
+ * @package Core_Login
  */
 class SessionUploadForm extends CoreForm
 {

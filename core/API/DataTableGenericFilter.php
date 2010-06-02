@@ -1,20 +1,20 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: DataTableGenericFilter.php 1420 2009-08-22 13:23:16Z vipsoft $
  * 
- * @category Piwik
- * @package Piwik
+ * @category Core
+ * @package Core
  */
 
 /**
- * @package Piwik
- * @subpackage Piwik_API
+ * @package Core
+ * @subpackage Core_API
  */
-class Piwik_API_DataTableGenericFilter
+class Core_API_DataTableGenericFilter
 {
 	function __construct( $datatable, $request )
 	{
@@ -28,7 +28,7 @@ class Piwik_API_DataTableGenericFilter
 	}
 	
 	/**
-	 * Returns an array containing the information of the generic Piwik_DataTable_Filter 
+	 * Returns an array containing the information of the generic Core_DataTable_Filter 
 	 * to be applied automatically to the data resulting from the API calls.
 	 *
 	 * Order to apply the filters:
@@ -77,11 +77,11 @@ class Piwik_API_DataTableGenericFilter
 	 * Apply generic filters to the DataTable object resulting from the API Call.
 	 * Disable this feature by setting the parameter disable_generic_filters to 1 in the API call request.
 	 * 
-	 * @param Piwik_DataTable
+	 * @param Core_DataTable
 	 */
 	protected function applyGenericFilters($datatable)
 	{
-		if($datatable instanceof Piwik_DataTable_Array )
+		if($datatable instanceof Core_DataTable_Array )
 		{
 			$tables = $datatable->getArray();
 			foreach($tables as $table)
@@ -110,7 +110,7 @@ class Piwik_API_DataTableGenericFilter
 				}
 				
 				try {
-					$value = Piwik_Common::getRequestVar($name, $defaultValue, $type, $this->request);
+					$value = Core_Common::getRequestVar($name, $defaultValue, $type, $this->request);
 					settype($value, $type);
 					$filterParameters[] = $value;
 				}
@@ -124,7 +124,7 @@ class Piwik_API_DataTableGenericFilter
 			if(!$exceptionRaised)
 			{
 				// a generic filter class name must follow this pattern
-				$class = "Piwik_DataTable_Filter_".$filterName;
+				$class = "Core_DataTable_Filter_".$filterName;
 				if($filterName == 'Limit')
 				{
 					$datatable->setRowsCountBeforeLimitFilter();

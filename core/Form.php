@@ -1,13 +1,13 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: Form.php 1434 2009-08-23 15:55:35Z vipsoft $
  * 
- * @category Piwik
- * @package Piwik
+ * @category Core
+ * @package Core
  */
 
 require_once('libraries/HTML/QuickForm.php');
@@ -17,7 +17,7 @@ require_once('libraries/HTML/QuickForm.php');
  * 
  * For an example, @see Login_Form
  * 
- * @package Piwik
+ * @package Core
  * @see HTML_QuickForm, libs/HTML/QuickForm.php
  * @link http://pear.php.net/package/HTML_QuickForm/
  */
