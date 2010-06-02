@@ -172,6 +172,10 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     speed,
                     latitude,
                     longitude,
+                    altitude,
+                    cadence,
+                    temperature,
+                    power,
                     userid)
                 VALUES 
                    (:session_date,
@@ -181,6 +185,10 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     :speed,
                     :latitude,
                     :longitude,
+                    :altitude,
+                    :cadence,
+                    :temperature,
+                    :power,
                     :userid)";
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
@@ -192,10 +200,10 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(":speed",         $speed);
         $stmt->bindParam(":latitude",      $latitude);
         $stmt->bindParam(":longitude",     $longitude);
-        //$stmt->bindParam(":altitude",      $altitude);
-        //$stmt->bindParam(":cadence",       $cadence);
-        //$stmt->bindParam(":power",         $power);
-        //$stmt->bindParam(":temperature",   $temperature);
+        $stmt->bindParam(":altitude",      $altitude);
+        $stmt->bindParam(":cadence",       $cadence);
+        $stmt->bindParam(":temperature",   $temperature);
+        $stmt->bindParam(":power",         $power);
         $stmt->bindParam(":userid",        $_SESSION['userid'], PDO::PARAM_STR);
 
         $stmt->execute(); //or die("Unable to execute $sql");
