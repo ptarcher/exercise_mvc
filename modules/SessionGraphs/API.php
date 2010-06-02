@@ -51,20 +51,20 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
         }
 
     	// Get time in seconds since the start of the session
-        $sql = "SELECT 
-                    (extract(EPOCH from \"time\") * 1000) AS \"time\",
-                    ".$field."
+        $sql = 'SELECT 
+                    (extract(EPOCH from "time") * 1000) AS "time",
+                    '.$field.'
                 FROM 
                     t_exercise_data
                 WHERE 
                     userid       = :userid  AND
                     session_date = :session_date
                 ORDER BY
-                    \"time\"     DESC";
+                    "time"     DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(":userid",       $_SESSION['userid'], PDO::PARAM_STR);
-        $stmt->bindParam(":session_date", $session_date,       PDO::PARAM_STR);
+        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
 
         $stmt->execute();
 
@@ -83,7 +83,7 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
 
     function getGPXData($session_date) {
     	// Get time in seconds since the start of the session
-        $sql = "SELECT 
+        $sql = 'SELECT 
                     latitude as lat,
                     longitude as lon
                 FROM 
@@ -92,11 +92,11 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     userid       = :userid  AND
                     session_date = :session_date
                 ORDER BY
-                    \"time\"     DESC";
+                    "time"     DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(":userid",       $_SESSION['userid'], PDO::PARAM_STR);
-        $stmt->bindParam(":session_date", $session_date,       PDO::PARAM_STR);
+        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
 
         $stmt->execute();
 

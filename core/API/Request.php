@@ -101,8 +101,7 @@ class API_Request
 			
             /* Load the request module */
             $api_file = "modules".DIRECTORY_SEPARATOR.
-                $module.DIRECTORY_SEPARATOR.
-                "API.php";
+                $module.DIRECTORY_SEPARATOR."API.php";
 
             /* Include the module */
             if (!file_exists($api_file)) {

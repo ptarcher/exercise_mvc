@@ -25,12 +25,12 @@ require_once('core/ModuleAPI.php');
 
 class ModuleUserManagementAPI extends CoreModuleAPI {
     function getUsers() {
-        $sql = "SELECT 
+        $sql = 'SELECT 
                     userid
                 FROM 
                     t_users
                 ORDER BY
-                    userid DESC";
+                    userid DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
         $stmt->execute();
 
@@ -41,7 +41,7 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
         $password_salt = Common::getRandomString(64);
         $password_hash = sha1($password . $password_salt);
 
-        $sql = "INSERT INTO t_users
+        $sql = 'INSERT INTO t_users
                    (userid,
                     password_hash,
                     password_salt)
@@ -49,26 +49,26 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
                    (:userid,
                     :password_hash,
                     :password_salt
-                   )";
+                   )';
 
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(":userid",        $userid,        PDO::PARAM_STR);
-        $stmt->bindParam(":password_hash", $password_hash, PDO::PARAM_STR);
-        $stmt->bindParam(":password_salt", $password_salt, PDO::PARAM_STR);
+        $stmt->bindParam(':userid',        $userid,        PDO::PARAM_STR);
+        $stmt->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
+        $stmt->bindParam(':password_salt', $password_salt, PDO::PARAM_STR);
 
         $stmt->execute() or die("failed to execute $SQL");
     }
 
     // TODO: Convert this into user groups
     function getExerciseTypes() {
-        $sql = "SELECT 
+        $sql = 'SELECT 
                     type_short,
                     type
                 FROM 
                     t_training_types
                 ORDER BY
-                    type_short";
+                    type_short';
         $stmt = $this->dbQueries->dbh->prepare($sql);
         $stmt->execute();
 

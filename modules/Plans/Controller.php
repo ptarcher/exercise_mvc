@@ -22,11 +22,12 @@
  */
 
 require_once('core/Module.php');
+require_once('core/View.php');
 
 class ModulePlans extends CoreModule {
     var $module_description = array(
-        'name'        => 'Session',
-        'description' => 'View, create and edit exercise sessions',
+        'name'        => 'Plans',
+        'description' => 'View, create and edit exercise plans',
         'version'     => '0.1',
         'author'      => 'Paul Archer',
     );
@@ -53,9 +54,11 @@ class ModulePlans extends CoreModule {
     }
     
     function view() {
-        $sessions = $this->api->getPlans($_SESSION['userid']);
+        //$plans = $this->api->getPlans();
+        $view = CoreView::factory('plans');
+        //$view->plans = $plans;
 
-        $this->view->renderPlans($sessions);
+        $view->render();
     }
 }
 

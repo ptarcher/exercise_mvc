@@ -72,7 +72,7 @@ class CoreFrontController
         if (!class_exists($controllerClassName)) {
             $module_file = "modules".DIRECTORY_SEPARATOR.
                 $module.DIRECTORY_SEPARATOR.
-                $module.".php";
+                "Controller.php";
 
             /* Include the module */
             if (!file_exists($module_file)) {

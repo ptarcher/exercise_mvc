@@ -24,8 +24,24 @@
 require_once('core/ModuleAPI.php');
 
 class ModulePlansAPI extends CoreModuleAPI {
-    function getPlans($userid) {
-        $sql = "SELECT 
+	static private $instance = null;
+	/**
+	 * Returns the singleton ModuleSessionGraphsAPI
+	 *
+	 * @return ModuleSessionGraphsAPI
+	 */
+	static public function getInstance()
+	{
+		if (self::$instance == null)
+		{			
+			$c = __CLASS__;
+			self::$instance = new $c();
+		}
+		return self::$instance;
+	}
+	
+    function getPlans() {
+        $sql = 'SELECT 
                     session_date,
                     type_short,
                     description,
@@ -37,12 +53,15 @@ class ModulePlansAPI extends CoreModuleAPI {
                 FROM 
                     t_exercise_totals
                 WHERE 
-                    userid = '$userid'
+                    userid = :userid
                 ORDER BY
                     session_date DESC
                 LIMIT 
-                    100";
+                    100';
         $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -41,7 +41,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
 	}
 	
     function getSessions() {
-        $sql = "SELECT 
+        $sql = 'SELECT 
                     session_date,
                     type_short,
                     description,
@@ -57,10 +57,10 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                 ORDER BY
                     session_date DESC
                 LIMIT 
-                    100";
+                    100';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(":userid", $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
 
         $stmt->execute();
 
@@ -70,7 +70,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
     function updateSession($session_date, $type_short, $description,
                            $duration,     $distance,   $avg_heartrate,
                            $avg_speed,    $comment) {
-        $sql = "UPDATE t_exercise_totals
+        $sql = 'UPDATE t_exercise_totals
                 SET
                     type_short    = :type_short,
                     description   = :description,
@@ -81,19 +81,19 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     comment       = :comment
                 WHERE 
                     session_date = :session_date AND
-                    userid       = :userid";
+                    userid       = :userid';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         // TODO: Add the types
-        $stmt->bindParam(":session_date",  $session_date);
-        $stmt->bindParam(":type_short",    $type_short,         PDO::PARAM_STR);
-        $stmt->bindParam(":description",   $description,        PDO::PARAM_STR);
-        $stmt->bindParam(":duration",      $duration);
-        $stmt->bindParam(":distance",      $distance);
-        $stmt->bindParam(":avg_heartrate", $avg_heartrate);
-        $stmt->bindParam(":avg_speed",     $avg_speed);
-        $stmt->bindParam(":comment",       $comment,            PDO::PARAM_STR);
-        $stmt->bindParam(":userid",        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':session_date',  $session_date);
+        $stmt->bindParam(':type_short',    $type_short,         PDO::PARAM_STR);
+        $stmt->bindParam(':description',   $description,        PDO::PARAM_STR);
+        $stmt->bindParam(':duration',      $duration);
+        $stmt->bindParam(':distance',      $distance);
+        $stmt->bindParam(':avg_heartrate', $avg_heartrate);
+        $stmt->bindParam(':avg_speed',     $avg_speed);
+        $stmt->bindParam(':comment',       $comment,            PDO::PARAM_STR);
+        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
 
         $stmt->execute() or die("Unable to execute $sql");
     }
@@ -103,7 +103,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                            $description,  $duration, 
                            $distance,     $avg_heartrate, 
                            $avg_speed,    $comment) {
-        $sql = "INSERT INTO t_exercise_totals
+        $sql = 'INSERT INTO t_exercise_totals
                    (session_date,
                     type_short,
                     description,
@@ -122,25 +122,25 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     :avg_heartrate,
                     :avg_speed,
                     :comment,
-                    :userid)";
+                    :userid)';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         // TODO: Add the types
-        $stmt->bindParam(":session_date",  $session_date);
-        $stmt->bindParam(":type_short",    $type_short,         PDO::PARAM_STR);
-        $stmt->bindParam(":description",   $description,        PDO::PARAM_STR);
-        $stmt->bindParam(":duration",      $duration);
-        $stmt->bindParam(":distance",      $distance);
-        $stmt->bindParam(":avg_heartrate", $avg_heartrate);
-        $stmt->bindParam(":avg_speed",     $avg_speed);
-        $stmt->bindParam(":comment",       $comment,            PDO::PARAM_STR);
-        $stmt->bindParam(":userid",        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':session_date',  $session_date);
+        $stmt->bindParam(':type_short',    $type_short,         PDO::PARAM_STR);
+        $stmt->bindParam(':description',   $description,        PDO::PARAM_STR);
+        $stmt->bindParam(':duration',      $duration);
+        $stmt->bindParam(':distance',      $distance);
+        $stmt->bindParam(':avg_heartrate', $avg_heartrate);
+        $stmt->bindParam(':avg_speed',     $avg_speed);
+        $stmt->bindParam(':comment',       $comment,            PDO::PARAM_STR);
+        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
 
         $stmt->execute();
     }
 
     function deleteSession($session_date) {
-        $sql = "BEGIN;
+        $sql = 'BEGIN;
                 DELETE FROM t_exercise_data
                 WHERE
                     session_date = :session_date AND
@@ -149,12 +149,12 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                 WHERE
                     session_date = :session_date AND
                     userid       = :userid;
-                COMMIT";
+                COMMIT';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         // TODO: Add the types
-        $stmt->bindParam(":session_date",  $session_date);
-        $stmt->bindParam(":userid",        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':session_date',  $session_date);
+        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
 
         $stmt->execute() or die("Unable to execute $sql");
     }
@@ -164,7 +164,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                                $latitude,     $longitude,
                                $altitude,     $cadence,
                                $temperature,  $power) {
-        $sql = "INSERT INTO t_exercise_data
+        $sql = 'INSERT INTO t_exercise_data
                    (session_date,
                     time,
                     distance,
@@ -189,36 +189,34 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     :cadence,
                     :temperature,
                     :power,
-                    :userid)";
+                    :userid)';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         // TODO: Add the types
-        $stmt->bindParam(":session_date",  $session_date);
-        $stmt->bindParam(":time",          $time);
-        $stmt->bindParam(":distance",      $distance);
-        $stmt->bindParam(":heartrate",     $heartrate);
-        $stmt->bindParam(":speed",         $speed);
-        $stmt->bindParam(":latitude",      $latitude);
-        $stmt->bindParam(":longitude",     $longitude);
-        $stmt->bindParam(":altitude",      $altitude);
-        $stmt->bindParam(":cadence",       $cadence);
-        $stmt->bindParam(":temperature",   $temperature);
-        $stmt->bindParam(":power",         $power);
-        $stmt->bindParam(":userid",        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':session_date',  $session_date);
+        $stmt->bindParam(':time',          $time);
+        $stmt->bindParam(':distance',      $distance);
+        $stmt->bindParam(':heartrate',     $heartrate);
+        $stmt->bindParam(':speed',         $speed);
+        $stmt->bindParam(':latitude',      $latitude);
+        $stmt->bindParam(':longitude',     $longitude);
+        $stmt->bindParam(':altitude',      $altitude);
+        $stmt->bindParam(':cadence',       $cadence);
+        $stmt->bindParam(':temperature',   $temperature);
+        $stmt->bindParam(':power',         $power);
+        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
 
         $stmt->execute(); //or die("Unable to execute $sql");
     }
 
-
-
     function getTrainingTypes() {
-        $sql = "SELECT 
+        $sql = 'SELECT 
                     type_short,
                     type
                 FROM 
                     t_training_types
                 ORDER BY
-                    type_short";
+                    type_short';
         $stmt = $this->dbQueries->dbh->prepare($sql);
         $stmt->execute();
 
@@ -235,18 +233,17 @@ class ModuleSessionsAPI extends CoreModuleAPI {
     }
 
     function getSessionTypes() {
-        $sql = "SELECT 
+        $sql = 'SELECT 
                     total_type,
                 FROM 
                     t_exercise_total_types
                 ORDER BY
-                    total_type";
+                    total_type';
         $stmt = $this->dbQueries->dbh->prepare($sql);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
 }
 
 ?>

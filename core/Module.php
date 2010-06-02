@@ -22,7 +22,6 @@
  */
 
 class CoreModule {
-    var $view;
     var $api;
 
     var $module_description = array();
@@ -31,18 +30,7 @@ class CoreModule {
         $parts = preg_split('/Module/', get_class($this));
         $module_name = $parts[1];
 
-        $view_file = 'modules/'.$module_name.'/view.php';
         $api_file  = 'modules/'.$module_name.'/API.php';
-
-        /* View */
-        if (file_exists($view_file)) {
-            require_once($view_file);
-            $view_class = 'Module' . $module_name . 'View';
-
-            if (class_exists($view_class)) {
-                $this->view = new $view_class;
-            }
-        }
 
         /* API */
         if (file_exists($api_file)) {
