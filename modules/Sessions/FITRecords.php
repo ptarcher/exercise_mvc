@@ -29,6 +29,10 @@ class FITRecord extends FITElement {
     var $distance;
     var $speed;
     var $heart_rate;
+    var $altitude;
+    var $cadence;
+    var $temperature;
+    var $power;
 }
 
 function parseRecords($xml) {
