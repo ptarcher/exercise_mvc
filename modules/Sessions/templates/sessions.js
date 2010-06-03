@@ -159,6 +159,20 @@ $(document).ready( function() {
 	);
 	
 	$('td.editableSession').click( function(){ $(this).parent().find('.editSession').click(); } );
+
+    $('table#editSessions').tablesorter({
+            // pass the headers argument and passing an object 
+            headers: {
+                8: {
+                    // Disable sorting
+                    sorter: false,
+                },
+                9: {
+                    // Disable sorting
+                    sorter: false,
+                },
+          }
+    });
 });
  
 function submitSessionOnEnter(e)

@@ -6,11 +6,13 @@
     <!-- TODO: Move this into the module code -->
     <link rel="stylesheet" type="text/css" href="modules/Sessions/templates/sessions.css" />
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/tablesorter/themes/blue/style.css" media="screen" />
 	{postEvent name="template_js_import"}
     <!-- TODO: Move this into the module code -->
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/sprintf.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="modules/Sessions/templates/sessions.js"></script>
 </head>
 
@@ -23,7 +25,7 @@
 </center>
 
 <!-- draw the table -->
-<table class="exercise" id="editSessions" border=1 cellpadding="10">
+<table class="tablesorter" id="editSessions" cellspacing="1">
     <thead>
     <tr>
         <th>Date</th>
