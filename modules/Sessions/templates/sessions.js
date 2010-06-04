@@ -171,7 +171,8 @@ $(document).ready( function() {
                     // Disable sorting
                     sorter: false,
                 },
-          }
+            },
+            widgets: ['zebra',],
     });
 });
  
