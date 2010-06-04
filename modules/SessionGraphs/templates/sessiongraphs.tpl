@@ -40,16 +40,34 @@
 
 <center>
 <h1>Exercise data</h1>
-<div style="margin-top:20px; margin-left:20px; width:800px; height:640px" id="map"></div>
-<br/>
 
+<div class="demo-show">
+<h3>Location</h3>
+<div style="margin-top:20px; margin-left:20px; width:800px; height:640px" id="map"></div>
+
+<h3>Speed</h3>
 <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="speed"></div>
+
+<h3>Heart Rate</h3>
 <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="heartrate"></div>
+
+<!--h3>Speed</h3-->
 <!--div class="jqplot" style="margin:20px;width:800px;height:240px;" id="distance"></div-->
+
+<h3>Altitude</h3>
 <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="altitude"></div>
+
+<h3>Cadence</h3>
 <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="cadence"></div>
+
+<h3>Power</h3>
 <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="power"></div>
+
+<h3>Temperature</h3>
 <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="temperature"></div>
+
+</div>
+
 </center>
 
 

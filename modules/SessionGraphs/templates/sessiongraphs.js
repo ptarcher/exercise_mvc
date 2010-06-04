@@ -49,93 +49,85 @@ $(function () {
         //legend: {location:'ne'},
     };
 
-    $.ajax({
-        url: "index.php?module=APIAccess&method=SessionGraphs.getSessionDataField&session_date="+encodeURIComponent(session_date)+"&field=heartrate",
-        method: 'GET',
-        dataType: 'json',
-        success: function (series) {
-                     var options = jqplot_options;
-                     options.title = 'Heart Rate';
-                     options.axes.yaxis.label = 'Heart Rate (bpm)';
-                     $.jqplot('heartrate', [series], options);
-                 }
-    });
+    var graphs = [
+        {
+            id    : 'speed',
+            title : 'Speed',
+            field : 'speed',
+            yaxis_label : 'Speed (km/h)',
+        },
 
+        {
+            id    : 'heartrate',
+            title : 'Heart Rate',
+            field : 'heartrate',
+            yaxis_label : 'Heart Rate (bpm)',
+        },
+
+        {
+            id    : 'distance',
+            title : 'Distance',
+            field : 'distance',
+            yaxis_label : 'Distance (km)',
+        },
+
+        {
+            id    : 'altitude',
+            title : 'Altitude',
+            field : 'altitude',
+            yaxis_label : 'Elevation (m)',
+        },
+
+        {
+            id    : 'cadence',
+            title : 'Cadence',
+            field : 'cadence',
+            yaxis_label : 'Cadence (rpm)',
+        },
+
+        {
+            id    : 'power',
+            title : 'Power',
+            field : 'power',
+            yaxis_label : 'Power (watts)',
+        },
+
+        {
+            id    : 'temperature',
+            title : 'Temperature',
+            field : 'temperature',
+            yaxis_label : 'Temperature (C)',
+        },
+    ];
+
+    function drawGraph(series, graph) {
+    }
+
+    for (var i in graphs) {
+        var graph = graphs[i];
+
+        $.ajax({
+            url: "index.php?"+
+                            "module=APIAccess"+
+                            "&method=SessionGraphs.getSessionDataField"+
+                            "&session_date="+encodeURIComponent(session_date)+
+                            "&field="+graph.field,
+            method: 'GET',
+            dataType: 'json',
+            graph : graphs[i],
+            success: function (series, textStatus, XMLHttpRequest) {
+                var options = jqplot_options;
+                options.title = this.graph.title;
+                options.axes.yaxis.label = this.graph.yaxis_label;
+                $.jqplot(this.graph.id, [series], options);
+            }
+        });
+    }
     
-    $.ajax({
-        url: "index.php?module=APIAccess&method=SessionGraphs.getSessionDataField&session_date="+encodeURIComponent(session_date)+"&field=speed",
-        method: 'GET',
-        dataType: 'json',
-        success: function (series) {
-                    var options = jqplot_options;
-                    options.title = 'Speed';
-                    options.axes.yaxis.label = 'Speed (km/h)';
-                    $.jqplot('speed', [series], options);
-                 }
-    });
-
-
+    //$('div.demo-show:eq(0)> div').hide();
     /*
-    $.ajax({
-        url: "index.php?module=APIAccess&method=SessionGraphs.getSessionDataField&session_date="+encodeURIComponent(session_date)+"&field=distance",
-        method: 'GET',
-        dataType: 'json',
-        success: function (series) {
-                     var options = jqplot_options;
-                     options.title = 'Distance';
-                     options.axes.yaxis.label = 'Distance (km)';
-                     $.jqplot('distance', [series], options);
-                 }
-
+    $('div.demo-show:eq(0)> div').click(function() {
+            $(this).next().slideToggle('fast');
     });*/
-
-    $.ajax({
-        url: "index.php?module=APIAccess&method=SessionGraphs.getSessionDataField&session_date="+encodeURIComponent(session_date)+"&field=altitude",
-        method: 'GET',
-        dataType: 'json',
-        success: function (series) {
-                     var options = jqplot_options;
-                     options.title = 'Altitude';
-                     options.axes.yaxis.label = 'Elevation (m)';
-                     $.jqplot('altitude', [series], options);
-                 }
-
-    });
-
-    $.ajax({
-        url: "index.php?module=APIAccess&method=SessionGraphs.getSessionDataField&session_date="+encodeURIComponent(session_date)+"&field=cadence",
-        method: 'GET',
-        dataType: 'json',
-        success: function (series) {
-                     var options = jqplot_options;
-                     options.title = 'Cadence';
-                     options.axes.yaxis.label = 'Cadence (rpm)';
-                     $.jqplot('cadence', [series], options);
-                 }
-    });
-
-    $.ajax({
-        url: "index.php?module=APIAccess&method=SessionGraphs.getSessionDataField&session_date="+encodeURIComponent(session_date)+"&field=power",
-        method: 'GET',
-        dataType: 'json',
-        success: function (series) {
-                     var options = jqplot_options;
-                     options.title = 'Power';
-                     options.axes.yaxis.label = 'Power (watts)';
-                     $.jqplot('power', [series], options);
-                 }
-    });
-
-    $.ajax({
-        url: "index.php?module=APIAccess&method=SessionGraphs.getSessionDataField&session_date="+encodeURIComponent(session_date)+"&field=temperature",
-        method: 'GET',
-        dataType: 'json',
-        success: function (series) {
-                     var options = jqplot_options;
-                     options.title = 'Temperature';
-                     options.axes.yaxis.label = 'Temperature (C)';
-                     $.jqplot('temperature', [series], options);
-                 }
-    });
 });
 
