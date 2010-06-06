@@ -32,6 +32,37 @@
     <script src="modules/SessionGraphs/templates/googlemaps.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="modules/SessionGraphs/templates/sessiongraphs.js"></script>
+
+    <!-- Accordian -->
+    {literal}
+    <style type="text/css">
+    .expand {
+       border-bottom: solid 1px #c4c4c4;
+    }
+    .expand h3 {
+        background: #e9e7e7 url(themes/default/images/arrow-square.gif) no-repeat right -51px;
+        padding: 7px 15px;
+        margin: 0;
+        font: bold 120%/100% Arial, Helvetica, sans-serif;
+        border: solid 1px #c4c4c4;
+                border-bottom: none;
+        cursor: pointer;
+    }
+    .expand h3:hover {
+        background-color: #e3e2e2;
+    }
+    .expand h3.active {
+        background-position: right 5px;
+    }
+    .expand p {
+        background: #f7f7f7;
+        margin: 0;
+        padding: 10px 15px 20px;
+                 border-left: solid 1px #c4c4c4;
+                 border-right: solid 1px #c4c4c4;
+    }
+    </style>
+    {/literal}
 </head>
 
 <body>
@@ -41,9 +72,11 @@
 <center>
 <h1>Exercise data</h1>
 
-<div class="demo-show">
+<div class="expand">
 <h3>Location</h3>
+<p>
 <div style="margin-top:20px; margin-left:20px; width:800px; height:640px" id="map"></div>
+</p>
 
 <h3>Speed</h3>
 <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="speed"></div>

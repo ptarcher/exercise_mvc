@@ -7,7 +7,7 @@ $(function () {
     // jqplot
     var jqplot_options = {
         title:session_date,
-        seriesDefaults:{showMarker: false},
+        seriesDefaults:{showMarker: false, shadow:false},
         /*
         series:[
             {label:'Heart Rate', }, 
@@ -100,18 +100,14 @@ $(function () {
         },
     ];
 
-    function drawGraph(series, graph) {
-    }
-
+    /* Request all the AJAX data and draw the graphs */
     for (var i in graphs) {
-        var graph = graphs[i];
-
         $.ajax({
             url: "index.php?"+
                             "module=APIAccess"+
                             "&method=SessionGraphs.getSessionDataField"+
                             "&session_date="+encodeURIComponent(session_date)+
-                            "&field="+graph.field,
+                            "&field="+graphs[i].field,
             method: 'GET',
             dataType: 'json',
             graph : graphs[i],
@@ -124,10 +120,11 @@ $(function () {
         });
     }
     
-    //$('div.demo-show:eq(0)> div').hide();
-    /*
-    $('div.demo-show:eq(0)> div').click(function() {
-            $(this).next().slideToggle('fast');
-    });*/
+    $(".expand h3").addClass("active");
+    $(".expand h3").click(function(){
+        $(this).next().toggle();
+        $(this).toggleClass("active");
+    });
+
 });
 
