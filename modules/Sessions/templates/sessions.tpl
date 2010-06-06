@@ -28,6 +28,9 @@
 <table class="tablesorter" id="editSessions" cellspacing="1">
     <thead>
     <tr>
+    {if $coach}
+        <th>User</th>
+    {/if}
         <th>Date</th>
         <th>Type</th>
         <th>Description</th>
@@ -51,16 +54,23 @@
     </tr>
     {/if}
     <tr id="row{$i}">
-        <td id="date"><input type="hidden" id="session_date" value="{$session.session_date}" /><a href="{url module=SessionGraphs session_date=$session.session_date|escape:url}">{$session.session_date}</a></td>
-        <td id="type"        class="editableSession">{$session.type_short}</td>
-        <td id="description" class="editableSession">{$session.description}</td>       
-        <td id="duration"    class="editableSession">{$session.duration}</td>       
-        <td id="distance"    class="editableSession">{$session.distance}</td>       
-        <td id="avg_speed"   class="editableSession">{$session.avg_speed}</td>       
+    {if $coach}
+        <th>{$session.userid|escape}</th>
+    {/if}
+        <td id="date"><input type="hidden" id="session_date" value="{$session.session_date}" /><a href="{url module=SessionGraphs session_date=$session.session_date|escape:url}">{$session.session_date|escape}</a></td>
+        <td id="type"        class="editableSession">{$session.type_short|escape}</td>
+        <td id="description" class="editableSession">{$session.description|escape}</td>       
+        <td id="duration"    class="editableSession">{$session.duration|escape}</td>       
+        <td id="distance"    class="editableSession">{$session.distance|escape}</td>       
+        <td id="avg_speed"   class="editableSession">{$session.avg_speed|escape}</td>       
         <td id="avg_heartrate" class="editableSession">{$session.avg_heartrate}</td>       
-        <td id="comment" class="editableSession">{$session.comment}</td>       
+        <td id="comment" class="editableSession">{$session.comment|escape}</td>       
         <td><img src='themes/default/images/edit.png' class="editSession" id="row{$i}" href='#' alt="" /></td>
         <td><img src='themes/default/images/remove.png' class="deleteSession" id="row{$i}" value="delete" alt="" /></td>
+    </tr>
+    {/foreachelse}
+    <tr>
+        <td colspan="10">No records</td>
     </tr>
     {/foreach}
     </tbody>
