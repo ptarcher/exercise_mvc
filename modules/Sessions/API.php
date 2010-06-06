@@ -41,7 +41,8 @@ class ModuleSessionsAPI extends CoreModuleAPI {
 	}
 	
     function getSessions() {
-        $sql = 'SELECT 
+        $sql = 'SELECT
+                    userid,
                     session_date,
                     type_short,
                     description,
