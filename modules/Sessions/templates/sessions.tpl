@@ -68,7 +68,7 @@
         <td><img src='themes/default/images/edit.png' class="editSession" id="row{$i}" href='#' alt="" /></td>
         <td><img src='themes/default/images/remove.png' class="deleteSession" id="row{$i}" value="delete" alt="" /></td>
     </tr>
-    {/foreachelse}
+    {foreachelse}
     <tr>
         <td colspan="10">No records</td>
     </tr>
