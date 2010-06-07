@@ -39,7 +39,7 @@ class CoreView implements iView
 		$this->smarty->template_dir = $template_dir;
 		array_walk($this->smarty->template_dir, array("CoreView","addPath"), INCLUDE_PATH);
 
-		$this->smarty->plugins_dir = array("core/SmartyPlugins");
+		$this->smarty->plugins_dir = array("core/SmartyPlugins", "libraries/Smarty/plugins/");
 		array_walk($this->smarty->plugins_dir, array("CoreView","addPath"), INCLUDE_PATH);
 
 		$this->smarty->compile_dir = "tmp/templates_c";
