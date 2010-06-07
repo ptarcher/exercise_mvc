@@ -24,6 +24,7 @@
 require_once('core/Module.php');
 require_once('core/View.php');
 require_once('modules/UserManagement/AddUserFrom.php');
+require_once('modules/UserManagement/UserSettingsForm.php');
 
 class ModuleUserManagement extends CoreModule {
     var $module_description = array(
@@ -115,14 +116,17 @@ class ModuleUserManagement extends CoreModule {
                                               'superuser' => 'SuperUser'));
         $view->assign('usertype_selected', 'user');
 
-
-
-
         echo $view->render();
     }
 
     function settings() {
-        echo "Not implemented";
+        $form = new UserSettingsForm();
+
+        $view = CoreView::factory('usersettings');
+        $view->addForm($form);
+        $view->subTemplate = 'genericForm.tpl';
+
+        echo $view->render();
     }
 }
 
