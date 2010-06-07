@@ -27,7 +27,12 @@ class ModuleLoginAPI extends CoreModuleAPI {
     function getUser($userid) 
     {
         $sql = 'SELECT 
-                    *
+                    userid,
+                    password_hash,
+                    password_salt,
+                    athlete,
+                    coach,
+                    superuser
                 FROM 
                     t_users
                 WHERE

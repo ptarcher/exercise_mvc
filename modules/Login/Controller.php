@@ -65,13 +65,17 @@ class ModuleLogin extends CoreModule {
 
         $form = new LoginForm();
         if ($form->validate()) {
-            $user     = $form->getSubmitValue('form_login');
+            $userid   = $form->getSubmitValue('form_login');
             $password = $form->getSubmitValue('form_password');
 
-            $success = $this->api->checkLogin($user, $password);
-            print_r($sucess);
+            $success = $this->api->checkLogin($userid, $password);
             if ($success) {
-                $_SESSION['userid'] = $user;
+                $user_credentials = $this->api->getUser($userid);
+
+                $_SESSION['userid']    = $user_credentials['userid'];
+                $_SESSION['coach']     = $user_credentials['coach']     == 't';
+                $_SESSION['athlete']   = $user_credentials['athlete']   == 't';
+                $_SESSION['superuser'] = $user_credentials['superuser'] == 't';
 
                 /* We have sucessfully logged in, now lets 
                  * display the next page */
