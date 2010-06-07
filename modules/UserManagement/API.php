@@ -26,7 +26,10 @@ require_once('core/ModuleAPI.php');
 class ModuleUserManagementAPI extends CoreModuleAPI {
     function getUsers() {
         $sql = 'SELECT 
-                    userid
+                    userid,
+                    coach,
+                    athlete,
+                    superuser
                 FROM 
                     t_users
                 ORDER BY

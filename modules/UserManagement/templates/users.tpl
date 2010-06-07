@@ -23,12 +23,18 @@
     <thead>
     <tr>
         <th>UserID</th>
+        <th>Coach</th>
+        <th>Athlete</th>
+        <th>Superuser</th>
     </tr>
     </thead>
     <tbody>
     {foreach from=$users key=i item=user}
     <tr>
         <td id="userid">{$user.userid}</td>
+        <td id="coach">{$user.coach}</td>
+        <td id="athlete">{$user.athlete}</td>
+        <td id="superuser">{$user.superuser}</td>
     </tr>
     {/foreach}
     </tbody>

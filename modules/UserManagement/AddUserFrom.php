@@ -31,12 +31,16 @@ class AddUserForm extends CoreForm
 		$formElements = array(
 			array('text',     'adduserform_login'),
 			array('password', 'adduserform_password'),
+			array('radio',    'adduserform_coach'),
+			array('radio',    'adduserform_athlete'),
 		);
 		$this->addElements( $formElements );
 
 		$formRules = array(
-			array('adduserform_login',    'Login Required', 'required'),
-			array('adduserform_password', 'Password Required', 'required'),
+			array('adduserform_login',    'Login Required',           'required'),
+			array('adduserform_password', 'Password Required',        'required'),
+			array('adduserform_coach',    'Select a coach setting',   'required'),
+			array('adduserform_athlete',  'Select a athlete setting', 'required'),
 		);
 		$this->addRules( $formRules );
 

@@ -34,18 +34,25 @@ class ModuleUserManagement extends CoreModule {
     );
 
     static function _getHooks() {
-        $hooks = array(
-            array("hook"     => "navigator",
-                  "category" => "UserManagement", 
-                  "name"     => "View Users", 
-                  "module"   => "UserManagement", 
-                  "action"   => "view"),
-            array("hook"     => "navigator",
-                  "category" => "UserManagement", 
-                  "name"     => "New User", 
-                  "module"   => "UserManagement", 
-                  "action"   => "create"),
-        );
+        $hooks   = array();
+
+        $hooks[] = array("hook"     => "navigator",
+                         "category" => "User", 
+                         "name"     => "Settings", 
+                         "module"   => "UserManagement", 
+                         "action"   => "settings");
+        if ($_SESSION['superuser']) {
+            $hooks[] = array("hook"     => "navigator",
+                             "category" => "UserManagement", 
+                             "name"     => "View Users", 
+                             "module"   => "UserManagement", 
+                             "action"   => "view");
+            $hooks[] = array("hook"     => "navigator",
+                             "category" => "UserManagement", 
+                             "name"     => "New User", 
+                             "module"   => "UserManagement", 
+                             "action"   => "create");
+        }
 
         return $hooks;
     }
@@ -86,10 +93,33 @@ class ModuleUserManagement extends CoreModule {
         }
 
         $view = CoreView::factory('adduser');
-        $view->users = $users;
+        //$view->users = $users;
         $view->addForm($form);
         $view->subTemplate = 'genericForm.tpl';
+
+        /* Coach radio buttons */
+        $view->assign('coach_types', array('y' => 'Yes',
+                                           'n' => 'No'));
+        $view->assign('coach_selected', 'n');
+
+        /* Athlete radio buttons */
+        $view->assign('athlete_types', array('y' => 'Yes',
+                                             'n' => 'No'));
+        $view->assign('athlete_selected', 'n');
+
+        /* Athlete radio buttons */
+        $view->assign('usertype_types', array('user'      => 'User',
+                                              'superuser' => 'SuperUser'));
+        $view->assign('usertype_selected', 'user');
+
+
+
+
         echo $view->render();
+    }
+
+    function settings() {
+        echo "Not implemented";
     }
 }
 
