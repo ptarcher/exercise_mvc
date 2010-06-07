@@ -41,7 +41,7 @@ class ModuleUserManagement extends CoreModule {
                          "name"     => "Settings", 
                          "module"   => "UserManagement", 
                          "action"   => "settings");
-        if ($_SESSION['superuser']) {
+        if (isset($_SESSION['superuser']) && $_SESSION['superuser']) {
             $hooks[] = array("hook"     => "navigator",
                              "category" => "UserManagement", 
                              "name"     => "View Users", 
@@ -75,10 +75,13 @@ class ModuleUserManagement extends CoreModule {
 
         $form = new AddUserForm();
         if ($form->validate()) {
-            $user     = $form->getSubmitValue('adduserform_login');
+            $userid   = $form->getSubmitValue('adduserform_login');
             $password = $form->getSubmitValue('adduserform_password');
+            $coach    = $form->getSubmitValue('adduserform_coach');
+            $athlete  = $form->getSubmitValue('adduserform_athlete');
+            $usertype = $form->getSubmitValue('adduserform_usertype');
 
-            $success = $this->api->createUser($user, $password);
+            $success = $this->api->createUser($user, $password, $coach, $athlete, $usertype);
             if ($success) {
                 /* We have sucessfully logged in, now lets 
                  * display the next page */

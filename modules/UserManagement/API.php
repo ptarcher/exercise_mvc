@@ -40,18 +40,29 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function createUser($userid, $password) {
+    function createUser($userid, $password, $coach, $athlete, $usertype) {
         $password_salt = Common::getRandomString(64);
         $password_hash = sha1($password . $password_salt);
+
+        /* TODO: Check that the current user is a super user */
+        if (!$_SESSION['superuser']) {
+            raise exception('You need to be super user to perform this action');
+        }
 
         $sql = 'INSERT INTO t_users
                    (userid,
                     password_hash,
-                    password_salt)
+                    password_salt,
+                    coach,
+                    athlete,
+                    superuser)
                 VALUES 
                    (:userid,
                     :password_hash,
-                    :password_salt
+                    :password_salt,
+                    :coach,
+                    :athlete,
+                    :superuser
                    )';
 
         $stmt = $this->dbQueries->dbh->prepare($sql);
@@ -59,6 +70,9 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
         $stmt->bindParam(':userid',        $userid,        PDO::PARAM_STR);
         $stmt->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
         $stmt->bindParam(':password_salt', $password_salt, PDO::PARAM_STR);
+        $stmt->bindParam(':coach',         $coach,         PDO::PDO_PARAM_BOOL);
+        $stmt->bindParam(':athlete',       $athlete,       PDO::PDO_PARAM_BOOL);
+        $stmt->bindParam(':superuser',     $superuser,     PDO::PDO_PARAM_BOOL);
 
         $stmt->execute() or die("failed to execute $SQL");
     }
