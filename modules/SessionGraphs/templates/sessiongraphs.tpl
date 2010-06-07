@@ -74,9 +74,7 @@
 
 <div class="expand">
 <h3>Location</h3>
-<p>
 <div style="margin-top:20px; margin-left:20px; width:800px; height:640px" id="map"></div>
-</p>
 
 <h3>Speed</h3>
 <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="speed"></div>
