@@ -66,6 +66,7 @@ class ModuleSessions extends CoreModule {
         $sessions = $this->api->getSessions();
         $view = CoreView::factory('sessions');
         $view->sessions = $sessions;
+        $view->coach    = $_SESSION['coach'];
         echo $view->render();
     }
 
