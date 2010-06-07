@@ -13,6 +13,7 @@
     <script type="text/javascript" src="libraries/javascript/sprintf.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.metadata.js"></script>
     <script type="text/javascript" src="modules/Sessions/templates/sessions.js"></script>
 </head>
 
@@ -28,9 +29,9 @@
 <table class="tablesorter" id="editSessions" cellspacing="1">
     <thead>
     <tr>
-    {if $coach}
+{if $coach}
         <th>User</th>
-    {/if}
+{/if}
         <th>Date</th>
         <th>Type</th>
         <th>Description</th>
@@ -39,8 +40,10 @@
         <th>Average Speed</th>
         <th>Average Heart Rate</th>
         <th>Comments</th>
-        <th> </th>
-        <th> </th>
+{literal}
+        <th class="{sorter: false}"> </th>
+        <th class="{sorter: false}"> </th>
+{/literal}
     </tr>
     </thead>
     <tbody>
@@ -70,7 +73,7 @@
     </tr>
     {foreachelse}
     <tr>
-        <td colspan="10"><center>No records</center></td>
+        <td colspan="11"><center>No records</center></td>
     </tr>
     {/foreach}
     </tbody>
