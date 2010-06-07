@@ -70,7 +70,7 @@
     </tr>
     {foreachelse}
     <tr>
-        <td colspan="10">No records</td>
+        <td colspan="10"><center>No records</center></td>
     </tr>
     {/foreach}
     </tbody>
