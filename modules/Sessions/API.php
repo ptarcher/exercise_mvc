@@ -141,22 +141,34 @@ class ModuleSessionsAPI extends CoreModuleAPI {
     }
 
     function deleteSession($session_date) {
-        $sql = 'BEGIN;
-                DELETE FROM t_exercise_data
-                WHERE
-                    session_date = :session_date AND
-                    userid       = :userid;
-                DELETE FROM t_exercise_totals
-                WHERE
-                    session_date = :session_date AND
-                    userid       = :userid;
-                COMMIT';
+        /* Start the changes */
+        $sql = 'BEGIN;';
         $stmt = $this->dbQueries->dbh->prepare($sql);
+        $stmt->execute() or die("Unable to execute $sql");
 
-        // TODO: Add the types
+        /* Remove all the data points */
+        $sql = 'DELETE FROM t_exercise_data
+                WHERE
+                    session_date = :session_date AND
+                    userid       = :userid;';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
         $stmt->bindParam(':session_date',  $session_date);
         $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->execute() or die("Unable to execute $sql");
 
+        /* Remove the session totals */
+        $sql = 'DELETE FROM t_exercise_totals
+                WHERE
+                    session_date = :session_date AND
+                    userid       = :userid;';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $stmt->bindParam(':session_date',  $session_date);
+        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->execute() or die("Unable to execute $sql");
+
+        /* Finalise */
+        $sql = 'COMMIT';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
         $stmt->execute() or die("Unable to execute $sql");
     }
 

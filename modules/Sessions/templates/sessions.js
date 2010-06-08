@@ -1,4 +1,4 @@
-function getDeleteSessionAJAX( idSession )
+function getDeleteSessionAJAX( session_date )
 {
 	var ajaxRequest = coreHelper.getStandardAjaxConf();
 	coreHelper.toggleAjaxLoading();
@@ -7,8 +7,7 @@ function getDeleteSessionAJAX( idSession )
 	parameters.module = 'APIAccess';
 	parameters.format = 'json';
  	parameters.method =  'Sessions.deleteSession';
- 	parameters.idSession = idSession;
- 	parameters.token_auth = core.token_auth;
+    parameters.session_date  = session_date;
 	
 	ajaxRequest.data = parameters;
 	
@@ -94,9 +93,10 @@ $(document).ready( function() {
 	$('.deleteSession').click( function() {
 			coreHelper.ajaxHideError();
 			var idRow = $(this).attr('id');
-			var nameToDelete = $(this).parent().parent().find('input#description').val() || $(this).parent().parent().find('td#description').html();
-			var session_date = $(this).parent().parent().find('#date').html();
-			if(confirm(sprintf('Are you sure you want to delete "'+nameToDelete+'" (date = '+session_date+')')) ) {
+            var row = $(this).parent().parent();
+			var nameToDelete = row.find('input#description').val() || row.find('td#description').html();
+			var session_date = row.find('input#session_date').val();
+			if(confirm('Are you sure you want to delete "'+nameToDelete+'" (date = '+session_date+')')) {
 				$.ajax( getDeleteSessionAJAX( session_date ) );
 			}
 		}

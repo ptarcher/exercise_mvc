@@ -37,23 +37,25 @@ class ModuleSessions extends CoreModule {
     );
 
     static function _getHooks() {
-        $hooks = array(
-            array("hook"     => "navigator",
-                  "category" => "Sessions", 
-                  "name"     => "View Sessions", 
-                  "module"   => "Sessions", 
-                  "action"   => "view"),
-            array("hook"     => "navigator",
-                  "category" => "Sessions", 
-                  "name"     => "New Session", 
-                  "module"   => "Sessions", 
-                  "action"   => "create"),
-            array("hook"     => "navigator",
-                  "category" => "Sessions", 
-                  "name"     => "Upload from File", 
-                  "module"   => "Sessions", 
-                  "action"   => "viewUpload"),
-        );
+        $hooks   = array();
+        $hooks[] = array("hook"     => "navigator",
+                         "category" => "Sessions", 
+                         "name"     => "View Sessions", 
+                         "module"   => "Sessions", 
+                         "action"   => "view");
+        $hooks[] = array("hook"     => "navigator",
+                         "category" => "Sessions", 
+                         "name"     => "New Session", 
+                         "module"   => "Sessions", 
+                         "action"   => "create");
+
+        if (isset($_SESSION['athlete']) && $_SESSION['athlete']) {
+            $hooks[] = array("hook"     => "navigator",
+                             "category" => "Sessions", 
+                             "name"     => "Upload from File", 
+                             "module"   => "Sessions", 
+                             "action"   => "viewUpload");
+        }
 
         return $hooks;
     }
