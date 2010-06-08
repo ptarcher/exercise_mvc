@@ -46,7 +46,7 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
 
         /* TODO: Check that the current user is a super user */
         if (!$_SESSION['superuser']) {
-            raise exception('You need to be super user to perform this action');
+            throw exception('You need to be super user to perform this action');
         }
 
         $sql = 'INSERT INTO t_users
