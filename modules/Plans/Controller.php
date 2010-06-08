@@ -54,11 +54,14 @@ class ModulePlans extends CoreModule {
     }
     
     function view() {
-        //$plans = $this->api->getPlans();
+        $plans = $this->api->getPlans();
         $view = CoreView::factory('plans');
-        //$view->plans = $plans;
+        $view->plans = $plans;
 
-        $view->render();
+        echo $view->render();
+    }
+
+    function create() {
     }
 }
 
