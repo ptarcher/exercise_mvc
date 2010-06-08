@@ -39,20 +39,41 @@ class ModulePlansAPI extends CoreModuleAPI {
 		}
 		return self::$instance;
 	}
+
+    function getWeeklyPlans() {
+        $sql = 'SELECT 
+                    week_date,
+                    period,
+                    description,
+                    comment
+                FROM 
+                    t_exercise_plans_weekly
+                WHERE 
+                    userid = :userid
+                ORDER BY
+                    session_date DESC';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 	
-    function getPlans() {
+    function getDailyPlans() {
         $sql = 'SELECT 
                     timestamp,
-                    type_short,
+                    category,
                     description,
                     volume,
                     intensity,
                     duration,
                     focus,
-                    category,
                     comment
                 FROM 
-                    t_exercise_plans
+                    t_exercise_plans_daily
                 WHERE 
                     userid = :userid
                 ORDER BY

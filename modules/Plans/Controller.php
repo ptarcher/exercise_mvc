@@ -41,9 +41,15 @@ class ModulePlans extends CoreModule {
                   "action"   => "view"),
             array("hook"     => "navigator",
                   "category" => "Plans", 
-                  "name"     => "Create a new Plan", 
+                  "name"     => "Create a new Daily Plan", 
                   "module"   => "Plans", 
-                  "action"   => "create"),
+                  "action"   => "createDaily"),
+            array("hook"     => "navigator",
+                  "category" => "Plans", 
+                  "name"     => "Create a new Weekly Plan", 
+                  "module"   => "Plans", 
+                  "action"   => "createWeekly"),
+
         );
 
         return $hooks;
@@ -54,14 +60,17 @@ class ModulePlans extends CoreModule {
     }
     
     function view() {
-        $plans = $this->api->getPlans();
+        $weekly_plans = $this->api->getWeeklyPlans();
         $view = CoreView::factory('plans');
-        $view->plans = $plans;
+        $view->weekly_plans = $weekly_plans;
 
         echo $view->render();
     }
 
-    function create() {
+    function createDaily() {
+    }
+
+    function weeklyDaily() {
     }
 }
 
