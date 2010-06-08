@@ -42,25 +42,24 @@ class ModulePlansAPI extends CoreModuleAPI {
 	
     function getPlans() {
         $sql = 'SELECT 
-                    session_date,
+                    timestamp,
                     type_short,
                     description,
+                    volume,
+                    intensity,
                     duration,
-                    distance,
-                    avg_heartrate,
-                    avg_speed,
+                    focus,
+                    category,
                     comment
                 FROM 
-                    t_exercise_totals
+                    t_exercise_plans
                 WHERE 
                     userid = :userid
                 ORDER BY
-                    session_date DESC
-                LIMIT 
-                    100';
+                    session_date DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
 
         $stmt->execute();
 
