@@ -6,7 +6,7 @@
     {*<a name='{$subMenu.url}' href='index.php{$subMenu.url}'>{$mainMenu}</a>*}
     <ul>
     {foreach from=$subMenu key=name item=link name=subMenu}
-        <li><a href="{$link.url|urlencode}">{$link.name}</a></li>
+        <li><a href="{$link.url}">{$link.name}</a></li>
     {/foreach}
     </ul>
     </li>
