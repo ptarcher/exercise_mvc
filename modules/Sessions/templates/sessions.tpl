@@ -68,8 +68,8 @@
         <td id="avg_speed"   class="editableSession">{$session.avg_speed}</td>       
         <td id="avg_heartrate" class="editableSession">{$session.avg_heartrate}</td>       
         <td id="comment" class="editableSession">{$session.comment}</td>       
-        <td><img src='themes/default/images/edit.png' class="editSession" id="row{$i}" href='#' alt="" /></td>
-        <td><img src='themes/default/images/remove.png' class="deleteSession" id="row{$i}" value="delete" alt="" /></td>
+        <td><img src='themes/default/images/edit.png' class="editSession" id="row{$i}" alt="" /></td>
+        <td><img src='themes/default/images/remove.png' class="deleteSession" id="row{$i}" alt="" /></td>
     </tr>
     {foreachelse}
     <tr>
@@ -82,7 +82,8 @@
 <!-- end the table -->
 
 <!-- TODO: Just add a blank row to the table to allow direct input all the time  -->
-<div class="addRowSession"><a href="#"><img src='themes/default/images/add.png' alt="" />AddSession</a></div>
+<div class="addRowSession">
+<a href="#"><img src='themes/default/images/add.png' alt="" />AddSession</a>
 </div>
 
 {include file="templates/footer.tpl"}
