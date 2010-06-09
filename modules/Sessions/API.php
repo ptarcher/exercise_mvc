@@ -175,8 +175,8 @@ class ModuleSessionsAPI extends CoreModuleAPI {
 
     function createLap($session_date,  $start_time, 
                        $start_pos_lat, $start_pos_long,
-                       $duration,      $calories 
-                       $avg_heartrate, $max_heartrate
+                       $duration,      $calories,
+                       $avg_heartrate, $max_heartrate,
                        $avg_speed,     $max_speed,
                        $total_ascent,  $total_descent,
                        $distance) {
