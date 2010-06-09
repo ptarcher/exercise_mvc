@@ -140,6 +140,99 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->execute();
     }
 
+    function getLaps($session_date) {
+        $sql = 'SELECT
+                    userid,
+                    session_date,
+                    start_time,
+                    start_pos_lat,
+                    start_pos_long,
+                    duration,
+                    calories,
+                    distance,
+                    avg_heartrate,
+                    max_heartrate,
+                    avg_speed,
+                    max_speed,
+                    total_ascent,
+                    total_descent
+                FROM 
+                    t_exercise_laps
+                WHERE 
+                    userid       = :userid       AND
+                    session_date = :session_date
+                ORDER BY
+                    start_time DESC';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
+        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    function createLap($session_date,  $start_time, 
+                       $start_pos_lat, $start_pos_long,
+                       $duration,      $calories 
+                       $avg_heartrate, $max_heartrate
+                       $avg_speed,     $max_speed,
+                       $total_ascent,  $total_descent,
+                       $distance) {
+        $sql = 'INSERT INTO t_exercise_laps
+                   (session_date,
+                    start_time,
+                    start_pos_lat,
+                    start_pos_long,
+                    duration,
+                    calories,
+                    distance,
+                    avg_heartrate,
+                    max_heartrate,
+                    avg_speed,
+                    max_speed,
+                    total_ascent,
+                    total_descent,
+                    userid)
+                VALUES 
+                   (:session_date,
+                    :start_time,
+                    :start_pos_lat,
+                    :start_pos_long,
+                    :duration,
+                    :calories,
+                    :distance,
+                    :avg_heartrate,
+                    :max_heartrate,
+                    :avg_speed,
+                    :max_speed,
+                    :total_ascent,
+                    :total_descent,
+                    :userid)';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        // TODO: Add the types
+        $stmt->bindParam(':session_date',  $session_date);
+        $stmt->bindParam(':type_short',    $type_short,         PDO::PARAM_STR);
+        $stmt->bindParam(':start_time',    $start_time);
+        $stmt->bindParam(':start_pos_lat', $start_pos_lat);
+        $stmt->bindParam(':start_pos_long',$start_pos_long);
+        $stmt->bindParam(':duration',      $duration);
+        $stmt->bindParam(':calories',      $calories);
+        $stmt->bindParam(':distance',      $distance);
+        $stmt->bindParam(':avg_heartrate', $avg_heartrate);
+        $stmt->bindParam(':max_heartrate', $max_heartrate);
+        $stmt->bindParam(':avg_speed',     $avg_speed);
+        $stmt->bindParam(':max_speed',     $avg_speed);
+        $stmt->bindParam(':total_ascent',  $total_ascent);
+        $stmt->bindParam(':total_descent', $total_descent);
+        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+
+        $stmt->execute();
+    }
+
+
     function deleteSession($session_date) {
         /* Start the changes */
         $sql = 'BEGIN;';
