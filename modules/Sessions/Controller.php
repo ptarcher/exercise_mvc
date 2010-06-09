@@ -43,11 +43,13 @@ class ModuleSessions extends CoreModule {
                          "name"     => "View Sessions", 
                          "module"   => "Sessions", 
                          "action"   => "view");
+        /*
         $hooks[] = array("hook"     => "navigator",
                          "category" => "Sessions", 
                          "name"     => "New Session", 
                          "module"   => "Sessions", 
                          "action"   => "create");
+        */
 
         if (isset($_SESSION['athlete']) && $_SESSION['athlete']) {
             $hooks[] = array("hook"     => "navigator",
@@ -70,12 +72,6 @@ class ModuleSessions extends CoreModule {
         $view->sessions = $sessions;
         $view->coach    = $_SESSION['coach'];
         echo $view->render();
-    }
-
-    function create() {
-        $exercise_types = $this->api->getExerciseTypes();
-
-        $this->view->renderCreate($exercise_types);
     }
 
     function doCreate() {
