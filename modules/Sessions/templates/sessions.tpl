@@ -58,7 +58,7 @@
     {/if}
     <tr id="row{$i}">
     {if $coach}
-        <th>{$session.userid}</th>
+        <td>{$session.userid}</td>
     {/if}
         <td id="date"><input type="hidden" id="session_date" value="{$session.session_date}" /><a href="{url module=SessionGraphs session_date=$session.session_date|escape:url}">{$session.session_date}</a></td>
         <td id="type"        class="editableSession">{$session.type_short}</td>
