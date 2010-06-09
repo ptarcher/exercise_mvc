@@ -58,8 +58,8 @@
         <td id="period"      class="editableSession">{$plan.week_date}</td>
         <td id="description" class="editableSession">{$plan.description}</td>       
         <td id="comment"     class="editableSession">{$plan.comments}</td>       
-        <td><img src='themes/default/images/edit.png' class="editPlan" id="row{$i}" alt="" /></td>
-        <td><img src='themes/default/images/remove.png' class="deletePlan" id="row{$i}" alt="" /></td>
+        <td><center><img src='themes/default/images/edit.png' class="editPlan" id="row{$i}" alt="" /></center></td>
+        <td><center><img src='themes/default/images/remove.png' class="deletePlan" id="row{$i}" alt="" /></center></td>
     </tr>
     {foreachelse}
     <tr>

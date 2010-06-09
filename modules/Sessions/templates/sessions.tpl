@@ -68,8 +68,8 @@
         <td id="avg_speed"   class="editableSession">{$session.avg_speed}</td>       
         <td id="avg_heartrate" class="editableSession">{$session.avg_heartrate}</td>       
         <td id="comment" class="editableSession">{$session.comment}</td>       
-        <td><img src='themes/default/images/edit.png' class="editSession" id="row{$i}" alt="" /></td>
-        <td><img src='themes/default/images/remove.png' class="deleteSession" id="row{$i}" alt="" /></td>
+        <td><center><img src='themes/default/images/edit.png' class="editSession" id="row{$i}" alt="" /></center></td>
+        <td><center><img src='themes/default/images/remove.png' class="deleteSession" id="row{$i}" alt="" /></center></td>
     </tr>
     {foreachelse}
     <tr>
