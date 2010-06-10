@@ -51,7 +51,7 @@ class ModulePlansAPI extends CoreModuleAPI {
                 WHERE 
                     userid = :userid
                 ORDER BY
-                    session_date DESC';
+                    week_date DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
@@ -77,7 +77,7 @@ class ModulePlansAPI extends CoreModuleAPI {
                 WHERE 
                     userid = :userid
                 ORDER BY
-                    session_date DESC';
+                    timestamp DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
