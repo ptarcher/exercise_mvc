@@ -43,7 +43,7 @@
     <tbody>
     {* assign var=showSitesSelection value=false *}
     {* assign var=week value="false" *}
-    {foreach from=$plans key=i item=plans}
+    {foreach from=$plans key=i item=plan}
     {if $week != $session.week}
     <tr>
         <th colspan="8">Week 1</th>
@@ -55,7 +55,7 @@
         <td>{$plan.userid}</td>
 {/if}
         <td id="date"><input type="hidden" id="week_date" value="{$plan.week_date}" />{$plan.week_date}</a></td>
-        <td id="period"      class="editableSession">{$plan.week_date}</td>
+        <td id="period"      class="editableSession">{$plan.period}</td>
         <td id="description" class="editableSession">{$plan.description}</td>       
         <td id="comment"     class="editableSession">{$plan.comments}</td>       
         <td><center><img src='themes/default/images/edit.png' class="editPlan" id="row{$i}" alt="" /></center></td>

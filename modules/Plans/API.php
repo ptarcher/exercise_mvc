@@ -41,11 +41,12 @@ class ModulePlansAPI extends CoreModuleAPI {
 	}
 
     function getWeeklyPlans() {
-        $sql = 'SELECT 
+        $sql = 'SELECT
+                    userid,
                     week_date,
                     period,
                     description,
-                    comment
+                    "comment"
                 FROM 
                     t_exercise_plans_weekly
                 WHERE 
@@ -64,6 +65,7 @@ class ModulePlansAPI extends CoreModuleAPI {
 	
     function getDailyPlans() {
         $sql = 'SELECT 
+                    userid,
                     timestamp,
                     category,
                     description,

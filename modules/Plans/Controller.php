@@ -62,7 +62,7 @@ class ModulePlans extends CoreModule {
     function view() {
         $weekly_plans = $this->api->getWeeklyPlans();
         $view = CoreView::factory('plans');
-        $view->weekly_plans = $weekly_plans;
+        $view->plans = $weekly_plans;
 
         echo $view->render();
     }
