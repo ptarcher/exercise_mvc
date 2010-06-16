@@ -39,8 +39,17 @@ class ModuleSessionGraphs extends CoreModule {
     function view() {
         $session_date = Common::getRequestVar('session_date', null, 'string');
 
+        $sessions = $this->api->getSession($session_date);
+        if (is_array($sessions)) {
+            $session  = $sessions[0];
+        }
+        $laps    = $this->api->getLaps($session_date);
+
         $view = CoreView::factory('sessiongraphs');
         $view->session_date = $session_date;
+        $view->session      = $session;
+        $view->laps         = $laps;
+
         echo $view->render();
     }
 }

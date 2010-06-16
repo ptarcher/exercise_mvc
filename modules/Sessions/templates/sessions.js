@@ -93,7 +93,7 @@ $(document).ready( function() {
 	$('.deleteSession').click( function() {
 			coreHelper.ajaxHideError();
 			var idRow = $(this).attr('id');
-            var row = $(this).parent().parent();
+            var row   = $(this).parent().parent().parent();
 			var nameToDelete = row.find('input#description').val() || row.find('td#description').html();
 			var session_date = row.find('input#session_date').val();
 			if(confirm('Are you sure you want to delete "'+nameToDelete+'" (date = '+session_date+')')) {

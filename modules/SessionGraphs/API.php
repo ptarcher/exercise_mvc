@@ -103,6 +103,68 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
         return $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    function getSession($session_date) {
+        $sql = 'SELECT
+                    userid,
+                    session_date,
+                    type_short,
+                    description,
+                    duration,
+                    distance,
+                    avg_heartrate,
+                    avg_speed,
+                    comment
+                FROM 
+                    t_exercise_totals
+                WHERE 
+                    userid =       :userid       AND
+                    session_date = :session_date
+                ORDER BY
+                    session_date DESC';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':session_date', $session_date);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+
+    function getLaps($session_date) {
+        $sql = 'SELECT
+                    userid,
+                    session_date,
+                    start_time,
+                    start_pos_lat,
+                    start_pos_long,
+                    duration,
+                    calories,
+                    distance,
+                    avg_heartrate,
+                    max_heartrate,
+                    avg_speed,
+                    max_speed,
+                    total_ascent,
+                    total_descent
+                FROM 
+                    t_exercise_laps
+                WHERE 
+                    userid       = :userid       AND
+                    session_date = :session_date
+                ORDER BY
+                    start_time DESC';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
+        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 
 ?>

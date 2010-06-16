@@ -74,60 +74,35 @@ class ModuleSessions extends CoreModule {
         echo $view->render();
     }
 
-    function doCreate() {
-        // TODO: Check if it was successful
-        $this->api->createSession($_SESSION['userid'], 
-                                  $_POST['date'],
-                                  $_POST['type'],
-                                  $_POST['description'],
-                                  $_POST['duration'],
-                                  $_POST['distance'],
-                                  $_POST['avg_hr'],
-                                  $_POST['avg_speed'],
-                                  $_POST['comments']);
-
-        // TODO: Display it was successful
-        $this->view->renderCreate($exercise_types);
-    }
-
-    /*
-    function viewUpload() {
-        //$exercise_types = $this->api->getExerciseTypes();
-        $this->view->renderUpload($exercise_types);
-    }*/
-
     function viewUpload() {
         $form = new SessionUploadForm();
         if ($form->validate()) {
             $upload = $form->getSubmitValue('form_upload');
 
-            exec('/usr/bin/fitdecode -r '.$upload['tmp_name'], $xml_records);
-            exec('/usr/bin/fitdecode -l '.$upload['tmp_name'], $xml_laps);
             exec('/usr/bin/fitdecode -s '.$upload['tmp_name'], $xml_session);
-
-            $xml_records = implode("\n", $xml_records);
-            $xml_laps    = implode("\n", $xml_laps);
             $xml_session = implode("\n", $xml_session);
-
-            //print_r($xml_session);
-            $laps     = parseLaps($xml_laps);
-            $sessions = parseSessions($xml_session);
-            $records  = parseRecords($xml_records);
+            $sessions    = parseSessions($xml_session);
     
             /* There should only be one session */
             if (is_array($sessions)) {
                 $session = $sessions[0];
+                unset($sessions);
             }
 
             /* Insert the session data into the database */
-            $this->api->createSession($session->timestamp,
-                                      'E1',
-                                      'Untitled',
-                                      $session->total_timer_time,
-                                      $session->total_distance,
-                                      $session->avg_heart_rate,
-                                      $session->avg_speed,
-                                      '');
+            $this->api->createSessionFull($session->timestamp,
+                                          'E1',
+                                          'Untitled',
+                                          $session->total_timer_time,
+                                          $session->total_distance,
+                                          $session->total_calories,
+                                          $session->avg_heart_rate,
+                                          $session->max_heart_rate,
+                                          $session->avg_speed,
+                                          $session->max_speed,
+                                          $session->total_ascent,
+                                          $session->total_descent,
+                                          '');
 
             /* Find the seconds since epoch so we can do simple maths */
             $ftime = strptime($session->start_time, '%FT%T%z');
@@ -137,8 +112,17 @@ class ModuleSessions extends CoreModule {
                                     1 ,
                                     $ftime['tm_yday'] + 1,
                                     $ftime['tm_year'] + 1900); 
+            $session_timestamp = $session->timestamp;
 
             $last_interval = -1;
+
+            unset($session);
+            unset($sessions);
+
+            exec('/usr/bin/fitdecode -r '.$upload['tmp_name'], $xml_records);
+            $xml_records = implode("\n", $xml_records);
+            $records     = parseRecords($xml_records);
+
             /* Add the matching data points */
             foreach($records as $record) {
                 /* Convert the timestamp into an interval */
@@ -153,8 +137,7 @@ class ModuleSessions extends CoreModule {
 
                 /* Skip duplicates, they will cause issues in graphs */
                 if ($last_interval != $record_interval) {
-                    /* TODO: add the other factors */
-                    $this->api->insertSessionData($session->timestamp,
+                    $this->api->insertSessionData($session_timestamp,
                                                   $record_interval,
                                                   $record->distance,
                                                   $record->heart_rate,
@@ -169,19 +152,57 @@ class ModuleSessions extends CoreModule {
                 $last_interval = $record_interval;
             }
 
-            //print_r($laps);
-            //print_r($session);
-            //print_r($records);
+            unset($records);
+            exec('/usr/bin/fitdecode -l '.$upload['tmp_name'], $xml_laps);
+            $xml_laps = implode("\n", $xml_laps);
+            $laps     = parseLaps($xml_laps);
+            $lap_num = 1;
+            foreach($laps as $lap) {
+                //print_r($lap);
+
+                $ftime = strptime($lap->start_time, '%FT%T%z');
+                $start_epoch = mktime($ftime['tm_hour'],
+                                       $ftime['tm_min'],
+                                       $ftime['tm_sec'],
+                                       1 ,
+                                       $ftime['tm_yday'] + 1,
+                                       $ftime['tm_year'] + 1900);
+
+                $ftime = strptime($lap->duration, '%FT%T%z');
+                $duration_epoch = mktime($ftime['tm_hour'],
+                                       $ftime['tm_min'],
+                                       $ftime['tm_sec'],
+                                       1 ,
+                                       $ftime['tm_yday'] + 1,
+                                       $ftime['tm_year'] + 1900);
+
+                $lap_start    = $start_epoch    - $session_epoch;
+                $lap_duration = $duration_epoch - $start_epoch;
+                $lap_duration = 0;
+                $lap_start    = 0;
+
+                $this->api->insertLap($session_timestamp,
+                                      $lap_num,
+                                      $lap_start,
+                                      $lap->start_position_lat,
+                                      $lap->start_position_long,
+                                      $lap_duration,
+                                      $lap->total_calories,
+                                      $lap->avg_heart_rate,
+                                      $lap->max_heart_rate,
+                                      $lap->avg_speed,
+                                      $lap->max_speed,
+                                      $lap->total_ascent,
+                                      $lap->total_descent,
+                                      $lap->total_distance);
+                $lap_num++;
+            }
         }
 
         $view = CoreView::factory('sessionsfileupload');
         $view->addForm($form);
         $view->subTemplate = 'genericForm.tpl';
         echo $view->render();
-    }
-
-
-    function doUpload() {
     }
 }
 

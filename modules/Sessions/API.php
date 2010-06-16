@@ -140,40 +140,66 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->execute();
     }
 
-    function getLaps($session_date) {
-        $sql = 'SELECT
-                    userid,
-                    session_date,
-                    start_time,
-                    start_pos_lat,
-                    start_pos_long,
+    function createSessionFull($session_date,  $type_short, 
+                               $description,   $duration, 
+                               $distance,      $calories,
+                               $avg_heartrate, $max_heartrate,
+                               $avg_speed,     $max_speed,
+                               $total_ascent,  $total_descent,
+                               $comment) {
+        $sql = 'INSERT INTO t_exercise_totals
+                   (session_date,
+                    type_short,
+                    description,
                     duration,
-                    calories,
                     distance,
+                    calories,
                     avg_heartrate,
                     max_heartrate,
                     avg_speed,
                     max_speed,
                     total_ascent,
-                    total_descent
-                FROM 
-                    t_exercise_laps
-                WHERE 
-                    userid       = :userid       AND
-                    session_date = :session_date
-                ORDER BY
-                    start_time DESC';
+                    total_descent,
+                    comment,
+                    userid)
+                VALUES 
+                   (:session_date,
+                    :type_short,
+                    :description,
+                    :duration,
+                    :distance,
+                    :calories,
+                    :avg_heartrate,
+                    :max_heartrate,
+                    :avg_speed,
+                    :max_speed,
+                    :total_ascent,
+                    :total_descent,
+                    :comment,
+                    :userid)';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
-        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+        // TODO: Add the types
+        $stmt->bindParam(':session_date',  $session_date);
+        $stmt->bindParam(':type_short',    $type_short,         PDO::PARAM_STR);
+        $stmt->bindParam(':description',   $description,        PDO::PARAM_STR);
+        $stmt->bindParam(':duration',      $duration);
+        $stmt->bindParam(':distance',      $distance);
+        $stmt->bindParam(':calories',      $calories);
+        $stmt->bindParam(':avg_heartrate', $avg_heartrate);
+        $stmt->bindParam(':max_heartrate', $max_heartrate);
+        $stmt->bindParam(':avg_speed',     $avg_speed);
+        $stmt->bindParam(':max_speed',     $max_speed);
+        $stmt->bindParam(':total_ascent',  $total_ascent);
+        $stmt->bindParam(':total_descent', $total_descent);
+        $stmt->bindParam(':comment',       $comment,            PDO::PARAM_STR);
+        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
 
         $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function createLap($session_date,  $start_time, 
+    function insertLap($session_date,  $lap_num,
+                       $start_time, 
                        $start_pos_lat, $start_pos_long,
                        $duration,      $calories,
                        $avg_heartrate, $max_heartrate,
@@ -182,6 +208,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                        $distance) {
         $sql = 'INSERT INTO t_exercise_laps
                    (session_date,
+                    lap_num,
                     start_time,
                     start_pos_lat,
                     start_pos_long,
@@ -197,6 +224,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     userid)
                 VALUES 
                    (:session_date,
+                    :lap_num,
                     :start_time,
                     :start_pos_lat,
                     :start_pos_long,
@@ -214,7 +242,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
 
         // TODO: Add the types
         $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':type_short',    $type_short,         PDO::PARAM_STR);
+        $stmt->bindParam(':lap_num',       $lap_num);
         $stmt->bindParam(':start_time',    $start_time);
         $stmt->bindParam(':start_pos_lat', $start_pos_lat);
         $stmt->bindParam(':start_pos_long',$start_pos_long);
@@ -228,6 +256,8 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(':total_ascent',  $total_ascent);
         $stmt->bindParam(':total_descent', $total_descent);
         $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+
+        //print_r($stmt);
 
         $stmt->execute();
     }
@@ -248,6 +278,16 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(':session_date',  $session_date);
         $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
         $stmt->execute() or die("Unable to execute $sql");
+        
+        $sql = 'DELETE FROM t_exercise_laps
+                WHERE
+                    session_date = :session_date AND
+                    userid       = :userid;';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $stmt->bindParam(':session_date',  $session_date);
+        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->execute() or die("Unable to execute $sql");
+
 
         /* Remove the session totals */
         $sql = 'DELETE FROM t_exercise_totals

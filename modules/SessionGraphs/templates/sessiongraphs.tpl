@@ -72,32 +72,61 @@
 <center>
 <h1>Exercise data</h1>
 
-<div class="expand">
-<h3>Location</h3>
-<div style="margin-top:20px; margin-left:20px; width:800px; height:640px" id="map"></div>
+<table>
+<tr>
+    <td>
+        <h3>Details</h3>
+        <!-- Session details -->
+        <table>
+        <tr>
+            <td>Date:</td>
+            <td>{$session.session_date}</td>
+        <tr>
+        </table>
 
-<h3>Speed</h3>
-<div class="jqplot" style="margin:20px;width:800px;height:240px;" id="speed"></div>
+        <!-- Session laps, expandable -->
+        <h3>Laps</h3>
+        <table>
+        {foreach from=$laps key=i item=lap}
+        <tr>
+            <td>Lap {$lap.lap_num}:</td>
+            <td>{$lap.duration}</td>
+        <tr>
+        {foreachelse}
+        <tr>
+            <td colspan=2>No laps found.</td>
+        </tr>
+        {/foreach}
+        </table>
+    </td>
+    <td>
+        <div class="expand">
+        <h3>Location</h3>
+        <div style="margin-top:20px; margin-left:20px; width:800px; height:640px" id="map"></div>
 
-<h3>Heart Rate</h3>
-<div class="jqplot" style="margin:20px;width:800px;height:240px;" id="heartrate"></div>
+        <h3>Speed</h3>
+        <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="speed"></div>
 
-<!--h3>Speed</h3-->
-<!--div class="jqplot" style="margin:20px;width:800px;height:240px;" id="distance"></div-->
+        <h3>Heart Rate</h3>
+        <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="heartrate"></div>
 
-<h3>Altitude</h3>
-<div class="jqplot" style="margin:20px;width:800px;height:240px;" id="altitude"></div>
+        <!--h3>Speed</h3-->
+        <!--div class="jqplot" style="margin:20px;width:800px;height:240px;" id="distance"></div-->
 
-<h3>Cadence</h3>
-<div class="jqplot" style="margin:20px;width:800px;height:240px;" id="cadence"></div>
+        <h3>Altitude</h3>
+        <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="altitude"></div>
 
-<h3>Power</h3>
-<div class="jqplot" style="margin:20px;width:800px;height:240px;" id="power"></div>
+        <h3>Cadence</h3>
+        <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="cadence"></div>
 
-<h3>Temperature</h3>
-<div class="jqplot" style="margin:20px;width:800px;height:240px;" id="temperature"></div>
+        <h3>Power</h3>
+        <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="power"></div>
 
-</div>
+        <h3>Temperature</h3>
+        <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="temperature"></div>
+        </div>
+    </td>
+</tr>
 
 </center>
 
