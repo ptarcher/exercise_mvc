@@ -2,7 +2,7 @@ $(function () {
     // Call the Open Streetmap API
     //OSM_Init();
     // Call the googlemaps API
-    //GoogleMaps_Init();
+    GoogleMaps_Init();
 
     // jqplot
     var jqplot_options = {
