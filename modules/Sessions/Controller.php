@@ -158,28 +158,18 @@ class ModuleSessions extends CoreModule {
             $laps     = parseLaps($xml_laps);
             $lap_num = 1;
             foreach($laps as $lap) {
-                //print_r($lap);
+                print_r($lap);
 
                 $ftime = strptime($lap->start_time, '%FT%T%z');
                 $start_epoch = mktime($ftime['tm_hour'],
-                                       $ftime['tm_min'],
-                                       $ftime['tm_sec'],
-                                       1 ,
-                                       $ftime['tm_yday'] + 1,
-                                       $ftime['tm_year'] + 1900);
-
-                $ftime = strptime($lap->duration, '%FT%T%z');
-                $duration_epoch = mktime($ftime['tm_hour'],
-                                       $ftime['tm_min'],
-                                       $ftime['tm_sec'],
-                                       1 ,
-                                       $ftime['tm_yday'] + 1,
-                                       $ftime['tm_year'] + 1900);
+                                      $ftime['tm_min'],
+                                      $ftime['tm_sec'],
+                                      1 ,
+                                      $ftime['tm_yday'] + 1,
+                                      $ftime['tm_year'] + 1900);
 
                 $lap_start    = $start_epoch    - $session_epoch;
-                $lap_duration = $duration_epoch - $start_epoch;
-                $lap_duration = 0;
-                $lap_start    = 0;
+                $lap_duration = $lap->total_timer_time;
 
                 $this->api->insertLap($session_timestamp,
                                       $lap_num,

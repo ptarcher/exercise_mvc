@@ -155,7 +155,7 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     userid       = :userid       AND
                     session_date = :session_date
                 ORDER BY
-                    start_time DESC';
+                    start_time ASC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);

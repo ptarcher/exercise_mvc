@@ -96,7 +96,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(':comment',       $comment,            PDO::PARAM_STR);
         $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
 
-        $stmt->execute() or die("Unable to execute $sql");
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }
 
 
@@ -257,17 +257,48 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(':total_descent', $total_descent);
         $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
 
+        echo "\n";
+        echo $session_date;
+        echo "\n";
+        echo $lap_num;
+        echo "\n";
+        echo $start_time;
+        echo "\n";
+        echo $start_pos_lat;
+        echo "\n";
+        echo $start_pos_long;
+        echo "\n";
+        echo $duration;
+        echo "\n";
+        echo $calories;
+        echo "\n";
+        echo $distance;
+        echo "\n";
+        echo $avg_heartrate;
+        echo "\n";
+        echo $max_heartrate;
+        echo "\n";
+        echo $avg_speed;
+        echo "\n";
+        echo $avg_speed;
+        echo "\n";
+        echo $total_ascent;
+        echo "\n";
+        echo $total_descent;
+        echo "\n";
+        echo $_SESSION['userid'];
+        echo "\n";
+        echo "\n";
+
         //print_r($stmt);
 
-        $stmt->execute();
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }
 
 
     function deleteSession($session_date) {
         /* Start the changes */
-        $sql = 'BEGIN;';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-        $stmt->execute() or die("Unable to execute $sql");
+        $this->dbQueries->dbh->beginTransaction();
 
         /* Remove all the data points */
         $sql = 'DELETE FROM t_exercise_data
@@ -277,7 +308,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt = $this->dbQueries->dbh->prepare($sql);
         $stmt->bindParam(':session_date',  $session_date);
         $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
-        $stmt->execute() or die("Unable to execute $sql");
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
         
         $sql = 'DELETE FROM t_exercise_laps
                 WHERE
@@ -300,9 +331,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->execute() or die("Unable to execute $sql");
 
         /* Finalise */
-        $sql = 'COMMIT';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-        $stmt->execute() or die("Unable to execute $sql");
+        $this->dbQueries->dbh->commit();
     }
 
     function insertSessionData($session_date, $time, $distance, 
@@ -352,7 +381,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(':power',         $power);
         $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
 
-        $stmt->execute(); //or die("Unable to execute $sql");
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }
 
     function getTrainingTypes() {
@@ -364,7 +393,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                 ORDER BY
                     type_short';
         $stmt = $this->dbQueries->dbh->prepare($sql);
-        $stmt->execute();
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
 
         $types = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -386,7 +415,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                 ORDER BY
                     total_type';
         $stmt = $this->dbQueries->dbh->prepare($sql);
-        $stmt->execute();
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
