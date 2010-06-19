@@ -4,10 +4,13 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	{postEvent name="template_css_import"}
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/tablesorter/themes/blue/style.css" media="screen" />
 	{postEvent name="template_js_import"}
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript">session_date="{$session_date}";</script>
+    <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.metadata.js"></script>
 
     <!-- BEGIN: jqplot -->
     <!--[if IE]><script src="libraries/javascript/jqplot/excanvas.min.js"></script><![endif]-->
@@ -26,7 +29,7 @@
     <!-- script src="modules/SessionGraphs/templates/openstreetmap.js"></script-->
 
     <!-- Google Maps -->
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAv9aTDwE6fauiAWoMtxkR-xRUnSFVdNCq8_C9uprN1AKVsiEqDBQ31BXtoxNUK3ETgRsjnDg0vbJzjg" type="text/javascript"></script>
+    <!--script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAv9aTDwE6fauiAWoMtxkR-xRUnSFVdNCq8_C9uprN1AKVsiEqDBQ31BXtoxNUK3ETgRsjnDg0vbJzjg" type="text/javascript"></script-->
 
     <script src="modules/SessionGraphs/templates/loadgpx.4.js" type="text/javascript"></script>
     <script src="modules/SessionGraphs/templates/googlemaps.js" type="text/javascript"></script>
@@ -86,17 +89,31 @@
 
         <!-- Session laps, expandable -->
         <h3>Laps</h3>
-        <table>
+        <table class="tablesorter">
+        <thead>
+        <tr>
+            <th>Lap Num</th>
+            <th>Duration</th>
+            <th>Distance</th>
+            <th>Avg Speed</th>
+            <th>Avg Heartrate</th>
+        </tr>
+        </thead>
+        <tbody>
         {foreach from=$laps key=i item=lap}
         <tr>
-            <td>Lap {$lap.lap_num}:</td>
+            <td>{$lap.lap_num}</td>
             <td>{$lap.duration}</td>
+            <td>{$lap.distance}</td>
+            <td>{$lap.avg_speed}</td>
+            <td>{$lap.avg_heartrate}</td>
         <tr>
         {foreachelse}
         <tr>
             <td colspan=2>No laps found.</td>
         </tr>
         {/foreach}
+        </tbody>
         </table>
     </td>
     <td>
