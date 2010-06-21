@@ -81,22 +81,28 @@
         <h3>Details</h3>
         <!-- Session details -->
         <table>
+        <tbody>
+        {foreach from=$session key=label item=val}
         <tr>
-            <td>Date:</td>
-            <td>{$session.session_date}</td>
-        <tr>
+            <td>{$label}:</td>
+            <td>{$val}</td>
+        </tr>
+        {/foreach}
+        </tbody>
         </table>
 
         <!-- Session laps, expandable -->
         <h3>Laps</h3>
-        <table class="tablesorter">
+        <table class="tablesorter" id="laps">
         <thead>
         <tr>
             <th>Lap Num</th>
             <th>Duration</th>
             <th>Distance</th>
             <th>Avg Speed</th>
+            <th>Max Speed</th>
             <th>Avg Heartrate</th>
+            <th>Max Heartrate</th>
         </tr>
         </thead>
         <tbody>
@@ -106,8 +112,10 @@
             <td>{$lap.duration}</td>
             <td>{$lap.distance}</td>
             <td>{$lap.avg_speed}</td>
+            <td>{$lap.max_speed}</td>
             <td>{$lap.avg_heartrate}</td>
-        <tr>
+            <td>{$lap.max_heartrate}</td>
+        </tr>
         {foreachelse}
         <tr>
             <td colspan=2>No laps found.</td>

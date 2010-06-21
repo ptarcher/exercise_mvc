@@ -39,16 +39,22 @@ class ModuleSessionGraphs extends CoreModule {
     function view() {
         $session_date = Common::getRequestVar('session_date', null, 'string');
 
-        $sessions = $this->api->getSession($session_date);
-        if (is_array($sessions)) {
-            $session  = $sessions[0];
-        }
+        $session = $this->api->getSession($session_date);
         $laps    = $this->api->getLaps($session_date);
 
         $view = CoreView::factory('sessiongraphs');
         $view->session_date = $session_date;
-        $view->session      = $session;
         $view->laps         = $laps;
+
+        $session_labels = array();
+        $session_labels['Date']           = $session['session_date'];
+        $session_labels['Duration']       = $session['duration'];
+        $session_labels['Distance']       = $session['distance'];
+        $session_labels['Avg Speed']      = $session['avg_speed'];
+        $session_labels['Max Speed']      = $session['max_speed'];
+        $session_labels['Avg Heart Rate'] = $session['avg_heartrate'];
+        $session_labels['Max Heart Rate'] = $session['max_heartrate'];
+        $view->session = $session_labels;
 
         echo $view->render();
     }

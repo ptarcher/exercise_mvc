@@ -112,7 +112,9 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     duration,
                     distance,
                     avg_heartrate,
+                    max_heartrate,
                     avg_speed,
+                    max_speed,
                     comment
                 FROM 
                     t_exercise_totals
@@ -128,7 +130,13 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
 
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (is_array($sessions)) {
+            return $sessions[0];
+        } else {
+            return array();
+        }
     }
 
 

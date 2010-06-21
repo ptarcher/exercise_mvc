@@ -252,45 +252,10 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(':avg_heartrate', $avg_heartrate);
         $stmt->bindParam(':max_heartrate', $max_heartrate);
         $stmt->bindParam(':avg_speed',     $avg_speed);
-        $stmt->bindParam(':max_speed',     $avg_speed);
+        $stmt->bindParam(':max_speed',     $max_speed);
         $stmt->bindParam(':total_ascent',  $total_ascent);
         $stmt->bindParam(':total_descent', $total_descent);
         $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
-
-        echo "\n";
-        echo $session_date;
-        echo "\n";
-        echo $lap_num;
-        echo "\n";
-        echo $start_time;
-        echo "\n";
-        echo $start_pos_lat;
-        echo "\n";
-        echo $start_pos_long;
-        echo "\n";
-        echo $duration;
-        echo "\n";
-        echo $calories;
-        echo "\n";
-        echo $distance;
-        echo "\n";
-        echo $avg_heartrate;
-        echo "\n";
-        echo $max_heartrate;
-        echo "\n";
-        echo $avg_speed;
-        echo "\n";
-        echo $avg_speed;
-        echo "\n";
-        echo $total_ascent;
-        echo "\n";
-        echo $total_descent;
-        echo "\n";
-        echo $_SESSION['userid'];
-        echo "\n";
-        echo "\n";
-
-        //print_r($stmt);
 
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }
