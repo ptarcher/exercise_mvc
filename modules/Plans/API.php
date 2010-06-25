@@ -70,8 +70,8 @@ class ModulePlansAPI extends CoreModuleAPI {
                     timestamp,
                     category,
                     description,
-                    volume,
-                    intensity,
+                    volume    * 100 AS volume,
+                    intensity * 100 AS intensity,
                     duration,
                     focus,
                     comment
