@@ -63,9 +63,10 @@ class ModulePlansAPI extends CoreModuleAPI {
     }
 
 	
-    function getDailyPlans() {
+    function getDailyPlans($week_date) {
         $sql = 'SELECT 
                     userid,
+                    week_date,
                     timestamp,
                     category,
                     description,
@@ -77,14 +78,16 @@ class ModulePlansAPI extends CoreModuleAPI {
                 FROM 
                     t_exercise_plans_daily
                 WHERE 
-                    userid = :userid
+                    userid    = :userid AND
+                    week_date = :week_date
                 ORDER BY
                     timestamp DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':week_date', $week_date);
+        $stmt->bindParam(':userid',    $_SESSION['userid'], PDO::PARAM_STR);
 
-        $stmt->execute();
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

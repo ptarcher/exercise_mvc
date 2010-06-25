@@ -67,6 +67,17 @@ class ModulePlans extends CoreModule {
         echo $view->render();
     }
 
+    function viewDaily() {
+        $week_date   = Common::getRequestVar('week_date', null, 'string');
+
+        $daily_plans = $this->api->getDailyPlans($week_date);
+
+        $view = CoreView::factory('daily');
+        $view->plans = $daily_plans;
+
+        echo $view->render();
+    }
+
     function createDaily() {
     }
 

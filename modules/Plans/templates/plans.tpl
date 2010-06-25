@@ -1,6 +1,6 @@
 {include file="templates/header.tpl"}
 <head>
-    <title>Bike &rsaquo; Sessions</title>
+    <title>Bike &rsaquo; Plans</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	{postEvent name="template_css_import"}
     <!-- TODO: Move this into the module code -->
@@ -41,20 +41,12 @@
     </tr>
     </thead>
     <tbody>
-    {* assign var=showSitesSelection value=false *}
-    {* assign var=week value="false" *}
     {foreach from=$plans key=i item=plan}
-    {if $week != $session.week}
-    <tr>
-        <th colspan="8">Week 1</th>
-        {* assign var=week value=$session.week *}
-    </tr>
-    {/if}
     <tr id="row{$i}">
 {if $coach}
         <td>{$plan.userid}</td>
 {/if}
-        <td id="date"><input type="hidden" id="week_date" value="{$plan.week_date}" />{$plan.week_date}</a></td>
+        <td id="date"><input type="hidden" id="week_date" value="{$plan.week_date}" /><a href="{url module=Plans action=viewDaily week_date=$plan.week_date|escape:url}">{$plan.week_date}</a></td>
         <td id="period"      class="editableSession">{$plan.period}</td>
         <td id="description" class="editableSession">{$plan.description}</td>       
         <td id="comment"     class="editableSession">{$plan.comments}</td>       
