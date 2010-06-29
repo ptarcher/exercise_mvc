@@ -25,3 +25,7 @@ form p {
 a {
 	text-decoration: none;
 }
+
+.sessiongraphs td {
+    vertical-align:top;
+}
