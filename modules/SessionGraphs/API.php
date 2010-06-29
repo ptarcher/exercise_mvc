@@ -139,8 +139,6 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
         }
     }
 
-
-
     function getLaps($session_date) {
         $sql = 'SELECT
                     userid,
@@ -174,6 +172,31 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    function getZones($session_date) {
+        $sql = 'SELECT
+                    userid,
+                    zone,
+                    SUM(length) as length
+                FROM 
+                    v_exercise_data
+                WHERE 
+                    userid       = :userid       AND
+                    session_date = :session_date
+                GROUP BY
+                    zone, userid
+                ORDER BY
+                    zone ASC';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
+        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 
 ?>

@@ -91,6 +91,28 @@
         </tbody>
         </table>
 
+        <!-- Session Zones -->
+        <h3>Zones</h3>
+        <table class="tablesorter" id="zones">
+        <thead>
+        <tr>
+            <th>Zone</th>
+            <th>Length</th>
+        </thead>
+        <tbody>
+        {foreach from=$zones key=label item=zone}
+        <tr>
+            <td>{$zone.zone}:</td>
+            <td>{$zone.length}</td>
+        </tr>
+        {foreachelse}
+        <tr>
+            <td colspan=2>No zoneslaps found.</td>
+        </tr>
+        {/foreach}
+        </tbody>
+        </table>
+
         <!-- Session laps, expandable -->
         <h3>Laps</h3>
         <table class="tablesorter" id="laps">
@@ -118,7 +140,7 @@
         </tr>
         {foreachelse}
         <tr>
-            <td colspan=2>No laps found.</td>
+            <td colspan=7>No laps found.</td>
         </tr>
         {/foreach}
         </tbody>

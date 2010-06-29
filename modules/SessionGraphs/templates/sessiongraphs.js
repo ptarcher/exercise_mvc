@@ -130,6 +130,12 @@ $(function () {
             widgets: ['zebra',],
     });
 
+    $('table#zones').tablesorter({
+            widgets: ['zebra',],
+    });
+
+
+
 
 });
 
