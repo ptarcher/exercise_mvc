@@ -41,6 +41,7 @@
     <style type="text/css">
     .expand {
        border-bottom: solid 1px #c4c4c4;
+       background: #e9e7e7
     }
     .expand h3 {
         background: #e9e7e7 url(themes/default/images/arrow-square.gif) no-repeat right -51px;
@@ -79,7 +80,7 @@
 <tr>
     <td>
         <div class="expand">
-            <h3>Details</h3>
+            <h3>Overall</h3>
             <!-- Session details -->
             <table>
             <tbody>
@@ -92,6 +93,7 @@
             </tbody>
             </table>
         </div>
+        <br />
 
         <!-- Session Zones -->
         <div class="expand">
@@ -116,6 +118,7 @@
             </tbody>
             </table>
         </div>
+        <br />
 
         <!-- Session laps, expandable -->
         <div class="expand">
@@ -151,33 +154,57 @@
             </tbody>
             </table>
         </div>
+        <br />
     </td>
     <td>
         <div class="expand">
-        <h3>Location</h3>
-        <div style="margin-top:20px; margin-left:20px; width:800px; height:640px" id="map"></div>
-
-        <h3>Speed</h3>
-        <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="speed"></div>
-
-        <h3>Heart Rate</h3>
-        <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="heartrate"></div>
-
-        <!--h3>Speed</h3-->
-        <!--div class="jqplot" style="margin:20px;width:800px;height:240px;" id="distance"></div-->
-
-        <h3>Altitude</h3>
-        <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="altitude"></div>
-
-        <h3>Cadence</h3>
-        <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="cadence"></div>
-
-        <h3>Power</h3>
-        <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="power"></div>
-
-        <h3>Temperature</h3>
-        <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="temperature"></div>
+            <h3>Location</h3>
+            <div style="margin-top:20px; margin-left:20px; width:800px; height:640px" id="map"></div>
         </div>
+        <br />
+
+        <div class="expand">
+            <h3>Speed</h3>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="speed"></div>
+        </div>
+        <br />
+
+        <div class="expand">
+            <h3>Heart Rate</h3>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="heartrate"></div>
+        </div>
+        <br />
+
+        <div class="expand">
+            <!--h3>Speed</h3-->
+            <!--div class="jqplot" style="margin:20px;width:800px;height:240px;" id="distance"></div-->
+        </div>
+        <br />
+
+        <div class="expand">
+            <h3>Altitude</h3>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="altitude"></div>
+        </div>
+        <br />
+
+        <div class="expand">
+            <h3>Cadence</h3>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="cadence"></div>
+        </div>
+        <br />
+
+        <div class="expand">
+            <h3>Power</h3>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="power"></div>
+        </div>
+        <br />
+
+        <div class="expand">
+            <h3>Temperature</h3>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="temperature"></div>
+        </div>
+        <br />
+            </div>
     </td>
 </tr>
 

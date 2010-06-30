@@ -27,5 +27,6 @@ a {
 }
 
 .sessiongraphs td {
-    vertical-align:top;
+/*    background:     #e9e7e7;*/
+    vertical-align: top;
 }
