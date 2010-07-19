@@ -64,7 +64,7 @@
 <!-- end the table -->
 
 <!-- TODO: Just add a blank row to the table to allow direct input all the time  -->
-<div class="addRowPlan"><a href="#"><img src='themes/default/images/add.png' alt="" />Add Week Plan</a></div>
+<div class="addPlan"><a href="#"><img src='themes/default/images/add.png' alt="" />Add Week Plan</a></div>
 </div>
 
 {include file="templates/footer.tpl"}

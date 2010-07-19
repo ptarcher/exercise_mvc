@@ -81,11 +81,18 @@ $(document).ready( function() {
 				<td><img src="themes/default/images/ok.png"     class="addsession" href="#"></td>\
 	  			<td><img src="themes/default/images/remove.png" class="cancel"></td>\
 	 		</tr>')
-	  			.appendTo('#editSessions')
-		;
+	  			.appendTo('#editSessions');
+
+        /* Add callbacks */
 		$('#'+newRowId).keypress( submitSessionOnEnter );
-		$('.addsession').click( function(){ $.ajax( getAddSessionAJAX($('tr#'+newRowId)) ); } );
-		$('.cancel').click(function() { coreHelper.ajaxHideError(); $(this).parents('tr').remove();  $('.addRowSession').toggle(); });
+		$('.addsession').click( function(){ 
+                $.ajax( getAddSessionAJAX($('tr#'+newRowId)) ); 
+                } );
+		$('.cancel').click(function() { 
+                coreHelper.ajaxHideError(); 
+                $(this).parents('tr').remove();  
+                $('.addRowSession').toggle(); }
+                );
 	
 	 } );
 	
