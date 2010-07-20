@@ -6,11 +6,11 @@ function getAddPlanAJAX( row )
 	var parameters    = {};
     parameters.module = 'APIAccess';
     parameters.format = 'json';
-    parameters.method = 'Plans.addWeekly';
-    parameters.session_date  = $(row).find('input#plan_date').val();
-    parameters.type_short    = $(row).find('input#plan_period').val();
-    parameters.description   = $(row).find('input#plan_description').val();
-    parameters.comment       = $(row).find('textarea#plan_comment').val();
+    parameters.method = 'Plans.createWeeklyPlan';
+    parameters.week_date   = $(row).find('input#plan_date').val();
+    parameters.period      = $(row).find('input#plan_period').val();
+    parameters.description = $(row).find('input#plan_description').val();
+    parameters.comment     = $(row).find('textarea#plan_comment').val();
 
 	ajaxRequest.data = parameters;
  	
@@ -29,7 +29,7 @@ $(document).ready( function() {
         var newRowId = 'row' + numberOfRows;
 
         $(' <tr id="'+newRowId+'">\
-            <td><input id="plan_date"          value="Date"        size=25></td>\
+            <td><input id="plan_date"          value="Week Date"   size=25></td>\
             <td><input id="plan_period"        value="Period"      size=25></td>\
             <td><input id="plan_description"   value="Description" size=25></td>\
             <td><textarea cols=20 rows=3 id="plan_comment">Comments</textarea>\

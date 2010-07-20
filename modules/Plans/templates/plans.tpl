@@ -30,7 +30,7 @@
 {if $coach}
         <th>User</th>
 {/if}
-        <th>Date</th>
+        <th>Week Date</th>
         <th>Period</th>
         <th>Description</th>
         <th>Comments</th>
