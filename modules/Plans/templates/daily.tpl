@@ -68,7 +68,7 @@
 {/if}
     <tr>
         <th>Time</th>
-        <td>{$plan.timestamp}</td>
+        <td><b>{$plan.timestamp}</b></td>
     </tr>
     <tr>
         <th>Category</th>

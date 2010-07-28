@@ -39,17 +39,6 @@ class ModulePlans extends CoreModule {
                   "name"     => "View Plans", 
                   "module"   => "Plans", 
                   "action"   => "view"),
-            array("hook"     => "navigator",
-                  "category" => "Plans", 
-                  "name"     => "Create a new Daily Plan", 
-                  "module"   => "Plans", 
-                  "action"   => "createDaily"),
-            array("hook"     => "navigator",
-                  "category" => "Plans", 
-                  "name"     => "Create a new Weekly Plan", 
-                  "module"   => "Plans", 
-                  "action"   => "createWeekly"),
-
         );
 
         return $hooks;
