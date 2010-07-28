@@ -21,10 +21,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('libraries/html/htmlDrawer.php');
-require_once('libraries/html/htmlForms.php');
-require_once('include/exercisePage.php');
-
 session_start();
 
 ?>
