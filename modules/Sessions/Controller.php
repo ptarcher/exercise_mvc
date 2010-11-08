@@ -54,7 +54,7 @@ class ModuleSessions extends CoreModule {
         if (isset($_SESSION['athlete']) && $_SESSION['athlete']) {
             $hooks[] = array("hook"     => "navigator",
                              "category" => "Sessions", 
-                             "name"     => "Upload from File", 
+                             "name"     => "File Upload", 
                              "module"   => "Sessions", 
                              "action"   => "viewUpload");
         }
@@ -158,8 +158,6 @@ class ModuleSessions extends CoreModule {
             $laps     = parseLaps($xml_laps);
             $lap_num = 1;
             foreach($laps as $lap) {
-                print_r($lap);
-
                 $ftime = strptime($lap->start_time, '%FT%T%z');
                 $start_epoch = mktime($ftime['tm_hour'],
                                       $ftime['tm_min'],
