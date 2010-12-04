@@ -70,11 +70,11 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
         $stmt->bindParam(':userid',        $userid,        PDO::PARAM_STR);
         $stmt->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
         $stmt->bindParam(':password_salt', $password_salt, PDO::PARAM_STR);
-        $stmt->bindParam(':coach',         $coach,         PDO::PDO_PARAM_BOOL);
-        $stmt->bindParam(':athlete',       $athlete,       PDO::PDO_PARAM_BOOL);
-        $stmt->bindParam(':superuser',     $superuser,     PDO::PDO_PARAM_BOOL);
+        $stmt->bindParam(':coach',         $coach,         PDO::PARAM_BOOL);
+        $stmt->bindParam(':athlete',       $athlete,       PDO::PARAM_BOOL);
+        $stmt->bindParam(':superuser',     $superuser,     PDO::PARAM_BOOL);
 
-        $stmt->execute() or die("failed to execute $SQL");
+        $stmt->execute() or die("failed to execute $sql");
     }
 
     // TODO: Convert this into user groups
