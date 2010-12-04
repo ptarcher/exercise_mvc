@@ -29,7 +29,7 @@
     <!-- script src="modules/SessionGraphs/templates/openstreetmap.js"></script-->
 
     <!-- Google Maps -->
-    <!--script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAv9aTDwE6fauiAWoMtxkR-xRUnSFVdNCq8_C9uprN1AKVsiEqDBQ31BXtoxNUK3ETgRsjnDg0vbJzjg" type="text/javascript"></script-->
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAv9aTDwE6fauiAWoMtxkR-xRUnSFVdNCq8_C9uprN1AKVsiEqDBQ31BXtoxNUK3ETgRsjnDg0vbJzjg" type="text/javascript"></script>
 
     <script src="modules/SessionGraphs/templates/loadgpx.4.js" type="text/javascript"></script>
     <script src="modules/SessionGraphs/templates/googlemaps.js" type="text/javascript"></script>
