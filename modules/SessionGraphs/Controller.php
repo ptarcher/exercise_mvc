@@ -56,6 +56,8 @@ class ModuleSessionGraphs extends CoreModule {
         $session_labels['Max Speed']      = $session['max_speed'];
         $session_labels['Avg Heart Rate'] = $session['avg_heartrate'];
         $session_labels['Max Heart Rate'] = $session['max_heartrate'];
+        $session_labels['Avg Heart Percent'] = $session['avg_heartrate_percent'];
+        $session_labels['Max Heart Percent'] = $session['max_heartrate_percent'];
         $view->session = $session_labels;
 
         echo $view->render();

@@ -113,11 +113,13 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     distance,
                     avg_heartrate,
                     max_heartrate,
+                    avg_heartrate_percent,
+                    max_heartrate_percent,
                     avg_speed,
                     max_speed,
                     comment
                 FROM 
-                    t_exercise_totals
+                    v_exercise_totals
                 WHERE 
                     userid =       :userid       AND
                     session_date = :session_date
