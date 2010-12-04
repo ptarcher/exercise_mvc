@@ -82,7 +82,7 @@ class ModuleUserManagement extends CoreModule {
             $athlete  = $form->getSubmitValue('adduserform_athlete');
             $usertype = $form->getSubmitValue('adduserform_usertype');
 
-            $success = $this->api->createUser($user, $password, $coach, $athlete, $usertype);
+            $success = $this->api->createUser($userid, $password, $coach, $athlete, $usertype);
             if ($success) {
                 /* We have sucessfully logged in, now lets 
                  * display the next page */
