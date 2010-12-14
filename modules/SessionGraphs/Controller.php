@@ -51,13 +51,16 @@ class ModuleSessionGraphs extends CoreModule {
         $session_labels = array();
         $session_labels['Date']           = $session['session_date'];
         $session_labels['Duration']       = $session['duration'];
-        $session_labels['Distance']       = $session['distance'];
-        $session_labels['Avg Speed']      = $session['avg_speed'];
-        $session_labels['Max Speed']      = $session['max_speed'];
-        $session_labels['Avg Heart Rate'] = $session['avg_heartrate'];
-        $session_labels['Max Heart Rate'] = $session['max_heartrate'];
-        $session_labels['Avg Heart Percent'] = $session['avg_heartrate_percent'];
-        $session_labels['Max Heart Percent'] = $session['max_heartrate_percent'];
+        $session_labels['Distance']       = $session['distance'].'km';
+        $session_labels['Avg Speed']      = $session['avg_speed'].'km/h';
+        $session_labels['Max Speed']      = $session['max_speed'].'km/h';
+        $session_labels['Avg Heart Rate'] = $session['avg_heartrate'].'bpm';
+        $session_labels['Max Heart Rate'] = $session['max_heartrate'].'bpm';
+        $session_labels['Avg Heart Percent'] = $session['avg_heartrate_percent'].'%';
+        $session_labels['Max Heart Percent'] = $session['max_heartrate_percent'].'%';
+        $session_labels['Energy']         = (4.184 * $session['calories']).'kJ';
+        $session_labels['Total Ascent']   = $session['total_ascent'].'m';
+        $session_labels['Total Descent']  = $session['total_descent'].'m';
         $view->session = $session_labels;
 
         echo $view->render();
