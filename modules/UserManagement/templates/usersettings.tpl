@@ -21,7 +21,7 @@
     <script type="text/javascript" src="libraries/javascript/jqplot/plugins/jqplot.barRenderer.js"></script>
     <!-- END: jqplot -->
 
-    <script type="text/javascript" src="modules/Plans/templates/daily.js"></script>
+    <script type="text/javascript" src="modules/UserManagement/templates/usersettings.js"></script>
 </head>
 
 <body>
