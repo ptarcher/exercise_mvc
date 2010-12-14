@@ -24,6 +24,30 @@
 require_once('core/ModuleAPI.php');
 
 class ModuleUserManagementAPI extends CoreModuleAPI {
+    function getUser($userid) {
+        $sql = 'SELECT 
+                    userid,
+                    coach,
+                    athlete,
+                    superuser,
+                    0 AS age,
+                    max_heartrate,
+                    resting_heartrate
+                FROM 
+                    t_users
+                WHERE
+                    userid = :userid';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':userid',        $userid,        PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $users[0];
+    }
+
+
     function getUsers() {
         $sql = 'SELECT 
                     userid,
