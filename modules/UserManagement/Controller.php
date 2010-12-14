@@ -39,9 +39,9 @@ class ModuleUserManagement extends CoreModule {
 
         $hooks[] = array("hook"     => "navigator",
                          "category" => "User", 
-                         "name"     => "Settings", 
+                         "name"     => "New Settings", 
                          "module"   => "UserManagement", 
-                         "action"   => "settings");
+                         "action"   => "new_settings");
         if (isset($_SESSION['superuser']) && $_SESSION['superuser']) {
             $hooks[] = array("hook"     => "navigator",
                              "category" => "UserManagement", 
@@ -120,11 +120,20 @@ class ModuleUserManagement extends CoreModule {
     }
 
     function settings() {
-        $form = new UserSettingsForm();
-
         $view = CoreView::factory('usersettings');
-        $view->addForm($form);
-        $view->subTemplate = 'genericForm.tpl';
+
+        /* TODO: Grab the settings from the API */
+        $user = $this->api->getUser('ptarcher');
+
+        $settings['UserID']             = $user['userid'];
+        $settings['Password']           = '********';
+        $settings['Maximum Heart Rate'] = $user['max_heartrate'];
+        $settings['Resting Heart Rate'] = $user['resting_heartrate'];
+        $settings['Age']                = $user['age'];
+        $settings['Coach']              = $user['coach']   ? 'Yes' : 'No';
+        $settings['Athlete']            = $user['athlete'] ? 'Yes' : 'No';
+
+        $view->settings = $settings;
 
         echo $view->render();
     }
