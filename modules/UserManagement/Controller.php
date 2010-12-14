@@ -24,7 +24,6 @@
 require_once('core/Module.php');
 require_once('core/View.php');
 require_once('modules/UserManagement/AddUserFrom.php');
-require_once('modules/UserManagement/UserSettingsForm.php');
 
 class ModuleUserManagement extends CoreModule {
     var $module_description = array(
@@ -39,9 +38,9 @@ class ModuleUserManagement extends CoreModule {
 
         $hooks[] = array("hook"     => "navigator",
                          "category" => "User", 
-                         "name"     => "New Settings", 
+                         "name"     => "Settings", 
                          "module"   => "UserManagement", 
-                         "action"   => "new_settings");
+                         "action"   => "settings");
         if (isset($_SESSION['superuser']) && $_SESSION['superuser']) {
             $hooks[] = array("hook"     => "navigator",
                              "category" => "UserManagement", 
@@ -123,7 +122,7 @@ class ModuleUserManagement extends CoreModule {
         $view = CoreView::factory('usersettings');
 
         /* TODO: Grab the settings from the API */
-        $user = $this->api->getUser('ptarcher');
+        $user = $this->api->getUser($_SESSION['userid']);
 
         $settings['UserID']             = $user['userid'];
         $settings['Password']           = '********';
