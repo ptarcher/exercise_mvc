@@ -117,6 +117,9 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     max_heartrate_percent,
                     avg_speed,
                     max_speed,
+                    calories,
+                    total_ascent,
+                    total_descent,
                     comment
                 FROM 
                     v_exercise_totals
