@@ -13,14 +13,6 @@
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.metadata.js"></script>
 
-    <!-- BEGIN: jqplot -->
-    <!--[if IE]><script src="libraries/javascript/jqplot/excanvas.min.js"></script><![endif]-->
-    <link rel="stylesheet" type="text/css" href="libraries/javascript/jqplot/jquery.jqplot.css" />
-    <script type="text/javascript" src="libraries/javascript/jqplot/jquery.jqplot.js"></script>
-    <script type="text/javascript" src="libraries/javascript/jqplot/plugins/jqplot.categoryAxisRenderer.js"></script>
-    <script type="text/javascript" src="libraries/javascript/jqplot/plugins/jqplot.barRenderer.js"></script>
-    <!-- END: jqplot -->
-
     <script type="text/javascript" src="modules/UserManagement/templates/usersettings.js"></script>
 </head>
 
@@ -34,16 +26,24 @@
 
 <!-- draw the table -->
 <table class="tablesorter" id="settings" cellspacing="1">
-{foreach from=$settings key=label item=val}
-    <tr>
-        <th>{$label}:</th>
-        <td>{$val}</td>
-    </tr>
-{foreachelse}
-    <tr>
-        <td colspan="2"><center>No Settings Found</center></td>
-    </tr>
-{/foreach}
+    <thead>
+        <tr>
+            <th>Setting</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach from=$settings key=label item=val}
+        <tr>
+            <td>{$label}:</td>
+            <td>{$val}</td>
+        </tr>
+        {foreachelse}
+        <tr>
+            <td colspan="2"><center>No Settings Found</center></td>
+        </tr>
+        {/foreach}
+    </tbody>
 </table>
 
 <!-- end the table -->
