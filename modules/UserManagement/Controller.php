@@ -124,13 +124,41 @@ class ModuleUserManagement extends CoreModule {
         /* TODO: Grab the settings from the API */
         $user = $this->api->getUser($_SESSION['userid']);
 
-        $settings['UserID']             = $user['userid'];
-        $settings['Password']           = '********';
-        $settings['Maximum Heart Rate'] = $user['max_heartrate'];
-        $settings['Resting Heart Rate'] = $user['resting_heartrate'];
-        $settings['Age']                = $user['age'];
-        $settings['Coach']              = $user['coach']   ? 'Yes' : 'No';
-        $settings['Athlete']            = $user['athlete'] ? 'Yes' : 'No';
+        $settings   = array();
+        $settings[] = array("name"     => 'UserID',
+                            "id"       => 'userid', 
+                            "value"    => $user['userid'], 
+                            "editable" => false);
+
+        $settings[] = array("name"     => 'Password',
+                            "id"       => 'password', 
+                            "value"    => '********', 
+                            "editable" => true);
+
+        $settings[] = array("name"     => 'Maximum Heart Rate',
+                            "id"       => 'max_heartrate', 
+                            "value"    => $user['max_heartrate'], 
+                            "editable" => true);
+
+        $settings[] = array("name"     => 'Resting Heart Rate',
+                            "id"       => 'resting_heartrate', 
+                            "value"    => $user['resting_heartrate'], 
+                            "editable" => true);
+
+        $settings[] = array("name"     => 'Date of Birth',
+                            "id"       => 'dob', 
+                            "value"    => $user['dob'], 
+                            "editable" => true);
+
+        $settings[] = array("name"     => 'Athlete',
+                            "id"       => 'athlete', 
+                            "value"    => $user['athlete'] ? 'Yes' : 'No', 
+                            "editable" => true);
+
+        $settings[] = array("name"     => 'Coach',
+                            "id"       => 'coach', 
+                            "value"    => $user['coach'] ? 'Yes' : 'No', 
+                            "editable" => true);
 
         $view->settings = $settings;
 

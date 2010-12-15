@@ -33,10 +33,15 @@
         </tr>
     </thead>
     <tbody>
-        {foreach from=$settings key=label item=val}
+        {foreach from=$settings key=i item=setting}
         <tr>
-            <td>{$label}:</td>
-            <td>{$val}</td>
+            <td>{$setting.name}:</td>
+
+            {if $setting.editable}
+                <td id="{$setting.id}" class="editable">{$setting.value}</td>
+            {else}
+                <td id="{$setting.id}">{$setting.value}</td>
+            {/if}
         </tr>
         {foreachelse}
         <tr>
