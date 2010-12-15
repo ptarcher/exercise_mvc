@@ -30,7 +30,7 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
                     coach,
                     athlete,
                     superuser,
-                    0 AS age,
+                    \'07/03/1986\' AS dob,
                     max_heartrate,
                     resting_heartrate
                 FROM 
