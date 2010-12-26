@@ -24,7 +24,23 @@
 require_once('core/ModuleAPI.php');
 
 class ModuleUserManagementAPI extends CoreModuleAPI {
-    function getUser($userid) {
+    static private $instance = null;
+    /**
+     * Returns the singleton ModuleUserManagementAPI
+     *
+     * @return ModuleUserManagementAPI
+     */
+    static public function getInstance()
+    {
+        if (self::$instance == null)
+        {
+            $c = __CLASS__;
+            self::$instance = new $c();
+        }
+        return self::$instance;
+    }
+
+    function getUser() {
         $sql = 'SELECT 
                     userid,
                     coach,
@@ -39,7 +55,7 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
                     userid = :userid';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':userid',        $userid,        PDO::PARAM_STR);
+        $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
 
         $stmt->execute();
 
@@ -47,8 +63,42 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
         return $users[0];
     }
 
+    function updateSetting($id, $value)
+    {
+        $valid_fields = array('coach',
+                              'athlete',
+                              'max_heartrate',
+                              'resting_heartrate',
+                              //'dob',
+                              );
+        if (!in_array($id, $valid_fields)) {
+            return;
+        }
+
+        if ($id == 'password') {
+            /* TODO: Need to convert with salt etc */
+            return;
+        }
+
+        $sql = 'UPDATE
+                    t_users
+                SET
+                    '.$id.' = :value 
+                WHERE
+                    :userid = :userid';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':value',  $value,              PDO::PARAM_STR);
+        $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
+                    
+        $stmt->execute();
+    }
 
     function getUsers() {
+        if (!$_SESSION['superuser']) {
+            throw exception('You need to be super user to perform this action');
+        }
+
         $sql = 'SELECT 
                     userid,
                     coach,

@@ -121,8 +121,7 @@ class ModuleUserManagement extends CoreModule {
     function settings() {
         $view = CoreView::factory('usersettings');
 
-        /* TODO: Grab the settings from the API */
-        $user = $this->api->getUser($_SESSION['userid']);
+        $user = $this->api->getUser();
 
         $settings   = array();
         $settings[] = array("name"     => 'UserID',
