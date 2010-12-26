@@ -34,7 +34,7 @@
     </thead>
     <tbody>
         {foreach from=$settings key=i item=setting}
-        <tr>
+        <tr id="row{$i}">
             <td>{$setting.name}:</td>
 
             {if $setting.editable}
