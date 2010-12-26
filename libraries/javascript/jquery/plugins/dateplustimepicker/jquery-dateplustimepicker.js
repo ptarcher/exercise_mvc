@@ -598,11 +598,11 @@
 			var hourText = $.dateplustimepicker._get(inst.timepicker, "hourText");
 			var hourGrid = $.dateplustimepicker._get(inst.timepicker, "hourGrid");
 			
-			var showMinute = format.match(/m/) !== null;
+			var showMinute = $.dateplustimepicker._get(inst.timepicker, "showMinute");
 			var minuteText = $.dateplustimepicker._get(inst.timepicker, "minuteText");
 			var minuteGrid = $.dateplustimepicker._get(inst.timepicker, "minuteGrid");
 			
-			var showSecond = format.match(/s/) !== null;
+			var showSecond = $.dateplustimepicker._get(inst.timepicker, "showSecond");
 			var secondText = $.dateplustimepicker._get(inst.timepicker, "secondText");
 			var secondGrid = $.dateplustimepicker._get(inst.timepicker, "secondGrid");
 			
@@ -656,8 +656,8 @@
 			
 			var format = $.dateplustimepicker._get(inst.timepicker, "timeFormat");
 			var showHour = format.match(/h/) !== null;
-			var showMinute = format.match(/m/) !== null;
-			var showSecond = format.match(/s/) !== null;
+			var showMinute = $.dateplustimepicker._get(inst.timepicker, "showMinute");
+			var showSecond = $.dateplustimepicker._get(inst.timepicker, "showSecond");
 			
 			// hour slider
 			if (showHour) {
@@ -726,8 +726,8 @@
 			var secondGrid = $.dateplustimepicker._get(inst.timepicker, "secondGrid");
 
 			var showHour = format.match(/h/) !== null;
-			var showMinute = format.match(/m/) !== null;
-			var showSecond = format.match(/s/) !== null;
+			var showMinute = $.dateplustimepicker._get(inst.timepicker, "showMinute");
+			var showSecond = $.dateplustimepicker._get(inst.timepicker, "showSecond");
 
 			var minTime = new Time($.dateplustimepicker._get(inst.timepicker, 'minTime'));
 			var maxTime = new Time($.dateplustimepicker._get(inst.timepicker, 'maxTime'));
