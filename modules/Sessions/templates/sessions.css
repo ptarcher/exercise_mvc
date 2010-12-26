@@ -1,4 +1,4 @@
-.addRowSession:hover, .editableSession:hover, .addsite:hover, .cancel:hover, .deleteSession:hover, .editSession:hover, .updateSession:hover{
+.addRowSession:hover, .editableSession:hover, .addsite:hover, .cancel:hover, .deleteSession:hover, .editSession:hover, .updateSession:hover {
     cursor: pointer;
 }
 .addRowSession a {

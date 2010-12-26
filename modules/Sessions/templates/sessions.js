@@ -70,7 +70,7 @@ $(document).ready( function() {
 		var newRowId = 'row' + numberOfRows;
 	
 		$(' <tr id="'+newRowId+'">\
-				<td><input id="sessionadd_date"          value="Date"        size=25></td>\
+				<td><input id="sessionadd_date"          value=""        size=25></td>\
 				<td><input id="sessionadd_type"          value="Type"        size=25></td>\
 				<td><input id="sessionadd_description"   value="Description" size=25></td>\
 				<td><input id="sessionadd_duration"      value="Duration"    size=25></td>\
@@ -93,7 +93,13 @@ $(document).ready( function() {
                 $(this).parents('tr').remove();  
                 $('.addRowSession').toggle(); }
                 );
-	
+        $("#sessionadd_date").dateplustimepicker({
+            timeFormat: 'hh:mm:ss',
+            hourGrid: 3,
+            showSeconds: true,
+            showMinutes: true,
+            step: {hours: 3},
+        });
 	 } );
 	
 	// when click on deleteuser, the we ask for confirmation and then delete the user
