@@ -5,6 +5,7 @@
 	{postEvent name="template_css_import"}
     <!-- TODO: Move this into the module code -->
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="modules/Plans/templates/plans.css" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/tablesorter/themes/blue/style.css" media="screen" />
 	{postEvent name="template_js_import"}
     <!-- TODO: Move this into the module code -->
@@ -47,11 +48,11 @@
         <td>{$plan.userid}</td>
 {/if}
         <td id="date"><input type="hidden" id="week_date" value="{$plan.week_date}" /><a href="{url module=Plans action=viewDaily week_date=$plan.week_date|escape:url}">{$plan.week_date}</a></td>
-        <td id="period"      class="editableSession">{$plan.period}</td>
-        <td id="description" class="editableSession">{$plan.description}</td>       
-        <td id="comment"     class="editableSession">{$plan.comments}</td>       
-        <td><center><img src='themes/default/images/edit.png' class="editPlan" id="row{$i}" alt="" /></center></td>
-        <td><center><img src='themes/default/images/remove.png' class="deletePlan" id="row{$i}" alt="" /></center></td>
+        <td id="period"      class="editable">{$plan.period}</td>
+        <td id="description" class="editable">{$plan.description}</td>       
+        <td id="comment"     class="editable">{$plan.comments}</td>       
+        <td><center><img src="themes/default/images/edit.png"   class="editPlan"   id="row{$i}" alt="" /></center></td>
+        <td><center><img src="themes/default/images/remove.png" class="deletePlan" id="row{$i}" alt="" /></center></td>
     </tr>
     {foreachelse}
     <tr>
