@@ -1,0 +1,21 @@
+.addRowPlan:hover, 
+.editable:hover, 
+.cancel:hover, 
+.deletePlan:hover, 
+.editPlan:hover, 
+.updatePlan:hover {
+    cursor: pointer;
+}
+.addRowPlan a {
+    text-decoration: none;
+}
+.addRowPlan {
+    padding:1em;
+    font-color:#3A477B;
+    padding:1em;
+    font-weight:bold;
+}
+#editPlans {
+    valign: top;
+}
+
