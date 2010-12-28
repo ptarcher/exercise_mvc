@@ -40,6 +40,7 @@ class ModulePlansAPI extends CoreModuleAPI {
 		return self::$instance;
 	}
 
+    /* Weekly functoins */
     function getWeeklyPlans() {
         $sql = 'SELECT
                     userid,
@@ -86,8 +87,41 @@ class ModulePlansAPI extends CoreModuleAPI {
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }
 
+    function updateWeeklyPlan($week_date, $period, $description, $comment) {
+        $sql = 'UPDATE t_exercise_plans_weekly
+                SET
+                    period      = :period,
+                    description = :description,
+                    "comment"   = :comment
+                WHERE 
+                    userid      = :userid    AND
+                    week_date   = :week_date;';
 
-	
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':week_date',   $week_date);
+        $stmt->bindParam(':period',      $period,             PDO::PARAM_STR);
+        $stmt->bindParam(':description', $description,        PDO::PARAM_STR);
+        $stmt->bindParam(':comment',     $comemnt,            PDO::PARAM_STR);
+        $stmt->bindParam(':userid',      $_SESSION['userid'], PDO::PARAM_STR);
+
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+    }
+
+    function deleteWeeklyPlan($week_date) {
+        $sql = 'DELETE FROM t_exercise_plans_weekly
+                WHERE
+                   userid    = :userid    AND
+                   week_date = :week_date;';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':week_date',   $week_date);
+        $stmt->bindParam(':userid',      $_SESSION['userid'], PDO::PARAM_STR);
+
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+    }
+
+    /* Daily functoins */
     function getDailyPlans($week_date) {
         $sql = 'SELECT 
                     userid,
