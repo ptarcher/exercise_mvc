@@ -69,18 +69,18 @@ $(document).ready( function() {
 		var numberOfRows = $('table#editSessions')[0].rows.length;
 		var newRowId = 'row' + numberOfRows;
 	
-		$(' <tr id="'+newRowId+'">\
-				<td><input id="sessionadd_date"          value=""        size=25></td>\
-				<td><input id="sessionadd_type"          value="Type"        size=25></td>\
-				<td><input id="sessionadd_description"   value="Description" size=25></td>\
-				<td><input id="sessionadd_duration"      value="Duration"    size=25></td>\
-				<td><input id="sessionadd_distance"      value="Distance"    size=25></td>\
-				<td><input id="sessionadd_avg_speed"     value="Avg Speed"   size=25></td>\
-				<td><input id="sessionadd_avg_heartrate" value="Avg HR"      size=25></td>\
-                <td><textarea cols=20 rows=3 id="sessionadd_comment">Comments</textarea>\
-				<td><img src="themes/default/images/ok.png"     class="addsession" href="#"></td>\
-	  			<td><img src="themes/default/images/remove.png" class="cancel"></td>\
-	 		</tr>')
+		$(' <tr id="'+newRowId+'">'+
+				'<td><input id="sessionadd_date"          value=""        size=25></td>'+
+				'<td><input id="sessionadd_type"          value="Type"        size=25></td>'+
+				'<td><input id="sessionadd_description"   value="Description" size=25></td>'+
+				'<td><input id="sessionadd_duration"      value="Duration"    size=25></td>'+
+				'<td><input id="sessionadd_distance"      value="Distance"    size=25></td>'+
+				'<td><input id="sessionadd_avg_speed"     value="Avg Speed"   size=25></td>'+
+				'<td><input id="sessionadd_avg_heartrate" value="Avg HR"      size=25></td>'+
+                '<td><textarea cols=20 rows=3 id="sessionadd_comment">Comments</textarea>'+
+				'<td><img src="themes/default/images/ok.png"     class="addsession" href="#"></td>'+
+	  			'<td><img src="themes/default/images/remove.png" class="cancel"></td>'+
+	 		'</tr>')
 	  			.appendTo('#editSessions');
 
         /* Add callbacks */
@@ -120,8 +120,11 @@ $(document).ready( function() {
 		.click( function() {
 			coreHelper.ajaxHideError();
 			var idRow = $(this).attr('id');
+
+            /* Check if we are already editing */
 			if(alreadyEdited[idRow]==1) return;
 			alreadyEdited[idRow] = 1;
+
 			$('tr#'+idRow+' .editableSession').each(
 				// make the fields editable
 				// change the EDIT button to VALID button
