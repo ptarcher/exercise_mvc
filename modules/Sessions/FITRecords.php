@@ -51,15 +51,16 @@ function parseRecords($xml) {
             $molranges = $value;
             // each contiguous pair of array entries are the 
             // lower and upper range for each molecule definition
-            for ($i=0; $i < count($molranges); $i+=2) {
+            for ($i = 0; $i < count($molranges); $i += 2) {
                 $offset = $molranges[$i] + 1;
-                $len = $molranges[$i + 1] - $offset;
+                $len    = $molranges[$i + 1] - $offset;
                 $record_array[] = parseRecord(array_slice($values, $offset, $len));
             }
         } else {
             continue;
         }
     }
+
     return $record_array;
 }
 
