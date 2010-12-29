@@ -388,6 +388,65 @@ class ModuleSessionsAPI extends CoreModuleAPI {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    function getPower($gradient,     $temperature, 
+                      $altitude,     $velocity, 
+                      $rider_weight, $bike_weight) 
+    {
+        $GRAVITY              = 9.80665;    /* meters per second ^ 2 */
+        $SEA_LEVE_AIR_DENSITY = 1.293;      /* kg/m^3 */
+
+        $rolling_resistance = 0.005;        /* clinchers */
+        $frontal_area       = 0.388;        /* m^2 - bar hoods */
+        $headwind           = 0 / 3.6;      /* in meters per second */
+        $altitude           = 100;          /* meters above sea level */
+        $transmission       = 0.95;         /* in percent, ie 95% = 0.95 */
+
+        /*
+        echo "rolling res  = $rolling_resistance\n";
+        echo "frontal_area = $frontal_area\n";
+        echo "gradient     = $gradient\n";
+        echo "temperature  = $temperature\n";
+        echo "headwind     = $headwind\n";
+        echo "altitude     = $altitude\n";
+        echo "transmission = $transmission\n";
+        */
+
+        /* Variables */
+        $velocity           = $velocity / 3.6; /* in meters per second */
+
+        /*
+        echo "velocity     = $velocity\n";
+        echo "rider_weight = $rider_weight\n";
+        echo "bike_weight  = $bike_weight\n";
+        */
+
+        /* Start the calculations */
+        /* Full air resistance */
+        $density = ($SEA_LEVE_AIR_DENSITY - 0.00426 * $temperature) * pow(M_E, -$altitude / 7000.0);
+        $A2      = 0.5 * $frontal_area * $density;
+
+        /*
+        echo "density     = $density\n";
+        echo "A2          = $A2\n";
+        */
+
+        /* Gravity and rolling resistance */
+        /* Weight in newtons */
+        $total_weight     = $GRAVITY * ($rider_weight + $bike_weight);
+        $total_resistance = $total_weight * ($gradient + $rolling_resistance);
+        $total_air_velocity = $velocity + $headwind;
+
+        $power = $velocity ($total_resistance + $total_air_velocity * $total_air_velocity * $A2) / $transmission;
+
+        /*
+        echo "total_weight       = $total_weight\n";
+        echo "total_resistance   = $total_resistance\n";
+        echo "total_air_velocity = $total_air_velocity\n";
+
+        echo "total power = $power\n";
+        */
+    }
 }
 
 ?>
