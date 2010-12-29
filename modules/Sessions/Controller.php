@@ -160,16 +160,17 @@ class ModuleSessions extends CoreModule {
                 /* Skip duplicates, they will cause issues in graphs */
                 if ($last_interval != $record_interval) {
                     $gradient_avg = $gradient_avg * 0.7 + 0.3 * $gradient;
-                    echo "gradient (".$record->timestamp.") = $gradient_avg<br>";
+                    echo 'gradient ('.$record->timestamp.') = '.$record->gradient.'<br>';
+                    $record->gradient = $gradient_avg;
 
                     if (!isset($record->power)) {
-                        $power = $this->api->getPower($gradient_avg,
-                                                      $record->temperature,
-                                                      $record->altitude,
-                                                      $record->speed,
-                                                      $rider_weight,
-                                                      $bike_weight);
-                        echo "Power = $power<br>";
+                        $record->power = $this->api->getPower($record->gradient,
+                                                              $record->temperature,
+                                                              $record->altitude,
+                                                              $record->speed,
+                                                              $rider_weight,
+                                                              $bike_weight);
+                        echo 'Power = '.$record->power.'<br>';
                     }
 
                     $this->api->insertSessionData($session_timestamp,
