@@ -33,6 +33,9 @@ class FITRecord extends FITElement {
     var $cadence;
     var $temperature;
     var $power;
+
+    /* Calculated */
+    var $gradient;
 }
 
 function parseRecords($xml) {
