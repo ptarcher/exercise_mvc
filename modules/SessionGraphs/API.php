@@ -43,7 +43,7 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
     function getSessionDataField($session_date, $field) {
         $valid_fields = array('distance','speed','heartrate',
                               'altitude','power','temperature',
-                              'cadence');
+                              'cadence', 'gradient');
 
         // Make sure field is a valid field
         if (!in_array($field, $valid_fields)) {
