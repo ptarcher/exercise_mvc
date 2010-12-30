@@ -20,6 +20,7 @@
     <script type="text/javascript" src="libraries/javascript/jqplot/plugins/jqplot.canvasTextRenderer.js"></script>
     <script type="text/javascript" src="libraries/javascript/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js"></script>
     <script type="text/javascript" src="libraries/javascript/jqplot/plugins/jqplot.highlighter.js"></script>
+    <script type="text/javascript" src="libraries/javascript/jqplot/plugins/jqplot.canvasThresholdLinesRenderer.js"></script>
     <script type="text/javascript" src="libraries/javascript/jqplot/plugins/jqplot.cursor.js"></script>
     <!-- END: jqplot -->
 
@@ -186,6 +187,13 @@
             <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="altitude"></div>
         </div>
         <br />
+
+        <div class="expand">
+            <h3>Gradient</h3>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="gradient"></div>
+        </div>
+        <br />
+
 
         <div class="expand">
             <h3>Cadence</h3>
