@@ -149,6 +149,16 @@ class ModuleUserManagement extends CoreModule {
                             "value"    => $user['dob'], 
                             "editable" => true);
 
+        $settings[] = array("name"     => 'Rider Weight',
+                            "id"       => 'rider_weight', 
+                            "value"    => $user['rider_weight'], 
+                            "editable" => true);
+
+        $settings[] = array("name"     => 'Bike Weight',
+                            "id"       => 'bike_weight', 
+                            "value"    => $user['bike_weight'], 
+                            "editable" => true);
+
         $settings[] = array("name"     => 'Athlete',
                             "id"       => 'athlete', 
                             "value"    => $user['athlete'] ? 'Yes' : 'No', 
