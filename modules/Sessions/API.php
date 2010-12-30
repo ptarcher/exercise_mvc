@@ -414,6 +414,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
 
         /* Variables */
         $velocity           = $velocity / 3.6; /* in meters per second */
+        $gradient           = $gradient * 0.01; /* convert from percentage */
 
         /*
         echo "velocity     = $velocity\n";
@@ -437,7 +438,8 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $total_resistance = $total_weight * ($gradient + $rolling_resistance);
         $total_air_velocity = $velocity + $headwind;
 
-        $power = $velocity ($total_resistance + $total_air_velocity * $total_air_velocity * $A2) / $transmission;
+        $power = ($velocity * $total_resistance + 
+                 pow($total_air_velocity, 3) * $A2) / $transmission;
 
         /*
         echo "total_weight       = $total_weight\n";
@@ -446,6 +448,8 @@ class ModuleSessionsAPI extends CoreModuleAPI {
 
         echo "total power = $power\n";
         */
+
+        return $power;
     }
 }
 
