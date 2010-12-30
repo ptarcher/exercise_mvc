@@ -6,6 +6,7 @@
     <!-- TODO: Move this into the module code -->
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/tablesorter/themes/blue/style.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="modules/Plans/templates/daily.css" />
 	{postEvent name="template_js_import"}
     <!-- TODO: Move this into the module code -->
     <script type="text/javascript" src="themes/common.js"></script>
@@ -56,6 +57,8 @@
 <h1>Daily Exercise Plans</h1>
 </center>
 
+<input id="week_date" type="hidden" value="{$week_date}"/>
+
 <!-- draw the table -->
 {assign var="plan_id" value="0"}
 {foreach from=$plans key=i item=plan}
@@ -68,27 +71,27 @@
 {/if}
     <tr>
         <th>Time</th>
-        <td><b>{$plan.timestamp}</b></td>
+        <td class="editable"><b>{$plan.timestamp}</b></td>
     </tr>
     <tr>
         <th>Category</th>
-        <td>{$plan.category}</td>
+        <td class="editable">{$plan.category}</td>
     </tr>
     <tr>
         <th>Description</th>
-        <td>{$plan.description}</td>
+        <td class="editable">{$plan.description}</td>
     </tr>
     <tr>
         <th>Focus</th>
-        <td>{$plan.focus}</td>
+        <td class="editable">{$plan.focus}</td>
     </tr>
     <tr>
         <th>Duration</th>
-        <td>{$plan.duration}</td>
+        <td class="editable">{$plan.duration}</td>
     </tr>
     <tr>
         <th>Comment</th>
-        <td>{$plan.comment}</td>
+        <td class="editable">{$plan.comment}</td>
     </tr>
     <tr>
         <th>Volume</th>
@@ -104,7 +107,7 @@
 
 {math assign="plan_id" equation="id+1" id=$plan_id}
 {foreachelse}
-<table class="tablesorter" id="plans" cellspacing="1">
+<table class="tablesorter" id="noplans" cellspacing="1">
     <tr>
         <td colspan="2"><center>No Plans Found</center></td>
     </tr>
@@ -112,5 +115,11 @@
 {/foreach}
 
 <!-- end the table -->
+
+<div class="placeholder"></div>
+
+<div class="addPlan"><a href="#"><img src='themes/default/images/add.png' alt="" />Add Daily Plan</a></div>
+</div>
+
 
 {include file="templates/footer.tpl"}
