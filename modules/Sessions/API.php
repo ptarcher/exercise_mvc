@@ -303,7 +303,8 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                                $heartrate,    $speed, 
                                $latitude,     $longitude,
                                $altitude,     $cadence,
-                               $temperature,  $power) {
+                               $temperature,  $power,
+                               $gradient) {
         $sql = 'INSERT INTO t_exercise_data
                    (session_date,
                     time,
@@ -316,6 +317,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     cadence,
                     temperature,
                     power,
+                    gradient,
                     userid)
                 VALUES 
                    (:session_date,
@@ -329,6 +331,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     :cadence,
                     :temperature,
                     :power,
+                    :gradient,
                     :userid)';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
@@ -344,6 +347,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(':cadence',       $cadence);
         $stmt->bindParam(':temperature',   $temperature);
         $stmt->bindParam(':power',         $power);
+        $stmt->bindParam(':gradient',      $gradient);
         $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
 
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
