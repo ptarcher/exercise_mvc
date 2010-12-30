@@ -1,0 +1,20 @@
+.add:hover, 
+.delete:hover, 
+.cancel:hover, 
+.editable:hover, 
+.cancel:hover {
+    cursor: pointer;
+}
+
+.addPlan a {
+    text-decoration: none;
+}
+.addPlan {
+    padding:1em;
+    font-color:#3A477B;
+    padding:1em;
+    font-weight:bold;
+}
+#editPlans {
+    valign: top;
+}
