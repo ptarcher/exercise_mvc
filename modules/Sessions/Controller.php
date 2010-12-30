@@ -74,6 +74,58 @@ class ModuleSessions extends CoreModule {
         echo $view->render();
     }
 
+    function getPower() {
+        $GRAVITY = 9.80665;             /* meters per second ^ 2 */
+        $SEA_LEVE_AIR_DENSITY = 1.293;  /* kg/m^3 */
+
+        $rolling_resistance = 0.005;    /* clinchers */
+        $frontal_area       = 0.388;    /* m^2 - bar hoods */
+        $gradient           = 0.00;     /* In percent, ie 10% = 0.10 */
+        $temperature        = 25;       /* Degrees C */
+        $headwind           = 0 / 3.6;  /* in meters per second */
+        $elevation          = 100;      /* meters above sea level */
+        $transmission       = 0.95;     /* in percent, ie 95% = 0.95 */
+
+        echo "rolling res  = $rolling_resistance\n";
+        echo "frontal_area = $frontal_area\n";
+        echo "gradient     = $gradient\n";
+        echo "temperature  = $temperature\n";
+        echo "headwind     = $headwind\n";
+        echo "elevation    = $elevation\n";
+        echo "transmission = $transmission\n";
+
+        /* Variables */
+        $velocity           = 30 / 3.6; /* in meters per second */
+        $rider_weight       = 75;
+        $bike_weight        = 9;
+
+        echo "velocity     = $velocity\n";
+        echo "rider_weight = $rider_weight\n";
+        echo "bike_weight  = $bike_weight\n";
+
+        /* Start the calculations */
+        /* Full air resistance */
+        $density = ($SEA_LEVE_AIR_DENSITY - 0.00426 * $temperature) * pow(M_E, -$elevation / 7000.0);
+        $A2      = 0.5 * $frontal_area * $density;
+
+        echo "density     = $density\n";
+        echo "A2          = $A2\n";
+
+        /* Gravity and rolling resistance */
+        /* Weight in newtons */
+        $total_weight     = $GRAVITY * ($rider_weight + $bike_weight);
+        $total_resistance = $total_weight * ($gradient + $rolling_resistance);
+        $total_air_velocity      = $velocity + $headwind;
+
+        $power = $velocity ($total_resistance + $total_air_velocity * $total_air_velocity * $A2) / $transmission;
+
+        echo "total_weight       = $total_weight\n";
+        echo "total_resistance   = $total_resistance\n";
+        echo "total_air_velocity = $total_air_velocity\n";
+
+        echo "total power = $power\n";
+    }
+
     function viewUpload() {
         $form = new SessionUploadForm();
         if ($form->validate()) {
@@ -123,6 +175,11 @@ class ModuleSessions extends CoreModule {
             $xml_records = implode("\n", $xml_records);
             $records     = parseRecords($xml_records);
 
+            if (is_array($records)) {
+                $record_prev = $records[0];
+            }
+            $gradient_avg = 0;
+
             /* Add the matching data points */
             foreach($records as $record) {
                 /* Convert the timestamp into an interval */
@@ -135,8 +192,20 @@ class ModuleSessions extends CoreModule {
                                        $ftime['tm_year'] + 1900);
                 $record_interval = $record_epoch - $session_epoch;
 
+                /* calculate the gradient */
+                $gradient = 0;
+                $rise = $record->altitude - $record_prev->altitude;             /* m */
+                $run  = ($record->distance - $record_prev->distance) * 1000;    /* Convert to m */
+                if ($run) {
+                    $gradient = $rise / $run;
+                }
+
+
                 /* Skip duplicates, they will cause issues in graphs */
                 if ($last_interval != $record_interval) {
+                    $gradient_avg = $gradient_avg * 0.7 + 0.3 * $gradient;
+                    echo "gradient (".$record->timestamp.") = $gradient_avg<br>";
+
                     $this->api->insertSessionData($session_timestamp,
                                                   $record_interval,
                                                   $record->distance,
@@ -147,7 +216,9 @@ class ModuleSessions extends CoreModule {
                                                   $record->altitude,
                                                   $record->cadence,
                                                   $record->temperature,
-                                                  $record->power);
+                                                  $record->power,
+                                                  $gradient_avg);
+                    $record_prev = $record;
                 }
                 $last_interval = $record_interval;
             }
