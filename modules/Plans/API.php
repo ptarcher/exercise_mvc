@@ -150,6 +150,50 @@ class ModulePlansAPI extends CoreModuleAPI {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    function addDailyPlan($week_date,   $timestamp,
+                          $category,    $description,
+                          $focus,       $duration,
+                          $comment,     $volume,
+                          $intensity) 
+    {
+        $sql = 'INSERT INTO t_exercise_plans_daily
+                   (userid,
+                    week_date,
+                    timestamp,
+                    category,
+                    description,
+                    volume,
+                    intensity,
+                    duration,
+                    focus,
+                    comment)
+                VALUES
+                   (:userid,
+                    :week_date,
+                    :timestamp,
+                    :category,
+                    :description,
+                    :volume,
+                    :intensity,
+                    :duration,
+                    :focus,
+                    :comment);';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':userid',      $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':week_date',   $week_date);
+        $stmt->bindParam(':timestamp',   $timestamp,          PDO::PARAM_STR);
+        $stmt->bindParam(':category',    $category,           PDO::PARAM_STR);
+        $stmt->bindParam(':description', $description,        PDO::PARAM_STR);
+        $stmt->bindParam(':volume',      $volume,             PDO::PARAM_STR);
+        $stmt->bindParam(':intensity',   $intensity,          PDO::PARAM_STR);
+        $stmt->bindParam(':duration',    $duration,           PDO::PARAM_STR);
+        $stmt->bindParam(':focus',       $focus,              PDO::PARAM_STR);
+        $stmt->bindParam(':comment',     $comemnt,            PDO::PARAM_STR);
+
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+    }
 }
 
 ?>
