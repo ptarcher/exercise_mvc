@@ -7,7 +7,14 @@ $(function () {
     // jqplot
     var jqplot_options = {
         title:session_date,
-        seriesDefaults:{showMarker: false, shadow:false},
+        seriesDefaults:{
+            showMarker: false, 
+            shadow:false,
+            thresholdLines: {
+                yValues: [0.0],
+                showLabel: true,
+            },
+        },
         /*
         series:[
             {label:'Heart Rate', }, 
@@ -55,6 +62,7 @@ $(function () {
             title : 'Speed',
             field : 'speed',
             yaxis_label : 'Speed (km/h)',
+            seriesDefaults: {showMarker: false, shadow:false},
         },
 
         {
@@ -62,6 +70,7 @@ $(function () {
             title : 'Heart Rate',
             field : 'heartrate',
             yaxis_label : 'Heart Rate (bpm)',
+            seriesDefaults: {showMarker: false, shadow:false},
         },
 
         {
@@ -69,6 +78,7 @@ $(function () {
             title : 'Distance',
             field : 'distance',
             yaxis_label : 'Distance (km)',
+            seriesDefaults: {showMarker: false, shadow:false},
         },
 
         {
@@ -76,6 +86,18 @@ $(function () {
             title : 'Altitude',
             field : 'altitude',
             yaxis_label : 'Elevation (m)',
+            seriesDefaults: {showMarker: false, shadow:false, 
+                             //fill:true, fillToZero: false,
+            },
+        },
+
+        {
+            id    : 'gradient',
+            title : 'Gradient',
+            field : 'gradient',
+            yaxis_label : 'Gradient (%)',
+            seriesDefaults: {showMarker: false, shadow:false,
+                             thresholdLines: {yValues: [0.0], showLabel: true,}},
         },
 
         {
@@ -83,6 +105,7 @@ $(function () {
             title : 'Cadence',
             field : 'cadence',
             yaxis_label : 'Cadence (rpm)',
+            seriesDefaults: {showMarker: false, shadow:false},
         },
 
         {
@@ -90,6 +113,8 @@ $(function () {
             title : 'Power',
             field : 'power',
             yaxis_label : 'Power (watts)',
+            seriesDefaults: {showMarker: false, shadow:false,
+                             thresholdLines: {yValues: [0.0], showLabel: true,}},
         },
 
         {
@@ -97,6 +122,7 @@ $(function () {
             title : 'Temperature',
             field : 'temperature',
             yaxis_label : 'Temperature (C)',
+            seriesDefaults: {showMarker: false, shadow:false},
         },
     ];
 
@@ -113,8 +139,9 @@ $(function () {
             graph : graphs[i],
             success: function (series, textStatus, XMLHttpRequest) {
                 var options = jqplot_options;
-                options.title = this.graph.title;
+                options.title            = this.graph.title;
                 options.axes.yaxis.label = this.graph.yaxis_label;
+                options.seriesDefaults   = this.graph.seriesDefaults;
                 $.jqplot(this.graph.id, [series], options);
             }
         });
