@@ -48,7 +48,9 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
                     superuser,
                     \'07/03/1986\' AS dob,
                     max_heartrate,
-                    resting_heartrate
+                    resting_heartrate,
+                    rider_weight,
+                    bike_weight
                 FROM 
                     t_users
                 WHERE
@@ -69,6 +71,8 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
                               'athlete',
                               'max_heartrate',
                               'resting_heartrate',
+                              'rider_weight',
+                              'bike_weight',
                               //'dob',
                               );
         if (!in_array($id, $valid_fields)) {
