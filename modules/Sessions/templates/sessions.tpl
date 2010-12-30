@@ -81,7 +81,7 @@
         <td><center><img src='themes/default/images/remove.png' class="deleteSession" id="row{$i}" alt="" /></center></td>
     </tr>
     {foreachelse}
-    <tr>
+    <tr id="norecords">
         <td colspan="11"><center>No records</center></td>
     </tr>
     {/foreach}

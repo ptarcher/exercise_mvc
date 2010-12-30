@@ -65,6 +65,7 @@ $(document).ready( function() {
 	$('.addRowSession').click( function() {
 		coreHelper.ajaxHideError();
 		$(this).toggle();
+        $('#norecords').toggle();
 		
 		var numberOfRows = $('table#editSessions')[0].rows.length;
 		var newRowId = 'row' + numberOfRows;
