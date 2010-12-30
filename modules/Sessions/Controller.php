@@ -153,15 +153,15 @@ class ModuleSessions extends CoreModule {
                 $rise = $record->altitude - $record_prev->altitude;             /* m */
                 $run  = ($record->distance - $record_prev->distance) * 1000;    /* Convert to m */
                 if ($run) {
-                    $gradient = $rise / $run;
+                    $gradient = round(($rise / $run) * 100, 1);
                 }
 
 
                 /* Skip duplicates, they will cause issues in graphs */
                 if ($last_interval != $record_interval) {
-                    $gradient_avg = $gradient_avg * 0.7 + 0.3 * $gradient;
-                    echo 'gradient ('.$record->timestamp.') = '.$record->gradient.'<br>';
+                    $gradient_avg = round($gradient_avg * 0.7 + 0.3 * $gradient, 1);
                     $record->gradient = $gradient_avg;
+//                    echo 'gradient ('.$record->timestamp.') = '.$record->gradient.'<br>';
 
                     if (!isset($record->power)) {
                         $record->power = $this->api->getPower($record->gradient,
@@ -170,7 +170,7 @@ class ModuleSessions extends CoreModule {
                                                               $record->speed,
                                                               $rider_weight,
                                                               $bike_weight);
-                        echo 'Power = '.$record->power.'<br>';
+//                        echo 'Power = '.$record->power.'<br>';
                     }
 
                     $this->api->insertSessionData($session_timestamp,
