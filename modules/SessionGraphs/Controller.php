@@ -49,18 +49,54 @@ class ModuleSessionGraphs extends CoreModule {
         $view->zones        = $zones;
 
         $session_labels = array();
-        $session_labels['Date']           = $session['session_date'];
-        $session_labels['Duration']       = $session['duration'];
-        $session_labels['Distance']       = $session['distance'].'km';
-        $session_labels['Avg Speed']      = $session['avg_speed'].'km/h';
-        $session_labels['Max Speed']      = $session['max_speed'].'km/h';
-        $session_labels['Avg Heart Rate'] = $session['avg_heartrate'].'bpm';
-        $session_labels['Max Heart Rate'] = $session['max_heartrate'].'bpm';
-        $session_labels['Avg Heart Percent'] = $session['avg_heartrate_percent'].'%';
-        $session_labels['Max Heart Percent'] = $session['max_heartrate_percent'].'%';
-        $session_labels['Energy']         = (4.184 * $session['calories']).'kJ';
-        $session_labels['Total Ascent']   = $session['total_ascent'].'m';
-        $session_labels['Total Descent']  = $session['total_descent'].'m';
+        $session_labels[] = array("label" => 'Date',
+                                  "value" => $session['session_date'],
+                                  "id"    => 'session_date',
+                                  "units" => '');
+        $session_labels[] = array("label" => 'Duration',
+                                  "value" => $session['duration'],
+                                  "id"    => 'duration',
+                                  "units" => '');
+        $session_labels[] = array("label" => 'Distance',
+                                  "value" => $session['distance'],
+                                  "id"    => 'distance',
+                                  "units" => 'km');
+        $session_labels[] = array("label" => 'Avg Speed',
+                                  "value" => $session['avg_speed'],
+                                  "id"    => 'avg_speed',
+                                  "units" => 'km/h');
+        $session_labels[] = array("label" => 'Max Speed',
+                                  "value" => $session['max_speed'],
+                                  "id"    => 'max_speed',
+                                  "units" => 'km/h');
+        $session_labels[] = array("label" => 'Avg Heart Rate',
+                                  "value" => $session['avg_heartrate'],
+                                  "id"    => 'avg_heartrate',
+                                  "units" => 'bpm');
+        $session_labels[] = array("label" => 'Max Heart Rate',
+                                  "value" => $session['max_heartrate'],
+                                  "id"    => 'max_heartrate',
+                                  "units" => 'bpm');
+        $session_labels[] = array("label" => 'Avg Heart Percent',
+                                  "value" => $session['avg_heartrate_percent'],
+                                  "id"    => 'avg_heartrate_percent',
+                                  "units" => '%');
+        $session_labels[] = array("label" => 'Max Heart Percent',
+                                  "value" => $session['max_heartrate_percent'],
+                                  "id"    => 'max_heartrate_percent',
+                                  "units" => '%');
+        $session_labels[] = array("label" => 'Energy',
+                                  "value" => round($session['calories']*4.184),
+                                  "id"    => 'calories',
+                                  "units" => 'kJ');
+        $session_labels[] = array("label" => 'Total Ascent',
+                                  "value" => $session['total_ascent'],
+                                  "id"    => 'total_ascent',
+                                  "units" => 'm');
+        $session_labels[] = array("label" => 'Total Descent',
+                                  "value" => $session['total_descent'],
+                                  "id"    => 'total_descent',
+                                  "units" => 'm');
         $view->session = $session_labels;
 
         echo $view->render();
