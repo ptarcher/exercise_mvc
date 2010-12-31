@@ -58,71 +58,108 @@ $(function () {
 
     var graphs = [
         {
-            id    : 'speed',
+            id    : 'graph_speed',
             title : 'Speed',
             field : 'speed',
-            yaxis_label : 'Speed (km/h)',
-            seriesDefaults: {showMarker: false, shadow:false},
+            seriesDefaults: {showMarker: false, shadow:false,
+                             thresholdLines: {yValues: [$('input#avg_speed').val()], showLabel: true,}},
+            yaxis :{
+                labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                label        : 'Speed (km/h)',
+                numberTicks  : 8,
+            }
         },
 
         {
-            id    : 'heartrate',
+            id    : 'graph_heartrate',
             title : 'Heart Rate',
             field : 'heartrate',
-            yaxis_label : 'Heart Rate (bpm)',
-            seriesDefaults: {showMarker: false, shadow:false},
+            seriesDefaults: {showMarker: false, shadow:false,
+                             thresholdLines: {yValues: [$('input#avg_heartrate').val()], showLabel: true,}},
+            yaxis :{
+                labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                label        : 'Heart Rate (bpm)',
+                numberTicks  : 8,
+            }
         },
 
+        /*
         {
-            id    : 'distance',
+            id    : 'graph_distance',
             title : 'Distance',
             field : 'distance',
-            yaxis_label : 'Distance (km)',
             seriesDefaults: {showMarker: false, shadow:false},
-        },
+            yaxis :{
+                labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                label        : 'Distance (km)',
+            }
+        },*/
 
         {
-            id    : 'altitude',
+            id    : 'graph_altitude',
             title : 'Altitude',
             field : 'altitude',
-            yaxis_label : 'Elevation (m)',
             seriesDefaults: {showMarker: false, shadow:false, 
                              //fill:true, fillToZero: false,
             },
+            yaxis :{
+                labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                label        : 'Elevation (m)',
+                numberTicks  : 8,
+                autoscale    : true,
+            }
         },
 
         {
-            id    : 'gradient',
+            id    : 'graph_gradient',
             title : 'Gradient',
             field : 'gradient',
-            yaxis_label : 'Gradient (%)',
             seriesDefaults: {showMarker: false, shadow:false,
                              thresholdLines: {yValues: [0.0], showLabel: true,}},
+            yaxis :{
+                labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                label        : 'Gradient (%)',
+                min          : -20,
+                max          : 20,
+                tickInterval : 5,
+            }
         },
 
         {
-            id    : 'cadence',
+            id    : 'graph_cadence',
             title : 'Cadence',
             field : 'cadence',
-            yaxis_label : 'Cadence (rpm)',
             seriesDefaults: {showMarker: false, shadow:false},
+            yaxis :{
+                labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                label        : 'Cadence (rpm)',
+            }
         },
 
         {
-            id    : 'power',
+            id    : 'graph_power',
             title : 'Power',
             field : 'power',
-            yaxis_label : 'Power (watts)',
             seriesDefaults: {showMarker: false, shadow:false,
                              thresholdLines: {yValues: [0.0], showLabel: true,}},
+            yaxis :{
+                labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                label        : 'Power (watts)',
+                min          : -100,
+                //max        : 1200,
+                tickInterval : 100,
+            }
         },
 
         {
-            id    : 'temperature',
+            id    : 'graph_temperature',
             title : 'Temperature',
             field : 'temperature',
-            yaxis_label : 'Temperature (C)',
             seriesDefaults: {showMarker: false, shadow:false},
+            yaxis :{
+                labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                label        : 'Temperature (C)',
+            }
         },
     ];
 
@@ -139,9 +176,9 @@ $(function () {
             graph : graphs[i],
             success: function (series, textStatus, XMLHttpRequest) {
                 var options = jqplot_options;
-                options.title            = this.graph.title;
-                options.axes.yaxis.label = this.graph.yaxis_label;
-                options.seriesDefaults   = this.graph.seriesDefaults;
+                options.title          = this.graph.title;
+                options.axes.yaxis     = this.graph.yaxis;
+                options.seriesDefaults = this.graph.seriesDefaults;
                 $.jqplot(this.graph.id, [series], options);
             }
         });
