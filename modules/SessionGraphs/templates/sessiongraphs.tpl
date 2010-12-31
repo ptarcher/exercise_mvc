@@ -85,10 +85,10 @@
             <!-- Session details -->
             <table>
             <tbody>
-            {foreach from=$session key=label item=val}
+            {foreach from=$session key=i item=field}
             <tr>
-                <td>{$label}:</td>
-                <td>{$val}</td>
+                <td>{$field.label}:</td>
+                <td><input type="hidden" id="{$field.id}" value="{$field.value}">{$field.value} {$field.units}</td>
             </tr>
             {/foreach}
             </tbody>
@@ -166,50 +166,50 @@
 
         <div class="expand">
             <h3>Speed</h3>
-            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="speed"></div>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="graph_speed"></div>
         </div>
         <br />
 
         <div class="expand">
             <h3>Heart Rate</h3>
-            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="heartrate"></div>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="graph_heartrate"></div>
         </div>
         <br />
 
-        <div class="expand">
-            <!--h3>Speed</h3-->
-            <!--div class="jqplot" style="margin:20px;width:800px;height:240px;" id="distance"></div-->
+        <!--div class="expand">
+            <h3>Speed</h3>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="graph_distance"></div>
         </div>
-        <br />
+        <br /-->
 
         <div class="expand">
             <h3>Altitude</h3>
-            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="altitude"></div>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="graph_altitude"></div>
         </div>
         <br />
 
         <div class="expand">
             <h3>Gradient</h3>
-            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="gradient"></div>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="graph_gradient"></div>
         </div>
         <br />
 
 
         <div class="expand">
             <h3>Cadence</h3>
-            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="cadence"></div>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="graph_cadence"></div>
         </div>
         <br />
 
         <div class="expand">
             <h3>Power</h3>
-            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="power"></div>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="graph_power"></div>
         </div>
         <br />
 
         <div class="expand">
             <h3>Temperature</h3>
-            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="temperature"></div>
+            <div class="jqplot" style="margin:20px;width:800px;height:240px;" id="graph_temperature"></div>
         </div>
         <br />
             </div>
