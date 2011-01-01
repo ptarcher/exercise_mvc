@@ -91,16 +91,21 @@ function parseRecords($xml, $session_epoch) {
         $record->interval = $record_epoch - $session_epoch;
 
         /* Calculate the average gradient */
-        $total_rise = 0;
-        $total_time = 0;
+        $total_rise     = 0;
+        $total_distance = 0;
+        unset($first_distance);
+        $last_distance = 0;
         for ($g = $i - $LOW_OFFSET, $j = 0; $g <= $i + $HIGH_OFFSET; $g++, $j++) {
             if ($g >= 0 && $g < count($records)) {
+                if (!isset($first_distance)) {
+                    $first_distance = $records[$g]->distance;
+                }
                 $total_rise     += ($records[$g]->altitude - $record->altitude)*$window[$j];
-                $total_distance +=  $records[$g]->distance  - $record->distance;
+                $last_distance = $records[$g]->distance;
             }
         }
         $avg_rise     = $total_rise     / $NUM_GRADIENT_SAMPES;
-        $avg_distance = ($total_distance / $NUM_GRADIENT_SAMPES) * 1000;;
+        $avg_distance = (($last_distance-$first_distance) / $NUM_GRADIENT_SAMPES) * 1000;;
 
         if ($avg_distance) {
             $record->gradient = round($avg_rise / $avg_distance * 100, 1);
