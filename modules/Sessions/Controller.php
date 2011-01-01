@@ -90,7 +90,7 @@ class ModuleSessions extends CoreModule {
             }
 
             /* Insert the session data into the database */
-            $this->api->createSessionFull($session->timestamp,
+            $this->api->createSessionFull($session->start_time,
                                           'E1',
                                           'Untitled',
                                           $session->total_timer_time,
@@ -112,24 +112,19 @@ class ModuleSessions extends CoreModule {
                                     1 ,
                                     $ftime['tm_yday'] + 1,
                                     $ftime['tm_year'] + 1900); 
-            $session_timestamp = $session->timestamp;
+            $session_timestamp = $session->start_time;
 
-
-
-            $last_interval = -1;
 
             unset($session);
             unset($sessions);
 
             exec('/usr/bin/fitdecode -r '.$upload['tmp_name'], $xml_records);
             $xml_records = implode("\n", $xml_records);
-            $records     = parseRecords($xml_records);
+            $records     = parseRecords($xml_records, $session_epoch);
 
             if (is_array($records)) {
                 $record_prev = $records[0];
             }
-            $gradient_avg = 0;
-
 
             /* TODO: Get these from either the record OR
              * From the user settings */
@@ -138,43 +133,25 @@ class ModuleSessions extends CoreModule {
 
             /* Add the matching data points */
             foreach($records as $record) {
-                /* Convert the timestamp into an interval */
-                $ftime = strptime($record->timestamp, '%FT%T%z');
-                $record_epoch = mktime($ftime['tm_hour'],
-                                       $ftime['tm_min'],
-                                       $ftime['tm_sec'],
-                                       1 ,
-                                       $ftime['tm_yday'] + 1,
-                                       $ftime['tm_year'] + 1900);
-                $record_interval = $record_epoch - $session_epoch;
-
-                /* calculate the gradient */
-                $gradient = 0;
-                $rise = $record->altitude - $record_prev->altitude;             /* m */
-                $run  = ($record->distance - $record_prev->distance) * 1000;    /* Convert to m */
-                if ($run) {
-                    $gradient = round(($rise / $run) * 100, 1);
-                }
-
-
-                /* Skip duplicates, they will cause issues in graphs */
-                if ($last_interval != $record_interval) {
-                    $gradient_avg = round($gradient_avg * 0.7 + 0.3 * $gradient, 1);
-                    $record->gradient = $gradient_avg;
-//                    echo 'gradient ('.$record->timestamp.') = '.$record->gradient.'<br>';
+               /* Skip duplicates, they will cause issues in graphs */
+                if (!isset($record_last) || 
+                        $record_last->interval != $record->interval) {
 
                     if (!isset($record->power)) {
                         $record->power = $this->api->getPower($record->gradient,
                                                               $record->temperature,
                                                               $record->altitude,
                                                               $record->speed,
+                                                              $record->speed - $record_prev->speed,
+                                                              $record->interval - $record_prev->interval,
+
+                                                              $speed_delta,
                                                               $rider_weight,
                                                               $bike_weight);
-//                        echo 'Power = '.$record->power.'<br>';
                     }
 
                     $this->api->insertSessionData($session_timestamp,
-                                                  $record_interval,
+                                                  $record->interval,
                                                   $record->distance,
                                                   $record->heart_rate,
                                                   $record->speed,
@@ -184,10 +161,11 @@ class ModuleSessions extends CoreModule {
                                                   $record->cadence,
                                                   $record->temperature,
                                                   $record->power,
-                                                  $gradient_avg);
+                                                  $record->gradient);
                     $record_prev = $record;
                 }
-                $last_interval = $record_interval;
+                $record_last = $record;
+                $i++;
             }
 
             unset($records);

@@ -35,11 +35,12 @@ class FITRecord extends FITElement {
     var $power;
 
     /* Calculated */
+    var $interval;
     var $gradient;
 }
 
-function parseRecords($xml) {
-    $record_array = array();
+function parseRecords($xml, $session_epoch) {
+    $records = array();
 
     /* Parse the XML into tags */
     $parser = xml_parser_create();
@@ -57,14 +58,62 @@ function parseRecords($xml) {
             for ($i = 0; $i < count($molranges); $i += 2) {
                 $offset = $molranges[$i] + 1;
                 $len    = $molranges[$i + 1] - $offset;
-                $record_array[] = parseRecord(array_slice($values, $offset, $len));
+                $records[] = parseRecord(array_slice($values, $offset, $len));
             }
         } else {
             continue;
         }
     }
 
-    return $record_array;
+    $i = 0;
+
+    /* Gradient calc constants */
+    $NUM_GRADIENT_SAMPES = 11;
+    $LOW_OFFSET          = floor($NUM_GRADIENT_SAMPES/2);
+    $HIGH_OFFSET         = floor($NUM_GRADIENT_SAMPES/2);
+
+    /* Create the window function */
+    $window = array();
+    for ($i = 0; $i < $NUM_GRADIENT_SAMPES; $i++) {
+        $window[$i] = 1.0;
+    }
+
+    $i = 0;
+    foreach($records as $record) {
+        /* Convert the timestamp into an interval */
+        $ftime = strptime($record->timestamp, '%FT%T%z');
+        $record_epoch = mktime($ftime['tm_hour'],
+                $ftime['tm_min'],
+                $ftime['tm_sec'],
+                1 ,
+                $ftime['tm_yday'] + 1,
+                $ftime['tm_year'] + 1900);
+        $record->interval = $record_epoch - $session_epoch;
+
+        /* Calculate the average gradient */
+        $total_rise = 0;
+        $total_time = 0;
+        for ($g = $i - $LOW_OFFSET, $j = 0; $g <= $i + $HIGH_OFFSET; $g++, $j++) {
+            if ($g >= 0 && $g < count($records)) {
+                $total_rise     += ($records[$g]->altitude - $record->altitude)*$window[$j];
+                $total_distance +=  $records[$g]->distance  - $record->distance;
+            }
+        }
+        $avg_rise     = $total_rise     / $NUM_GRADIENT_SAMPES;
+        $avg_distance = ($total_distance / $NUM_GRADIENT_SAMPES) * 1000;;
+
+        if ($avg_distance) {
+            $record->gradient = round($avg_rise / $avg_distance * 100, 1);
+        } else {
+            $record->gradient = 0;
+        }
+
+        /* Calculate the power */
+
+        $i++;
+    }
+
+    return $records;
 }
 
 function parseRecord($record_values) 

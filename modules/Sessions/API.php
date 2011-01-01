@@ -389,10 +389,12 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function getPower($gradient,     $temperature, 
-                      $altitude,     $velocity, 
-                      $rider_weight, $bike_weight) 
+    function getPower($gradient,       $temperature, 
+                      $altitude,       $velocity,
+                      $velocity_delta, $time_delta,
+                      $rider_weight,   $bike_weight) 
     {
+        /* Calculate static power */
         $GRAVITY              = 9.80665;    /* meters per second ^ 2 */
         $SEA_LEVE_AIR_DENSITY = 1.293;      /* kg/m^3 */
 
@@ -413,8 +415,9 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         */
 
         /* Variables */
-        $velocity           = $velocity / 3.6; /* in meters per second */
-        $gradient           = $gradient * 0.01; /* convert from percentage */
+        $velocity           = $velocity / 3.6;      /* convert to m/s */
+        $velocity_delta     = $velocity_delta / 3.6;/* convert to m/s */
+        $gradient           = $gradient * 0.01;     /* convert from percent */
 
         /*
         echo "velocity     = $velocity\n";
@@ -434,22 +437,29 @@ class ModuleSessionsAPI extends CoreModuleAPI {
 
         /* Gravity and rolling resistance */
         /* Weight in newtons */
-        $total_weight     = $GRAVITY * ($rider_weight + $bike_weight);
-        $total_resistance = $total_weight * ($gradient + $rolling_resistance);
+        $total_weight     = $rider_weight + $bike_weight;
+        $total_weightn    = $GRAVITY * $total_weight;
+        $total_resistance = $total_weightn * ($gradient + $rolling_resistance);
         $total_air_velocity = $velocity + $headwind;
 
-        $power = ($velocity * $total_resistance + 
+        $static_power = ($velocity * $total_resistance + 
                  pow($total_air_velocity, 3) * $A2) / $transmission;
 
         /*
-        echo "total_weight       = $total_weight\n";
+        echo "total_weightn       = $total_weightn\n";
         echo "total_resistance   = $total_resistance\n";
         echo "total_air_velocity = $total_air_velocity\n";
-
-        echo "total power = $power\n";
         */
 
-        return $power;
+        /* Calculate dynamic power */
+        $dynamic_enery = 0.5 * $total_weight * pow($velocity_delta, 2);
+        if ($time_delta > 0) {
+            $dynamic_power = $dynamic_enery / $time_delta;
+        } else {
+            $dynamic_power = 0;
+        }
+
+        return round($static_power + $dynamic_power, 1);
     }
 }
 
