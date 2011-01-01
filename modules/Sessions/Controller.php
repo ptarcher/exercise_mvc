@@ -145,7 +145,6 @@ class ModuleSessions extends CoreModule {
                                                               $record->speed - $record_prev->speed,
                                                               $record->interval - $record_prev->interval,
 
-                                                              $speed_delta,
                                                               $rider_weight,
                                                               $bike_weight);
                     }
@@ -165,7 +164,6 @@ class ModuleSessions extends CoreModule {
                     $record_prev = $record;
                 }
                 $record_last = $record;
-                $i++;
             }
 
             unset($records);
