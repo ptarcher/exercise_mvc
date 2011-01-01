@@ -451,8 +451,8 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         echo "total_air_velocity = $total_air_velocity\n";
         */
 
-        /* Calculate dynamic power */
-        $dynamic_enery = 0.5 * $total_weight * pow($velocity_delta, 2);
+        /* Calculate dynamic power = 1/2m(v^2) */
+        $dynamic_enery = 0.5 * $total_weight * abs($velocity_delta) * $velocity_delta;
         if ($time_delta > 0) {
             $dynamic_power = $dynamic_enery / $time_delta;
         } else {
