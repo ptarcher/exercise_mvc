@@ -78,11 +78,11 @@ function parseRecords($xml, $session_epoch) {
     $window = array();
     for ($i = 0; $i < $NUM_GRADIENT_SAMPES; $i++) {
         if ($i <= ($alpha*$NUM_GRADIENT_SAMPES/2)) {
-            $window[$i] = 0.5 * (1 + cos(M_PI * (2*i/($alpha*$NUM_GRADIENT_SAMPES) - 1)));
-        } else if ($i <= $NUM_GRADIENT_SAMPES(1-$alpha/2)) {
+            $window[$i] = 0.5 * (1 + cos(M_PI * (2*$i/($alpha*$NUM_GRADIENT_SAMPES) - 1)));
+        } else if ($i <= $NUM_GRADIENT_SAMPES*(1-$alpha/2)) {
             $window[$i] = 1.0;
         } else {
-            $window[$i] = 0.5 * (1 + cos(M_PI * (2*i/($alpha*$NUM_GRADIENT_SAMPES) - 2/$alpha + 1)));
+            $window[$i] = 0.5 * (1 + cos(M_PI * (2*$i/($alpha*$NUM_GRADIENT_SAMPES) - 2/$alpha + 1)));
         }
     }
 
