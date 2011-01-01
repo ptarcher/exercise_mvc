@@ -73,9 +73,17 @@ function parseRecords($xml, $session_epoch) {
     $HIGH_OFFSET         = floor($NUM_GRADIENT_SAMPES/2);
 
     /* Create the window function */
+    /* Tukey window */
+    $alpha = 0.5;
     $window = array();
     for ($i = 0; $i < $NUM_GRADIENT_SAMPES; $i++) {
-        $window[$i] = 1.0;
+        if ($i <= ($alpha*$NUM_GRADIENT_SAMPES/2)) {
+            $window[$i] = 0.5 * (1 + cos(M_PI * (2*i/($alpha*$NUM_GRADIENT_SAMPES) - 1)));
+        } else if ($i <= $NUM_GRADIENT_SAMPES(1-$alpha/2)) {
+            $window[$i] = 1.0;
+        } else {
+            $window[$i] = 0.5 * (1 + cos(M_PI * (2*i/($alpha*$NUM_GRADIENT_SAMPES) - 2/$alpha + 1)));
+        }
     }
 
     $i = 0;
