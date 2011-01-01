@@ -1,6 +1,6 @@
 {include file="templates/header.tpl"}
 <head>
-    <title>Bike &rsaquo; Sessions</title>
+    <title>Bike &rsaquo; Upload session</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	{postEvent name="template_css_import"}
     <!-- TODO: Move this into the module code -->
