@@ -1,6 +1,6 @@
 {include file="templates/header.tpl"}
 <head>
-    <title>Bike &rsaquo; Session Graphs</title>
+    <title>Bike &rsaquo; Sessions &rsaquo; {$session_date}</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	{postEvent name="template_css_import"}
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
