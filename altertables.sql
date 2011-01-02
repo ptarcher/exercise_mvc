@@ -68,3 +68,74 @@ AS
               t.min_heartrate > zones.min_heartrate) AS max_heartrate
     FROM
         t_users_zones zones;
+
+
+CREATE TABLE t_climbs_categories
+(
+   rank         numeric              NOT NULL, 
+   category     text                 NOT NULL, 
+   cat          character varying(6) NOT NULL,
+   min_gradient double precision     NOT NULL,
+   min_distance double precision     NOT NULL,
+   min_height   numeric              NOT NULL,
+
+   CONSTRAINT primary_t_climbs_categories PRIMARY KEY (rank)
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+ALTER TABLE t_climbs_categories OWNER TO ptarcher;
+
+INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(0, 'Hors Category', 'HC', 7.0, 10.0, 1000);
+INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(1, 'Category 1', 'Cat 1', 6.0, 20.0, 1500);
+INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(2, 'Category 2', 'Cat 2', 8.0,  5.0, 500);
+INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(3, 'Category 3', 'Cat 3', 5.0,  5.0, 150);
+INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(4, 'Category 4', 'Cat 4', 4.0,  2.0, 80);
+INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(5, 'Category 5', 'Cat 5', 3.0,  0.5, 15);
+
+CREATE TABLE t_climbs
+(
+   name             character varying(128) NOT NULL,
+   description      text,
+
+   top_latitude     double precision NOT NULL, 
+   top_longitude    double precision NOT NULL, 
+   top_radius       double precision NOT NULL DEFAULT 100,
+
+   bottom_latitude  double precision NOT NULL, 
+   bottom_longitude double precision NOT NULL, 
+   bottom_radius    double precision NOT NULL DEFAULT 100,
+
+   CONSTRAINT primary_t_climbs PRIMARY KEY (name)
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+ALTER TABLE t_climbs OWNER TO ptarcher;
+
+CREATE TABLE t_climbs_data
+(
+   userid           character varying(32) NOT NULL,
+   session_date     timestamp with time zone NOT NULL,
+
+   bottom           interval NOT NULL,
+   top              interval NOT NULL,
+
+   /* Totals */
+   gradient_avg     double precision,
+   gradient_max     double precision,
+   total_distance   double precision,
+   total_climbed    numeric,
+   min_altitude     numeric,
+   max_altitude     numeric,
+
+   CONSTRAINT primary_t_climbs_data PRIMARY KEY (userid, session_date, bottom, top)
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+ALTER TABLE t_climbs_data OWNER TO ptarcher;
+
