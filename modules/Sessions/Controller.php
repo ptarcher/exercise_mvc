@@ -142,7 +142,7 @@ class ModuleSessions extends CoreModule {
                                                               $record->temperature,
                                                               $record->altitude,
                                                               $record->speed,
-                                                              $record->speed - $record_prev->speed,
+                                                              $record->speed    - $record_prev->speed,
                                                               $record->interval - $record_prev->interval,
 
                                                               $rider_weight,
@@ -166,7 +166,51 @@ class ModuleSessions extends CoreModule {
                 $record_last = $record;
             }
 
+            /* Calculate the climbs */
+            /* 500m with an average gradient of more than 3% */
+            /* 500m with more than 15m climb */
+
+            /*
+             * Bikes
+             * username
+             * Name
+             * description
+             * Type, TT or Road
+             * Weight
+             * Picture?
+             * Assign a bike to an exercise session at creation time?
+             *
+             * Table 
+             * t_exercise_climbs_data
+             * username
+             * ride timestamp
+             * average gradient
+             * maximum gradient
+             * start exercise_data_point
+             * stop  stop_data_point
+             * total m climbed
+             * total distance of the climb
+             * minimum altitude
+             * maximum altitude
+             * category
+             *
+             * t_exercise_climbs
+             * top_of_climb x,y
+             * name,
+             * description,
+             * radius - default 100m
+             *
+             * t_exercise_climb_categories
+             * Hors Category, HC
+             * Category 1, Cat 1
+             * Category 2, Cat 2
+             * Category 3, Cat 3
+             * Category 4, Cat 4
+             * Category 5, Cat 5
+             */
+
             unset($records);
+
             exec('/usr/bin/fitdecode -l '.$upload['tmp_name'], $xml_laps);
             $xml_laps = implode("\n", $xml_laps);
             $laps     = parseLaps($xml_laps);
