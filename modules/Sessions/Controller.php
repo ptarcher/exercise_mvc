@@ -179,34 +179,6 @@ class ModuleSessions extends CoreModule {
              * Weight
              * Picture?
              * Assign a bike to an exercise session at creation time?
-             *
-             * Table 
-             * t_exercise_climbs_data
-             * username
-             * ride timestamp
-             * average gradient
-             * maximum gradient
-             * start exercise_data_point
-             * stop  stop_data_point
-             * total m climbed
-             * total distance of the climb
-             * minimum altitude
-             * maximum altitude
-             * category
-             *
-             * t_exercise_climbs
-             * top_of_climb x,y
-             * name,
-             * description,
-             * radius - default 100m
-             *
-             * t_exercise_climb_categories
-             * Hors Category, HC
-             * Category 1, Cat 1
-             * Category 2, Cat 2
-             * Category 3, Cat 3
-             * Category 4, Cat 4
-             * Category 5, Cat 5
              */
 
             unset($records);
