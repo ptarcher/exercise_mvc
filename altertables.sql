@@ -1,3 +1,53 @@
+CREATE TABLE t_training_zones
+(
+   "zone" character varying(64) NOT NULL, 
+   "Description" text, 
+   CONSTRAINT t_training_zones_pk PRIMARY KEY ("zone")
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+
+INSERT INTO t_training_zones (zone, "Description") VALUES('Zone 0', 'Warmup');
+INSERT INTO t_training_zones (zone, "Description") VALUES('Zone 1', 'Recovery');
+INSERT INTO t_training_zones (zone, "Description") VALUES('Zone 2', 'Aerobic');
+INSERT INTO t_training_zones (zone, "Description") VALUES('Zone 3', 'Anaerobic');
+INSERT INTO t_training_zones (zone, "Description") VALUES('Zone 4', 'Red');
+
+CREATE TABLE t_users_zones
+(
+   "zone" character varying(64) NOT NULL, 
+   min_heartrate numeric NOT NULL, 
+   userid character varying(32) NOT NULL, 
+   CONSTRAINT t_users_zones_fk_users FOREIGN KEY (userid) REFERENCES t_users (userid) ON UPDATE NO ACTION ON DELETE NO ACTION, 
+   CONSTRAINT t_users_zones_pk PRIMARY KEY (userid, "zone")
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+
+INSERT INTO t_users_zones (zone, min_heartrate, userid) VALUES('Zone 0',   0, 'ptarcher');
+INSERT INTO t_users_zones (zone, min_heartrate, userid) VALUES('Zone 1', 115, 'ptarcher');
+INSERT INTO t_users_zones (zone, min_heartrate, userid) VALUES('Zone 2', 134, 'ptarcher');
+INSERT INTO t_users_zones (zone, min_heartrate, userid) VALUES('Zone 3', 153, 'ptarcher');
+INSERT INTO t_users_zones (zone, min_heartrate, userid) VALUES('Zone 4', 172, 'ptarcher');
+
+
+CREATE OR REPLACE VIEW v_users_zones
+AS
+    SELECT
+        zones.*,
+        (SELECT
+            MIN(t.min_heartrate) - 1
+            FROM t_users_zones t
+         WHERE
+              t.userid = zones.userid AND
+              t.min_heartrate > zones.min_heartrate) AS max_heartrate
+    FROM
+        t_users_zones zones;
+
 CREATE OR REPLACE VIEW v_exercise_data
 AS
     SELECT 
@@ -16,59 +66,6 @@ AS
     WHERE
     data.heartrate > zones.min_heartrate AND
     (zones.max_heartrate IS NULL OR data.heartrate < zones.max_heartrate);
-
-SELECT 
-    session_date,
-    zone,
-    SUM(length)
-FROM 
-    v_exercise_data 
-GROUP BY
-    zone,
-    session_date
-ORDER BY
-    session_date, zone;
-
-ALTER TABLE t_users ADD COLUMN max_heartrate numeric;
-ALTER TABLE t_users ADD COLUMN resting_heartrate numeric;
-
-CREATE TABLE t_training_zones
-(
-   "zone" character varying(64) NOT NULL, 
-   "Description" text, 
-   CONSTRAINT t_training_zones_pk PRIMARY KEY ("zone")
-) 
-WITH (
-  OIDS = FALSE
-)
-;
-
-CREATE TABLE t_users_zones
-(
-   "zone" character varying(64) NOT NULL, 
-   min_heartrate numeric NOT NULL, 
-   userid character varying(32) NOT NULL, 
-   CONSTRAINT t_users_zones_fk_users FOREIGN KEY (userid) REFERENCES t_users (userid) ON UPDATE NO ACTION ON DELETE NO ACTION, 
-   CONSTRAINT t_users_zones_pk PRIMARY KEY (userid, "zone")
-) 
-WITH (
-  OIDS = FALSE
-)
-;
-
-CREATE OR REPLACE VIEW v_users_zones
-AS
-    SELECT
-        zones.*,
-        (SELECT
-            MIN(t.min_heartrate) - 1
-            FROM t_users_zones t
-         WHERE
-              t.userid = zones.userid AND
-              t.min_heartrate > zones.min_heartrate) AS max_heartrate
-    FROM
-        t_users_zones zones;
-
 
 CREATE TABLE t_climbs_categories
 (
