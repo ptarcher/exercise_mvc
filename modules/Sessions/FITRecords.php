@@ -37,6 +37,8 @@ class FITRecord extends FITElement {
     /* Calculated */
     var $interval;
     var $gradient;
+    var $delta_altitude;
+    var $delta_distance;
 }
 
 function parseRecords($xml, $session_epoch) {
@@ -98,6 +100,14 @@ function parseRecords($xml, $session_epoch) {
                 $ftime['tm_year'] + 1900);
         $record->interval = $record_epoch - $session_epoch;
 
+        if ($i > 0) {
+            $record->delta_distance = $record->distance - $records[$i-1]->distance;
+            $record->delta_altitude = $record->altitude - $records[$i-1]->altitude;
+        } else {
+            $record->delta_distance = 0;
+            $record->delta_altitude = 0;
+        }
+
         /* Calculate the average gradient */
         $total_rise     = 0;
         $total_distance = 0;
@@ -121,7 +131,7 @@ function parseRecords($xml, $session_epoch) {
             $record->gradient = 0;
         }
 
-        /* Calculate the power */
+        /* TODO: Calculate the power */
 
         $i++;
     }
