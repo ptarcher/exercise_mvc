@@ -71,6 +71,7 @@ class ModuleSessions extends CoreModule {
         $view = CoreView::factory('sessions');
         $view->sessions = $sessions;
         $view->coach    = $_SESSION['coach'];
+
         echo $view->render();
     }
 
@@ -167,17 +168,87 @@ class ModuleSessions extends CoreModule {
             }
 
             /* Calculate the climbs */
-            /* 500m with an average gradient of more than 3% */
+            $climbs = $this->api->getClimbCategories();
+
+            $min_climb = $climbs[0];
+
+            /* 500m with an average gradient of more than 3% (cat 5)*/
             /* 500m with more than 15m climb */
+            /* Find the points that have a distance of 500m */
+            $window_distance = 0;
+            $window_altitude = 0;
+            $cat             = -1;
+
+            $climb = array();
+            $climb['total_climbed'] = 0;
+            $climb['max_gradient']  = 0;
+
+            echo count($records);
+
+            for ($front = 0, $back = 0; $front < count($records); $front++) {
+                $window_distance += $records[$front]->delta_distance * 1000;
+                $window_altitude += $records[$front]->delta_altitude;
+
+                if ($window_distance > $min_climb['min_distance']) {
+                    /* Check the category */
+                    while ((($cat+1) < count($climbs)) && 
+                            (($window_altitude/$window_distance) > $climbs[$cat+1]['min_gradient'])) {
+                        if ($cat == -1) {
+                            /* TODO: Go through and find the minimum height */
+                            $climb['bottom']       = $records[$back]->timestamp;
+                            $climb['min_altitude'] = $records[$back];
+                        }
+
+                        $cat++;
+                        /* We are in a climb */
+                        echo 'We are more than a '.$cat.$climbs[$cat]['cat']." climb<br />\n";
+                        echo 'Gradient = '.($window_altitude/$window_distance).' min_gradient = '.$climbs[$cat]['min_gradient'].' front = '.$front."<br />\n";
+                    }
+
+                    /* Check we are in the same category */
+                    if ($cat != -1 && 
+                            (($window_altitude/$window_distance) > $climbs[$cat]['min_gradient'])) {
+                        echo 'Still climbing at point '.$front."<br />\n";
+
+                        /* Get the max gradient */
+                        if ($climb['gradient_max'] < $records[$front]->gradient) {
+                            $climb['gradient_max'] = $records[$front]->gradient;
+                        }
+                        /* TODO: Need to get the delta in the altitude */
+                        $climb['total_climbed'] += 1; //$records[$front]->altitude;
+                    } else if ($cat != -1) {
+                        echo 'We have finished climbing the '.$climbs[$cat]['cat']."<br />\n";
+
+                        /* Need to go back and find the maximum altitude */
+                        $climb['top']            = $records[$front]->timestamp;
+                        $climb['max_altitude']   = $records[$back];
+                        $climb['total_distance'] = 0;
+                        $climb['cat']            = $cat;
+
+                        /* TODO: Insert it into the database */
+                        print_r($climb);
+
+                        $cat = -1;
+                    }
+
+                    /* Move the back up */
+                    while ($window_distance > $min_climb['min_distance'] && $back < count($records)) {
+                        $window_distance -= $records[$back]->delta_distance * 1000;
+                        $window_altitude -= $records[$back]->delta_altitude;
+                        $back++;
+                        //echo 'back = '.$back.' front = '.$front." distance = $window_distance, altitude = $window_altitude, min_distance = ".$min_climb['min_distance']."<br />\n";
+                    }
+                }
+            }
 
             /*
              * Bikes
-             * username
-             * Name
+             * userid
+             * name
              * description
-             * Type, TT or Road
-             * Weight
-             * Picture?
+             * type, TT or Road
+             * weight
+             * picture?
              * Assign a bike to an exercise session at creation time?
              */
 
