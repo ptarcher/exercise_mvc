@@ -389,6 +389,24 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    function getClimbCategories() {
+        $sql = 'SELECT 
+                    rank,
+                    category,
+                    cat,
+                    min_gradient,
+                    min_distance,
+                    min_height
+                FROM 
+                    t_climbs_categories
+                ORDER BY
+                    rank DESC';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     function getPower($gradient,       $temperature, 
                       $altitude,       $velocity,
                       $velocity_delta, $time_delta,
