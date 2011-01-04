@@ -84,12 +84,12 @@ WITH (
 ;
 ALTER TABLE t_climbs_categories OWNER TO ptarcher;
 
-INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(0, 'Hors Category', 'HC', 7.0, 10.0, 1000);
-INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(1, 'Category 1', 'Cat 1', 6.0, 20.0, 1500);
-INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(2, 'Category 2', 'Cat 2', 8.0,  5.0, 500);
-INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(3, 'Category 3', 'Cat 3', 5.0,  5.0, 150);
-INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(4, 'Category 4', 'Cat 4', 4.0,  2.0, 80);
-INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(5, 'Category 5', 'Cat 5', 3.0,  0.5, 15);
+INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(0, 'Hors Category', 'HC', 7.0, 10000.0, 1000);
+INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(1, 'Category 1', 'Cat 1', 6.0, 20000.0, 1500);
+INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(2, 'Category 2', 'Cat 2', 8.0,  5000.0,  500);
+INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(3, 'Category 3', 'Cat 3', 5.0,  5000.0,  150);
+INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(4, 'Category 4', 'Cat 4', 4.0,  2000.0,   80);
+INSERT INTO t_climbs_categories (rank, category, cat, min_gradient, min_distance, min_height) VALUES(5, 'Category 5', 'Cat 5', 3.0,   500.0,   15);
 
 CREATE TABLE t_climbs
 (
