@@ -190,6 +190,10 @@ $(function () {
         $(this).toggleClass("active");
     });
 
+    $('table#climbs').tablesorter({
+            widgets: ['zebra',],
+    });
+
     $('table#laps').tablesorter({
             widgets: ['zebra',],
     });
