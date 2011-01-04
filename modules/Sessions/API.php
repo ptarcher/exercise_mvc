@@ -417,7 +417,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function insertClimb($session_date,
+    function insertClimb($session_date,   $climb_num,
                          $bottom,         $top,
                          $gradient_avg,   $gradient_max,
                          $total_distance, $total_climbed,
@@ -425,6 +425,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
     {
         $sql = 'INSERT INTO t_climbs_data
                    (session_date,
+                    climb_num,
                     bottom,
                     top,
                     gradient_avg,
@@ -436,6 +437,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     userid)
                 VALUES 
                    (:session_date,
+                    :climb_num,
                     :bottom,
                     :top,
                     :gradient_avg,
@@ -449,6 +451,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
 
         // TODO: Add the types
         $stmt->bindParam(':session_date',   $session_date);
+        $stmt->bindParam(':climb_num',      $climb_num);
         $stmt->bindParam(':bottom',         $bottom);
         $stmt->bindParam(':top',            $top);
         $stmt->bindParam(':gradient_avg',   $gradient_avg);
