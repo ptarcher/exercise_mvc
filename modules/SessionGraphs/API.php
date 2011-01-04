@@ -40,7 +40,8 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
 		return self::$instance;
 	}
 	
-    function getSessionDataField($session_date, $field) {
+    function getSessionDataField($session_date, $field) 
+    {
         $valid_fields = array('distance','speed','heartrate',
                               'altitude','power','temperature',
                               'cadence', 'gradient');
@@ -80,8 +81,8 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
         return $rows;
     }
 
-
-    function getGPXData($session_date) {
+    function getGPXData($session_date) 
+    {
     	// Get time in seconds since the start of the session
         $sql = 'SELECT 
                     latitude as lat,
@@ -103,7 +104,8 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
         return $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function getSession($session_date) {
+    function getSession($session_date) 
+    {
         $sql = 'SELECT
                     userid,
                     session_date,
@@ -144,7 +146,8 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
         }
     }
 
-    function getLaps($session_date) {
+    function getLaps($session_date) 
+    {
         $sql = 'SELECT
                     userid,
                     session_date,
@@ -178,7 +181,8 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function getZones($session_date) {
+    function getZones($session_date) 
+    {
         $sql = 'SELECT
                     userid,
                     zone,
@@ -202,6 +206,35 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    function getClimbs($session_date) 
+    {
+        $sql = 'SELECT
+                    userid,
+                    session_date,
+                    climb_num,
+                    top - bottom AS duration,
+                    total_distance,
+                    total_climbed,
+                    gradient_avg,
+                    gradient_max,
+                    min_altitude,
+                    max_altitude
+                FROM 
+                    t_climbs_data
+                WHERE 
+                    userid       = :userid       AND
+                    session_date = :session_date
+                ORDER BY
+                    bottom';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
+        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 
 ?>
