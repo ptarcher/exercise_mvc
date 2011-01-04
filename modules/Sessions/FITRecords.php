@@ -89,6 +89,7 @@ function parseRecords($xml, $session_epoch) {
     }
 
     $i = 0;
+    $num_records = count($records);
     foreach($records as $record) {
         /* Convert the timestamp into an interval */
         $ftime = strptime($record->timestamp, '%FT%T%z');
@@ -102,7 +103,7 @@ function parseRecords($xml, $session_epoch) {
 
         if ($i > 0) {
             $record->delta_distance = $record->distance - $records[$i-1]->distance;
-            $record->delta_altitude = $record->altitude - $records[$i-1]->altitude;
+            $record->delta_altitude = round($record->altitude - $records[$i-1]->altitude, 2);
         } else {
             $record->delta_distance = 0;
             $record->delta_altitude = 0;
@@ -114,7 +115,7 @@ function parseRecords($xml, $session_epoch) {
         unset($first_distance);
         $last_distance = 0;
         for ($g = $i - $LOW_OFFSET, $j = 0; $g <= $i + $HIGH_OFFSET; $g++, $j++) {
-            if ($g >= 0 && $g < count($records)) {
+            if ($g >= 0 && $g < $num_records) {
                 if (!isset($first_distance)) {
                     $first_distance = $records[$g]->distance;
                 }
