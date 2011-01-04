@@ -28,6 +28,9 @@ require_once('modules/Sessions/FITLap.php');
 require_once('modules/Sessions/FITSession.php');
 require_once('modules/Sessions/FITRecords.php');
 
+/* PEAR benchmark */
+require_once 'Benchmark/Timer.php';
+
 class ModuleSessions extends CoreModule {
     var $module_description = array(
         'name'        => 'Session',
@@ -78,11 +81,15 @@ class ModuleSessions extends CoreModule {
     function viewUpload() {
         $form = new SessionUploadForm();
         if ($form->validate()) {
+            $timer = new Benchmark_Timer();
+            $timer->start();
             $upload = $form->getSubmitValue('form_upload');
 
+            $timer->setMarker('Decode Sessions - Start');
             exec('/usr/bin/fitdecode -s '.$upload['tmp_name'], $xml_session);
             $xml_session = implode("\n", $xml_session);
             $sessions    = parseSessions($xml_session);
+            $timer->setMarker('Decode Sessions - End');
     
             /* There should only be one session */
             if (is_array($sessions)) {
@@ -119,9 +126,11 @@ class ModuleSessions extends CoreModule {
             unset($session);
             unset($sessions);
 
+            $timer->setMarker('Decode Records - Start');
             exec('/usr/bin/fitdecode -r '.$upload['tmp_name'], $xml_records);
             $xml_records = implode("\n", $xml_records);
             $records     = parseRecords($xml_records, $session_epoch);
+            $timer->setMarker('Decode Records - End');
 
             if (is_array($records)) {
                 $record_prev = $records[0];
@@ -170,76 +179,110 @@ class ModuleSessions extends CoreModule {
             /* Calculate the climbs */
             $climbs = $this->api->getClimbCategories();
 
+            $timer->setMarker('Climb - Start');
             $min_climb = $climbs[0];
 
             /* 500m with an average gradient of more than 3% (cat 5)*/
-            /* 500m with more than 15m climb */
             /* Find the points that have a distance of 500m */
             $window_distance = 0;
             $window_altitude = 0;
             $cat             = -1;
 
-            $climb = array();
-            $climb['total_climbed'] = 0;
-            $climb['max_gradient']  = 0;
+            $num_records = count($records);
+            $num_climbs  = count($climbs);
 
-            echo count($records);
-
-            for ($front = 0, $back = 0; $front < count($records); $front++) {
+            for ($front = 0, $back = 0; $front < $num_records; $front++) {
                 $window_distance += $records[$front]->delta_distance * 1000;
                 $window_altitude += $records[$front]->delta_altitude;
 
                 if ($window_distance > $min_climb['min_distance']) {
-                    /* Check the category */
-                    while ((($cat+1) < count($climbs)) && 
-                            (($window_altitude/$window_distance) > $climbs[$cat+1]['min_gradient'])) {
-                        if ($cat == -1) {
-                            /* TODO: Go through and find the minimum height */
-                            $climb['bottom']       = $records[$back]->timestamp;
-                            $climb['min_altitude'] = $records[$back];
+                    $window_gradient = ($window_altitude/$window_distance)*100;
+
+                    /* Check if we have found the start of a climb */
+                    if ($cat == -1 && (($window_gradient >= $climbs[$cat+1]['min_gradient']))) {
+                        /* Go through and find the minimum height */
+                        $min = $back;
+                        for ($i = $back; $i < $front; $i++) {
+                            if ($records[$i]->altitude <= $records[$min]->altitude) {
+                                $min = $i;
+                            }
                         }
 
+                        $climb['bottom']       = $records[$min]->interval;
+                        $climb['min_altitude'] = $records[$min]->altitude;
                         $cat++;
-                        /* We are in a climb */
-                        echo 'We are more than a '.$cat.$climbs[$cat]['cat']." climb<br />\n";
-                        echo 'Gradient = '.($window_altitude/$window_distance).' min_gradient = '.$climbs[$cat]['min_gradient'].' front = '.$front."<br />\n";
                     }
 
-                    /* Check we are in the same category */
-                    if ($cat != -1 && 
-                            (($window_altitude/$window_distance) > $climbs[$cat]['min_gradient'])) {
-                        echo 'Still climbing at point '.$front."<br />\n";
+                    /* Check if we have finished the climb */
+                    if ($cat != -1 && ($window_gradient < $climbs[$cat]['min_gradient'])) {
+                        /* Need to go back and find the maximum altitude */
+                        $max = $back;
+                        for ($i = $back; $i < $front; $i++) {
+                            if ($records[$i]->altitude > $records[$max]->altitude) {
+                                $max = $i;
+                            }
+                        }
+                        $climb['top']          = $records[$max]->interval;
+                        $climb['max_altitude'] = $records[$max]->altitude;
 
                         /* Get the max gradient */
-                        if ($climb['gradient_max'] < $records[$front]->gradient) {
-                            $climb['gradient_max'] = $records[$front]->gradient;
+                        $climb['gradient_max'] = $records[$min]->gradient;
+                        for ($i = $min; $i <= $max; $i++) {
+                            if ($climb['gradient_max'] < $records[$i]->gradient) {
+                                $climb['gradient_max'] = $records[$i]->gradient;
+                            }
                         }
-                        /* TODO: Need to get the delta in the altitude */
-                        $climb['total_climbed'] += 1; //$records[$front]->altitude;
-                    } else if ($cat != -1) {
-                        echo 'We have finished climbing the '.$climbs[$cat]['cat']."<br />\n";
 
-                        /* Need to go back and find the maximum altitude */
-                        $climb['top']            = $records[$front]->timestamp;
-                        $climb['max_altitude']   = $records[$back];
-                        $climb['total_distance'] = 0;
+                        /* Tally the totals */
+                        $climb['total_climbed'] = 0;
+                        for ($i = $min+1; $i <= $max; $i++) {
+                            $climb['total_climbed']  += $records[$i]->delta_altitude;
+                        }
+
+                        $climb['total_distance'] = $records[$max]->distance - $records[$min]->distance;
+                        $climb['gradient_avg']   = round(($climb['total_climbed'] / ($climb['total_distance'] * 1000)) * 100, 2);
+
+                        /* Find the category of the climb */
+                        $cat = 0;
+                        while ((($cat+1) < $num_climbs) && 
+                                ($climb['gradient_avg']        >= $climbs[$cat+1]['min_gradient'])  &&
+                                ($climb['total_distance']*1000 >= $climbs[$cat+1]['min_distance']) &&
+                                ($climb['total_climbed']       >= $climbs[$cat+1]['min_height'])) {
+                            $cat++;
+                        }
                         $climb['cat']            = $cat;
 
-                        /* TODO: Insert it into the database */
-                        print_r($climb);
+                        /* Store it into the database */
+                        $this->api->insertClimb($session_timestamp,
+                                                $climb['bottom'],         $climb['top'],
+                                                $climb['gradient_avg'],   $climb['gradient_max'],
+                                                $climb['total_distance'], $climb['total_climbed'],
+                                                $climb['min_altitude'],   $climb['max_altitude']);
 
+                        $climb['cat']            = -1;
+                        $climb['bottom']         = 0;
+                        $climb['top']            = 0;
+                        $climb['gradient_max']   = 0;
                         $cat = -1;
+
+                        /* Start search for the next climb */
+                        $front           = $max;
+                        $back            = $max;
+                        $window_distance = 0;
+                        $window_altitude = 0;
                     }
 
-                    /* Move the back up */
-                    while ($window_distance > $min_climb['min_distance'] && $back < count($records)) {
+                    /* Move the back of the window up */
+                    while ($window_distance > $min_climb['min_distance'] && $back < $num_records) {
                         $window_distance -= $records[$back]->delta_distance * 1000;
                         $window_altitude -= $records[$back]->delta_altitude;
                         $back++;
+                        //echo "reducing back = $back, front = $front min_climb = ".$min_climb['min_distance']."<br />\n";
                         //echo 'back = '.$back.' front = '.$front." distance = $window_distance, altitude = $window_altitude, min_distance = ".$min_climb['min_distance']."<br />\n";
                     }
                 }
             }
+            $timer->setMarker('Climb - End');
 
             /*
              * Bikes
@@ -254,9 +297,12 @@ class ModuleSessions extends CoreModule {
 
             unset($records);
 
+            $timer->setMarker('Laps - Start');
             exec('/usr/bin/fitdecode -l '.$upload['tmp_name'], $xml_laps);
             $xml_laps = implode("\n", $xml_laps);
             $laps     = parseLaps($xml_laps);
+            $timer->setMarker('Laps - End');
+
             $lap_num = 1;
             foreach($laps as $lap) {
                 $ftime = strptime($lap->start_time, '%FT%T%z');
@@ -286,6 +332,7 @@ class ModuleSessions extends CoreModule {
                                       $lap->total_distance);
                 $lap_num++;
             }
+            $timer->display();
         }
 
         $view = CoreView::factory('sessionsfileupload');
