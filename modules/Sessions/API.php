@@ -437,11 +437,11 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                 VALUES 
                    (:session_date,
                     :bottom,
-                    :top:
+                    :top,
                     :gradient_avg,
                     :gradient_max,
                     :total_distance,
-                    :total_climbed
+                    :total_climbed,
                     :min_altitude,
                     :max_altitude,
                     :userid)';
