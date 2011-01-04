@@ -275,6 +275,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
         
+        /* Delete all the laps */
         $sql = 'DELETE FROM t_exercise_laps
                 WHERE
                     session_date = :session_date AND
@@ -284,6 +285,15 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
         $stmt->execute() or die("Unable to execute $sql");
 
+        /* Delete all the climbs */
+        $sql = 'DELETE FROM t_climbs_data
+                WHERE
+                    session_date = :session_date AND
+                    userid       = :userid;';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $stmt->bindParam(':session_date',  $session_date);
+        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->execute() or die("Unable to execute $sql");
 
         /* Remove the session totals */
         $sql = 'DELETE FROM t_exercise_totals
@@ -406,6 +416,52 @@ class ModuleSessionsAPI extends CoreModuleAPI {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    function insertClimb($session_date,
+                         $bottom,         $top,
+                         $gradient_avg,   $gradient_max,
+                         $total_distance, $total_climbed,
+                         $min_altitude,   $max_altitude)
+    {
+        $sql = 'INSERT INTO t_climbs_data
+                   (session_date,
+                    bottom,
+                    top,
+                    gradient_avg,
+                    gradient_max,
+                    total_distance,
+                    total_climbed,
+                    min_altitude,
+                    max_altitude,
+                    userid)
+                VALUES 
+                   (:session_date,
+                    :bottom,
+                    :top:
+                    :gradient_avg,
+                    :gradient_max,
+                    :total_distance,
+                    :total_climbed
+                    :min_altitude,
+                    :max_altitude,
+                    :userid)';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        // TODO: Add the types
+        $stmt->bindParam(':session_date',   $session_date);
+        $stmt->bindParam(':bottom',         $bottom);
+        $stmt->bindParam(':top',            $top);
+        $stmt->bindParam(':gradient_avg',   $gradient_avg);
+        $stmt->bindParam(':gradient_max',   $gradient_max);
+        $stmt->bindParam(':total_distance', $total_distance);
+        $stmt->bindParam(':total_climbed',  $total_climbed);
+        $stmt->bindParam(':min_altitude',   $min_altitude);
+        $stmt->bindParam(':max_altitude',   $max_altitude);
+        $stmt->bindParam(':userid',         $_SESSION['userid'], PDO::PARAM_STR);
+
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+    }
+
 
     function getPower($gradient,       $temperature, 
                       $altitude,       $velocity,
