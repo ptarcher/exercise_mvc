@@ -142,6 +142,7 @@ class ModuleSessions extends CoreModule {
             $bike_weight  = 9;
 
             /* Add the matching data points */
+            $timer->setMarker('Power calcs - Start');
             foreach($records as $record) {
                /* Skip duplicates, they will cause issues in graphs */
                 if (!isset($record_last) || 
@@ -158,7 +159,17 @@ class ModuleSessions extends CoreModule {
                                                               $rider_weight,
                                                               $bike_weight);
                     }
+                    $record_prev = $record;
+                }
+                $record_last = $record;
+            }
+            $timer->setMarker('Power calcs - End');
 
+            $timer->setMarker('Record insertion - start');
+            foreach($records as $record) {
+               /* Skip duplicates, they will cause issues in graphs */
+                if (!isset($record_last) || 
+                        $record_last->interval != $record->interval) {
                     $this->api->insertSessionData($session_timestamp,
                                                   $record->interval,
                                                   $record->distance,
@@ -175,6 +186,7 @@ class ModuleSessions extends CoreModule {
                 }
                 $record_last = $record;
             }
+            $timer->setMarker('Record insertion - end');
 
             /* Calculate the climbs */
             $climbs = $this->api->getClimbCategories();
@@ -187,6 +199,7 @@ class ModuleSessions extends CoreModule {
             $window_distance = 0;
             $window_altitude = 0;
             $cat             = -1;
+            $climb_num       = 1;
 
             $num_records = count($records);
             $num_climbs  = count($climbs);
@@ -200,6 +213,8 @@ class ModuleSessions extends CoreModule {
 
                     /* Check if we have found the start of a climb */
                     if ($cat == -1 && (($window_gradient >= $climbs[$cat+1]['min_gradient']))) {
+                        $cat++;
+
                         /* Go through and find the minimum height */
                         $min = $back;
                         for ($i = $back; $i < $front; $i++) {
@@ -207,10 +222,8 @@ class ModuleSessions extends CoreModule {
                                 $min = $i;
                             }
                         }
-
                         $climb['bottom']       = $records[$min]->interval;
                         $climb['min_altitude'] = $records[$min]->altitude;
-                        $cat++;
                     }
 
                     /* Check if we have finished the climb */
@@ -243,7 +256,7 @@ class ModuleSessions extends CoreModule {
                         $climb['gradient_avg']   = round(($climb['total_climbed'] / ($climb['total_distance'] * 1000)) * 100, 2);
 
                         /* Find the category of the climb */
-                        $cat = 0;
+                        $cat = -1;
                         while ((($cat+1) < $num_climbs) && 
                                 ($climb['gradient_avg']        >= $climbs[$cat+1]['min_gradient'])  &&
                                 ($climb['total_distance']*1000 >= $climbs[$cat+1]['min_distance']) &&
@@ -252,24 +265,27 @@ class ModuleSessions extends CoreModule {
                         }
                         $climb['cat']            = $cat;
 
-                        /* Store it into the database */
-                        $this->api->insertClimb($session_timestamp,
-                                                $climb['bottom'],         $climb['top'],
-                                                $climb['gradient_avg'],   $climb['gradient_max'],
-                                                $climb['total_distance'], $climb['total_climbed'],
-                                                $climb['min_altitude'],   $climb['max_altitude']);
+                        if ($cat != -1) {
+                            /* Store it into the database */
+                            $this->api->insertClimb($session_timestamp,       $climb_num++,
+                                                    $climb['bottom'],         $climb['top'],
+                                                    $climb['gradient_avg'],   $climb['gradient_max'],
+                                                    $climb['total_distance'], $climb['total_climbed'],
+                                                    $climb['min_altitude'],   $climb['max_altitude']);
 
-                        $climb['cat']            = -1;
-                        $climb['bottom']         = 0;
-                        $climb['top']            = 0;
-                        $climb['gradient_max']   = 0;
+                            /* Start search for the next climb */
+                            $front           = $max;
+                            $back            = $max;
+                            $window_distance = 0;
+                            $window_altitude = 0;
+                        } else {
+                            /* It was a false climb, either not steep enough, 
+                             * too short, and the window just masked this 
+                             * Keep searching for the next climb
+                             */
+                        }
+
                         $cat = -1;
-
-                        /* Start search for the next climb */
-                        $front           = $max;
-                        $back            = $max;
-                        $window_distance = 0;
-                        $window_altitude = 0;
                     }
 
                     /* Move the back of the window up */
@@ -277,8 +293,6 @@ class ModuleSessions extends CoreModule {
                         $window_distance -= $records[$back]->delta_distance * 1000;
                         $window_altitude -= $records[$back]->delta_altitude;
                         $back++;
-                        //echo "reducing back = $back, front = $front min_climb = ".$min_climb['min_distance']."<br />\n";
-                        //echo 'back = '.$back.' front = '.$front." distance = $window_distance, altitude = $window_altitude, min_distance = ".$min_climb['min_distance']."<br />\n";
                     }
                 }
             }
