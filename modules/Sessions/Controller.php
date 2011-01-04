@@ -239,7 +239,7 @@ class ModuleSessions extends CoreModule {
                             $climb['total_climbed']  += $records[$i]->delta_altitude;
                         }
 
-                        $climb['total_distance'] = $records[$max]->distance - $records[$min]->distance;
+                        $climb['total_distance'] = round($records[$max]->distance - $records[$min]->distance, 2);
                         $climb['gradient_avg']   = round(($climb['total_climbed'] / ($climb['total_distance'] * 1000)) * 100, 2);
 
                         /* Find the category of the climb */
