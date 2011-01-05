@@ -116,6 +116,7 @@ CREATE TABLE t_climbs_data
 (
    userid           character varying(32) NOT NULL,
    session_date     timestamp with time zone NOT NULL,
+   climb_num        numeric NOT NULL,
 
    bottom           interval NOT NULL,
    top              interval NOT NULL,
@@ -128,7 +129,7 @@ CREATE TABLE t_climbs_data
    min_altitude     numeric,
    max_altitude     numeric,
 
-   CONSTRAINT primary_t_climbs_data PRIMARY KEY (userid, session_date, bottom, top)
+   CONSTRAINT primary_t_climbs_data PRIMARY KEY (userid, session_date, climb_num)
 ) 
 WITH (
   OIDS = FALSE

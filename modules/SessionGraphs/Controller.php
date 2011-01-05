@@ -42,11 +42,13 @@ class ModuleSessionGraphs extends CoreModule {
         $session = $this->api->getSession($session_date);
         $laps    = $this->api->getLaps($session_date);
         $zones   = $this->api->getZones($session_date);
+        $climbs  = $this->api->getClimbs($session_date);
 
         $view = CoreView::factory('sessiongraphs');
         $view->session_date = $session_date;
         $view->laps         = $laps;
         $view->zones        = $zones;
+        $view->climbs       = $climbs;
 
         $session_labels = array();
         $session_labels[] = array("label" => 'Date',
