@@ -43,6 +43,15 @@ $(document).ready( function() {
             var content_after  = '<input id="'+id+'" value="'+content_before+'">';
             $(this).html(content_after)
                    .keypress(submitSessionOnEnter);
+
+            if (id == 'dob') {
+                var me = $("input#dob");
+                $("input#dob").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                });
+            }
+
     } );
 });
 
