@@ -164,11 +164,11 @@
             <thead>
             <tr>
                 <th>Climb Num</th>
+                <th>Category</th>
                 <th>Duration</th>
                 <th>Distance</th>
                 <th>Altitude</th>
                 <!--th>Avg Speed</th-->
-                <!--th>Max Speed</th-->
                 <!--th>Avg Heartrate</th-->
                 <!--th>Max Heartrate</th-->
                 <th>Avg Gradient</th>
@@ -179,11 +179,11 @@
             {foreach from=$climbs key=i item=climb}
             <tr>
                 <td>{$climb.climb_num}</td>
+                <td>{$climb.category}</td>
                 <td>{$climb.duration}</td>
                 <td>{$climb.total_distance}</td>
                 <td>{$climb.total_climbed}</td>
                 <!--td>{$climb.avg_speed}</td-->
-                <!--td>{$climb.max_speed}</td-->
                 <!--td>{$climb.avg_heartrate}</td-->
                 <!--td>{$climb.max_heartrate}</td-->
                 <td>{$climb.gradient_avg}</td>
