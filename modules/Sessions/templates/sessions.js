@@ -23,14 +23,14 @@ function getAddSessionAJAX( row )
     parameters.module = 'APIAccess';
     parameters.format = 'json';
     parameters.method = 'Sessions.createSession';
-    parameters.session_date  = $(row).find('input#sessionadd_date').val();
-    parameters.type_short    = $(row).find('input#sessionadd_type').val();
-    parameters.description   = $(row).find('input#sessionadd_description').val();
-    parameters.duration      = $(row).find('input#sessionadd_duration').val();
-    parameters.distance      = $(row).find('input#sessionadd_distance').val();
-    parameters.avg_speed     = $(row).find('input#sessionadd_avg_speed').val();
-    parameters.avg_heartrate = $(row).find('input#sessionadd_avg_heartrate').val();
-    parameters.comment       = $(row).find('textarea#sessionadd_comment').val();
+    parameters.session_date  = $(row).find('input#date').val();
+    parameters.type_short    = $(row).find('select#type').val();
+    parameters.description   = $(row).find('input#description').val();
+    parameters.duration      = $(row).find('input#duration').val();
+    parameters.distance      = $(row).find('input#distance').val();
+    parameters.avg_speed     = $(row).find('input#avg_speed').val();
+    parameters.avg_heartrate = $(row).find('input#avg_heartrate').val();
+    parameters.comment       = $(row).find('textarea#comment').val();
 
 	ajaxRequest.data = parameters;
  	
@@ -71,21 +71,21 @@ $(document).ready( function() {
 		var newRowId = 'row' + numberOfRows;
 	
 		$(' <tr id="'+newRowId+'">'+
-				'<td><input id="sessionadd_date"          value=""        size=25></td>'+
-				'<td><input id="sessionadd_type"          value="Type"        size=25></td>'+
-				'<td><input id="sessionadd_description"   value="Description" size=25></td>'+
-				'<td><input id="sessionadd_duration"      value="Duration"    size=25></td>'+
-				'<td><input id="sessionadd_distance"      value="Distance"    size=25></td>'+
-				'<td><input id="sessionadd_avg_speed"     value="Avg Speed"   size=25></td>'+
-				'<td><input id="sessionadd_avg_heartrate" value="Avg HR"      size=25></td>'+
-                '<td><textarea cols=20 rows=3 id="sessionadd_comment">Comments</textarea>'+
+				'<td><input id="date"          value=""        size=25></td>'+
+				'<td><select id="type"></select></td>'+
+				'<td><input id="description"   value="Description" size=25></td>'+
+				'<td><input id="duration"      value="Duration"    size=25></td>'+
+				'<td><input id="distance"      value="Distance"    size=25></td>'+
+				'<td><input id="avg_speed"     value="Avg Speed"   size=25></td>'+
+				'<td><input id="avg_heartrate" value="Avg HR"      size=25></td>'+
+                '<td><textarea cols=20 rows=3 id="comment">Comments</textarea>'+
 				'<td><img src="themes/default/images/ok.png"     class="addsession" href="#"></td>'+
 	  			'<td><img src="themes/default/images/remove.png" class="cancel"></td>'+
 	 		'</tr>')
 	  			.appendTo('#editSessions');
 
         /* Add callbacks */
-		$('#'+newRowId).keypress( submitSessionOnEnter );
+		$('tr#'+newRowId).keypress( submitSessionOnEnter );
 		$('.addsession').click( function(){ 
                 $.ajax( getAddSessionAJAX($('tr#'+newRowId)) ); 
                 } );
@@ -94,13 +94,24 @@ $(document).ready( function() {
                 $(this).parents('tr').remove();  
                 $('.addRowSession').toggle(); }
                 );
-        $("#sessionadd_date").dateplustimepicker({
+        $("input#date").dateplustimepicker({
             timeFormat: 'hh:mm:ss',
             hourGrid: 3,
             showSeconds: true,
             showMinutes: true,
             step: {hours: 3},
         });
+
+        /* Grab the select list */
+        $.getJSON( '', { module: 'APIAccess',
+                         format: 'json',
+                         method: 'Sessions.getTrainingTypes',
+                       },
+                   function(data) {
+                        $.each(data, function(val, item){
+                            $('<option value="'+val+'">'+item+'</option>').appendTo("select#type");
+                        });
+                   });
 	 } );
 	
 	// when click on deleteuser, the we ask for confirmation and then delete the user
@@ -126,16 +137,14 @@ $(document).ready( function() {
 			if(alreadyEdited[idRow]==1) return;
 			alreadyEdited[idRow] = 1;
 
-			$('tr#'+idRow+' .editableSession').each(
+			$('tr#'+idRow+' .editable').each(
 				// make the fields editable
 				// change the EDIT button to VALID button
 				function (i,n) {
 					var contentBefore = $(n).html();
 					var idName = $(n).attr('id');
-                    // TODO: Add a dropdown list for type
-                    // Add a calender link for date
-					if(idName == 'type'      || 
-                       idName == 'description' || idName == 'duration'  ||
+
+					if(idName == 'description' || idName == 'duration'  ||
                        idName == 'distance'    || idName == 'avg_speed' ||
                        idName == 'avg_heartrate')
 					{
@@ -158,14 +167,28 @@ $(document).ready( function() {
 						$(n)
 							.html(contentAfter)
 							.keypress( submitSessionOnEnter );
-					}
-					if(idName == 'comment')
-					{
+                    } else if (idName == 'type') {
+                        var contentAfter = '<select id="'+idName+'"></select>';
+                        $(n).html(contentAfter);
+                    } else if (idName == 'comment') {
 						var contentAfter = '<textarea cols=20 rows=3 id="'+idName+'">'+contentBefore.replace(/<br *\/? *>/gi,"\n")+'</textarea>';
 						$(n).html(contentAfter);
 					}
-				}
-			);
+                }
+            );
+
+            /* Grab the training list */
+            $.getJSON( '', { module: 'APIAccess',
+                    format: 'json',
+                    method: 'Sessions.getTrainingTypes',
+                    },
+                    function(data) {
+                        $.each(data, function(val, item){
+                            $('tr#'+idRow).find('select#type').append('<option value="'+val+'">'+item+'</option>');
+                        });
+                    });
+
+
 			$(this)
 				.toggle()
 				.parent()
@@ -175,7 +198,7 @@ $(document).ready( function() {
 		}
 	);
 	
-	$('td.editableSession').click( function(){ $(this).parent().find('.editSession').click(); } );
+	$('td.editable').click( function(){ $(this).parent().find('.editSession').click(); } );
 
     $('table#editSessions').tablesorter({
             widgets: ['zebra',],
