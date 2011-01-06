@@ -38,20 +38,17 @@ $(document).ready( function() {
 			if(alreadyEdited[idRow]==1) return;
 			alreadyEdited[idRow] = 1;
 
-            var id             = $(this).attr('id');
+            var id             = 'edit_'+$(this).attr('id');
             var content_before = $(this).html();
             var content_after  = '<input id="'+id+'" value="'+content_before+'">';
             $(this).html(content_after)
                    .keypress(submitSessionOnEnter);
 
-            if (id == 'dob') {
-                var me = $("input#dob");
-                $("input#dob").datepicker({
-                    changeMonth: true,
-                    changeYear: true,
-                });
-            }
-
+            $("input#edit_dob").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'dd/mm/yy',
+            });
     } );
 });
 
@@ -61,7 +58,7 @@ function submitSessionOnEnter(e)
 	if (key==13)
 	{
         var id    = $(this).attr('id');
-        var value = $(this).find('input#'+id).val();
+        var value = $(this).find('input#'+'edit_'+id).val();
 
         $.ajax(getUpdateUserSettingAJAX(id, value));
 		//$(this).parent().find('.updateSession').click();
