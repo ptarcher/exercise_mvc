@@ -137,3 +137,18 @@ WITH (
 ;
 ALTER TABLE t_climbs_data OWNER TO ptarcher;
 
+CREATE OR REPLACE VIEW v_climbs_data
+AS
+    SELECT 
+        data.*,
+        categories.cat
+    FROM 
+        t_climbs_data data,
+        t_climbs_categories categories
+    WHERE
+    data.gradient_avg   > categories.min_gradient AND
+    data.total_distance > categories.min_distance AND
+    data.total_climbed  > categories.min_height;
+
+
+
