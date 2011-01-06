@@ -146,9 +146,21 @@ AS
         t_climbs_data data,
         t_climbs_categories categories
     WHERE
-    data.gradient_avg   > categories.min_gradient AND
-    data.total_distance > categories.min_distance AND
-    data.total_climbed  > categories.min_height;
+        data.gradient_avg   > categories.min_gradient AND
+        data.total_distance > categories.min_distance AND
+        data.total_climbed  > categories.min_height;
 
 
+SELECT * 
+FROM
+    t_climbs_data data
+
+foreach data
+    SELECT MIN(rank), cat
+    FROM
+        t_climbs_categories categories
+    WHERE
+        data.gradient_avg > categories.min_gradient AND
+        data.total_distance > categories.min_distance AND
+        data.total_climbed  > categories.min_height;
 
