@@ -137,29 +137,43 @@ WITH (
 ;
 ALTER TABLE t_climbs_data OWNER TO ptarcher;
 
+CREATE OR REPLACE VIEW v_climbs_data_rank
+AS
+    SELECT 
+        data.userid,
+        data.session_date,
+        data.climb_num,
+        data.bottom,
+        data.top,
+        data.gradient_avg,
+        data.gradient_max,
+        data.total_distance,
+        data.total_climbed,
+        data.min_altitude,
+        data.max_altitude,
+        MIN(categories.rank) AS rank
+    FROM 
+        t_climbs_data data,
+        t_climbs_categories categories
+    WHERE
+        data.gradient_avg   > categories.min_gradient AND
+        data.total_distance*1000 > categories.min_distance AND
+        data.total_climbed  > categories.min_height
+    GROUP BY
+        userid, session_date, climb_num,
+        bottom, top, gradient_avg, gradient_max,
+        total_distance, total_climbed,
+        min_altitude, max_altitude;
+
 CREATE OR REPLACE VIEW v_climbs_data
 AS
-    EXPLAIN SELECT 
-        t1.userid,
-        t1.session_date,
-        t1.climb_num,
+    SELECT 
+        data.*,
         categories.cat
     FROM
         t_climbs_categories categories,
-        (SELECT 
-            data.userid,
-            data.session_date,
-            data.climb_num,
-            MIN(categories.rank) AS rank
-        FROM 
-            t_climbs_data data,
-            t_climbs_categories categories
-        WHERE
-            data.gradient_avg   > categories.min_gradient AND
-            data.total_distance*1000 > categories.min_distance AND
-            data.total_climbed  > categories.min_height
-        GROUP BY
-            userid, session_date, climb_num) t1
-    WHERE categories.rank = t1.rank;
+        v_climbs_data_rank  data
+    WHERE categories.rank = data.rank;
+
 
 
