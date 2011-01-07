@@ -212,6 +212,7 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     userid,
                     session_date,
                     climb_num,
+                    cat AS category,
                     top - bottom AS duration,
                     total_distance,
                     total_climbed,
@@ -220,12 +221,12 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     min_altitude,
                     max_altitude
                 FROM 
-                    t_climbs_data
+                    v_climbs_data
                 WHERE 
                     userid       = :userid       AND
                     session_date = :session_date
                 ORDER BY
-                    bottom';
+                    climb_num';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
