@@ -139,28 +139,27 @@ ALTER TABLE t_climbs_data OWNER TO ptarcher;
 
 CREATE OR REPLACE VIEW v_climbs_data
 AS
-    SELECT 
-        data.*,
+    EXPLAIN SELECT 
+        t1.userid,
+        t1.session_date,
+        t1.climb_num,
         categories.cat
-    FROM 
-        t_climbs_data data,
-        t_climbs_categories categories
-    WHERE
-        data.gradient_avg   > categories.min_gradient AND
-        data.total_distance > categories.min_distance AND
-        data.total_climbed  > categories.min_height;
-
-
-SELECT * 
-FROM
-    t_climbs_data data
-
-foreach data
-    SELECT MIN(rank), cat
     FROM
-        t_climbs_categories categories
-    WHERE
-        data.gradient_avg > categories.min_gradient AND
-        data.total_distance > categories.min_distance AND
-        data.total_climbed  > categories.min_height;
+        t_climbs_categories categories,
+        (SELECT 
+            data.userid,
+            data.session_date,
+            data.climb_num,
+            MIN(categories.rank) AS rank
+        FROM 
+            t_climbs_data data,
+            t_climbs_categories categories
+        WHERE
+            data.gradient_avg   > categories.min_gradient AND
+            data.total_distance*1000 > categories.min_distance AND
+            data.total_climbed  > categories.min_height
+        GROUP BY
+            userid, session_date, climb_num) t1
+    WHERE categories.rank = t1.rank;
+
 
