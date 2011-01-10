@@ -175,5 +175,98 @@ AS
         v_climbs_data_rank  data
     WHERE categories.rank = data.rank;
 
+CREATE LANGUAGE plpgsql;
 
+-- Heaver Sin
+CREATE OR REPLACE FUNCTION heaver_sin(FLOAT) RETURNS FLOAT AS $$
+    SELECT power(sin($1/2.0), 2);
+$$ LANGUAGE SQL;
+
+-- Heaver Arcsine
+CREATE OR REPLACE FUNCTION arc_heaver_sin(FLOAT) RETURNS FLOAT AS $$
+    SELECT 2.0*asin(sqrt($1));
+$$ LANGUAGE SQL;
+
+-- Provides the Earth radius 
+CREATE OR REPLACE FUNCTION earth_radius(lat FLOAT) RETURNS float AS $$
+    DECLARE
+        rad_equatorial FLOAT := 6378.137;
+        rad_polar FLOAT := 6356.752;
+    BEGIN
+    RETURN sqrt(power(rad_equatorial, 2) * power(cos(lat), 2) + power(rad_polar, 2)* power(sin(lat), 2)/rad_equatorial*power(cos(lat), 2) + rad_polar*power(sin(lat), 2));
+    END;
+$$ LANGUAGE plpgsql;
+
+-- Give two sets of coordinates in degree form
+CREATE OR REPLACE FUNCTION distance_in_km(lat1 float, lon1 float, lat2 float, lon2 float) 
+    RETURNS float AS $$
+DECLARE
+    lat1_r FLOAT := radians(lat1);
+    lon1_r FLOAT := radians(lon1);
+    lat2_r FLOAT := radians(lat2);
+    lon2_r FLOAT := radians(lon2);
+BEGIN
+
+    RETURN earth_radius((lat1_r + lat2_r) / 2.0) * arc_heaver_sin(heaver_sin(abs(lat1_r-lat2_r)) + cos(lat1_r)*cos(lat2_r)*heaver_sin(abs(lon1_r - lon2_r)));
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE VIEW v_climbs_details
+AS
+    SELECT 
+        data.userid,
+        data.session_date,
+        data.climb_num,
+        climbs.name,
+        climbs.description
+    FROM
+        t_climbs climbs,
+        (SELECT
+            tops.userid,
+            tops.session_date,
+            tops.climb_num,
+            tops.top,
+            tops.top_latitude,
+            tops.top_longitude,
+            bottoms.bottom_latitude,
+            bottoms.bottom_longitude,
+            bottoms.bottom
+        FROM 
+            (SELECT
+                cd.userid,
+                cd.session_date,
+                cd.climb_num,
+                cd.top,
+                ed.latitude  AS top_latitude, 
+                ed.longitude AS top_longitude
+            FROM
+                t_climbs_data   cd,
+                t_exercise_data ed
+            WHERE
+                cd.userid       = ed.userid       AND
+                cd.session_date = ed.session_date AND
+                ed.time         = cd.top) tops,
+            (SELECT
+                cd.userid,
+                cd.session_date,
+                cd.climb_num,
+                cd.bottom,
+                ed.latitude  AS bottom_latitude, 
+                ed.longitude AS bottom_longitude
+            FROM
+                t_climbs_data   cd,
+                t_exercise_data ed
+            WHERE
+                cd.userid       = ed.userid       AND
+                cd.session_date = ed.session_date AND
+                ed.time         = cd.bottom) bottoms
+        WHERE 
+            tops.userid       = bottoms.userid       AND
+            tops.session_date = bottoms.session_date AND
+            tops.climb_num    = bottoms.climb_num) data
+    WHERE
+        distance_in_km(data.top_latitude,   data.top_longitude,
+                       climbs.top_latitude, climbs.top_longitude)       * 1000.0 < climbs.top_radius       AND
+        distance_in_km(data.bottom_latitude,   data.bottom_longitude,
+                       climbs.bottom_latitude, climbs.bottom_longitude) * 1000.0 < climbs.top_radius;
 
