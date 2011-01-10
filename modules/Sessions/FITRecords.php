@@ -44,6 +44,10 @@ class FITRecord extends FITElement {
 function parseRecords($xml, $session_epoch) {
     $records = array();
 
+    $timer = new Benchmark_Timer();
+    $timer->start();
+
+    $timer->setMarker('Parse XML to tags - start');
     /* Parse the XML into tags */
     $parser = xml_parser_create();
     xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
@@ -52,6 +56,7 @@ function parseRecords($xml, $session_epoch) {
     xml_parser_free($parser);
 
     // loop through the structures
+    $timer->setMarker('tags to arrays - start');
     foreach ($tags as $key => $value) {
         if ($key == "record") {
             $molranges = $value;
@@ -60,15 +65,17 @@ function parseRecords($xml, $session_epoch) {
             for ($i = 0; $i < count($molranges); $i += 2) {
                 $offset = $molranges[$i] + 1;
                 $len    = $molranges[$i + 1] - $offset;
-                $records[] = parseRecord(array_slice($values, $offset, $len));
+                $records[] = parseRecord($values, $offset, $len);
             }
         } else {
             continue;
         }
     }
+    $timer->setMarker('tags to array - done');
 
     $i = 0;
 
+    $timer->setMarker('gradient calcs - start');
     /* Gradient calc constants */
     $NUM_GRADIENT_SAMPES = 11;
     $LOW_OFFSET          = floor($NUM_GRADIENT_SAMPES/2);
@@ -132,20 +139,26 @@ function parseRecords($xml, $session_epoch) {
             $record->gradient = 0;
         }
 
+
         /* TODO: Calculate the power */
 
         $i++;
     }
+    $timer->setMarker('gradient calcs - done');
+
+    $timer->display();
 
     return $records;
 }
 
-function parseRecord($record_values) 
+function parseRecord($record_values, $offset, $len) 
 {
-    for ($i=0; $i < count($record_values); $i++) {
-        $record[$record_values[$i]["tag"]] = $record_values[$i]["value"];
+    for ($i=0; $i < $len; $i++) {
+        $record[$record_values[$i+$offset]["tag"]] = $record_values[$i+$offset]["value"];
     }
+
     return new FITRecord($record);
 }
+
 
 ?>
