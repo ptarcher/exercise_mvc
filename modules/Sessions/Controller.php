@@ -53,6 +53,12 @@ class ModuleSessions extends CoreModule {
                          "module"   => "Sessions", 
                          "action"   => "create");
         */
+        $hooks[] = array("hook"     => "navigator",
+                         "category" => "Sessions", 
+                         "name"     => "Climbs", 
+                         "module"   => "Sessions", 
+                         "action"   => "viewClimbs");
+
 
         if (isset($_SESSION['athlete']) && $_SESSION['athlete']) {
             $hooks[] = array("hook"     => "navigator",
@@ -74,6 +80,15 @@ class ModuleSessions extends CoreModule {
         $view = CoreView::factory('sessions');
         $view->sessions = $sessions;
         $view->coach    = $_SESSION['coach'];
+
+        echo $view->render();
+    }
+
+    function viewClimbs() {
+        $climbs = $this->api->getClimbs();
+        $view = CoreView::factory('climbs');
+        $view->climbs = $climbs;
+        $view->coach  = $_SESSION['coach'];
 
         echo $view->render();
     }

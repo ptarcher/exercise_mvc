@@ -465,6 +465,28 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }
 
+    function getClimbs() {
+        $sql = 'SELECT 
+                    userid,
+                    session_date,
+                    climb_num,
+                    name,
+                    description
+                FROM 
+                    v_climbs_details
+                WHERE
+                    userid = :userid
+                ORDER BY
+                    climb_num ASC';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
+
+        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
 
     function getPower($gradient,       $temperature, 
                       $altitude,       $velocity,
