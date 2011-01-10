@@ -191,7 +191,7 @@
             </tr>
             {foreachelse}
             <tr>
-                <td colspan=6>No climbs.</td>
+                <td colspan=7>No climbs.</td>
             </tr>
             {/foreach}
             </tbody>
