@@ -8,7 +8,7 @@
 	{postEvent name="template_js_import"}
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript">session_date="{$session_date}";</script>
+    <script type="text/javascript">session_date="{$session_date}";climb_num={$climb_num};</script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.metadata.js"></script>
 
@@ -35,7 +35,7 @@
     <script src="modules/SessionGraphs/templates/loadgpx.4.js" type="text/javascript"></script>
     <script src="modules/SessionGraphs/templates/googlemaps.js" type="text/javascript"></script>
 
-    <script type="text/javascript" src="modules/SessionGraphs/templates/sessiongraphs.js"></script>
+    <script type="text/javascript" src="modules/SessionGraphs/templates/sessionclimbs.js"></script>
 
     <!-- Accordian -->
     {literal}
