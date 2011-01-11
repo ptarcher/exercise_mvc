@@ -1,6 +1,6 @@
 {include file="templates/header.tpl"}
 <head>
-    <title>Bike &rsaquo; Sessions</title>
+    <title>Bike &rsaquo; Climbs</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	{postEvent name="template_css_import"}
     <!-- TODO: Move this into the module code -->
@@ -67,7 +67,7 @@
     {if $coach}
         <td>{$climb.userid}</td>
     {/if}
-        <td id="date"><input type="hidden" id="session_date" value="{$climb.session_date}" /><a href="{url module=SessionGraphs session_date=$climb.session_date|escape:url}">{$climb.session_date}</a></td>
+        <td id="date"><input type="hidden" id="session_date" value="{$climb.session_date}" /><a href="{url module=SessionGraphs session_date=$climb.session_date climb_num=$climb.climb_num|escape:url}">{$climb.session_date}</a></td>
         <td id="name"        class="editable">{$climb.name}</td>       
         <td id="clim_num"                    >{$climb.climb_num}</td>       
         <td id="description" class="editable">{$climb.description}</td>       
