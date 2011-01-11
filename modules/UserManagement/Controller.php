@@ -41,6 +41,12 @@ class ModuleUserManagement extends CoreModule {
                          "name"     => "Settings", 
                          "module"   => "UserManagement", 
                          "action"   => "settings");
+        $hooks[] = array("hook"     => "navigator",
+                         "category" => "User", 
+                         "name"     => "Bikes", 
+                         "module"   => "UserManagement", 
+                         "action"   => "bikes");
+
         if (isset($_SESSION['superuser']) && $_SESSION['superuser']) {
             $hooks[] = array("hook"     => "navigator",
                              "category" => "UserManagement", 
@@ -173,6 +179,13 @@ class ModuleUserManagement extends CoreModule {
 
         echo $view->render();
     }
+
+    function bikes() {
+        $view = CoreView::factory('bikes');
+
+        echo $view->render();
+    }
+
 }
 
 ?>
