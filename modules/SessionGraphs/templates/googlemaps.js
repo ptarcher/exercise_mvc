@@ -23,10 +23,8 @@ function LoadGPXFileIntoGoogleMap(map, filename)
     request.send(null);
 }
 
-function GoogleMaps_Init()
+function GoogleMaps_Init(url)
 {
-    var url  = "index.php?module=APIAccess&method=SessionGraphs.getGPXData&format=gpx&session_date="+encodeURIComponent(session_date);
-
     MyMap = new GMap2(document.getElementById("map"));
     MyMap.addControl(new GLargeMapControl());
     MyMap.addControl(new GMapTypeControl());
