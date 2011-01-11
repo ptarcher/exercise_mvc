@@ -111,6 +111,7 @@ class ModuleSessionGraphs extends CoreModule {
         $view = CoreView::factory('sessionclimbs');
 
         $view->session_date = $session_date;
+        $view->climb_num    = $climb_num;
 
         $session = $this->api->getSession($session_date);
         $laps    = $this->api->getLaps($session_date);
