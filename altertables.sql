@@ -270,3 +270,15 @@ AS
         distance_in_km(data.bottom_latitude,   data.bottom_longitude,
                        climbs.bottom_latitude, climbs.bottom_longitude) * 1000.0 < climbs.top_radius;
 
+INSERT INTO t_climbs
+    (name,
+     top_latitude,
+     top_longitude,
+     bottom_latitude,
+     bottom_longitude)
+VALUES
+    ('Bulli Pass',
+     -34.311189,
+     150.897371,
+     -34.320387,
+     150.913961);
