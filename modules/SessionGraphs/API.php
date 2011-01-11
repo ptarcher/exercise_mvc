@@ -236,6 +236,34 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    function getGPXClimbData($session_date, $climb_num) 
+    {
+    	// Get time in seconds since the start of the session
+        $sql = 'SELECT 
+                    latitude as lat,
+                    longitude as lon
+                FROM 
+                    t_exercise_data exercise,
+                    t_climbs_data   climb
+                WHERE 
+                    userid          = :userid       AND
+                    session_date    = :session_date AND
+                    climb.climb_num = :climb_num
+                ORDER BY
+                    "time"     DESC';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
+        $stmt->bindParam(':climb_num',    $climb_num,          PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
 }
 
 ?>
