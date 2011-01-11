@@ -67,7 +67,7 @@
     {if $coach}
         <td>{$climb.userid}</td>
     {/if}
-        <td id="date"><input type="hidden" id="session_date" value="{$climb.session_date}" /><a href="{url module=SessionGraphs session_date=$climb.session_date climb_num=$climb.climb_num|escape:url}">{$climb.session_date}</a></td>
+        <td id="date"><input type="hidden" id="session_date" value="{$climb.session_date}" /><a href="{url module=SessionGraphs session_date=$climb.session_date|escape:url climb_num=$climb.climb_num|escape:url}">{$climb.session_date}</a></td>
         <td id="name"        class="editable">{$climb.name}</td>       
         <td id="clim_num"                    >{$climb.climb_num}</td>       
         <td id="description" class="editable">{$climb.description}</td>       
