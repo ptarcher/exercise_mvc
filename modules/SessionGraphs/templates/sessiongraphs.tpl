@@ -8,7 +8,7 @@
 	{postEvent name="template_js_import"}
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript">session_date="{$session_date}";</script>
+    <script type="text/javascript">var session_date="{$session_date}";</script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.metadata.js"></script>
 
@@ -178,7 +178,7 @@
             <tbody>
             {foreach from=$climbs key=i item=climb}
             <tr>
-                <td>{$climb.climb_num}</td>
+                <td><a href="{url module=SessionGraphs action=viewClimbs session_date=$session_date|escape:url climb_num=$climb.climb_num|escape:url}">{$climb.climb_num}</a></td>
                 <td>{$climb.category}</td>
                 <td>{$climb.duration}</td>
                 <td>{$climb.total_distance}</td>
