@@ -1,6 +1,6 @@
 {include file="templates/header.tpl"}
 <head>
-    <title>Bike &rsaquo; Climbs &rsaquo; {$session_date}</title>
+    <title>Bike &rsaquo; Climb &rsaquo; {$session_date}</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	{postEvent name="template_css_import"}
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
@@ -8,7 +8,7 @@
 	{postEvent name="template_js_import"}
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript">session_date="{$session_date}";climb_num={$climb_num};</script>
+    <script type="text/javascript">var session_date="{$session_date}";var climb_num="{$climb_num}";var min_time="{$climb.bottom}";var max_time="{$climb.top}";</script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.metadata.js"></script>
 
@@ -121,42 +121,6 @@
         </div>
         <br />
 
-        <!-- Session laps, expandable -->
-        <div class="expand">
-            <h3>Laps</h3>
-            <table class="tablesorter" id="laps">
-            <thead>
-            <tr>
-                <th>Lap Num</th>
-                <th>Duration</th>
-                <th>Distance</th>
-                <th>Avg Speed</th>
-                <th>Max Speed</th>
-                <th>Avg Heartrate</th>
-                <th>Max Heartrate</th>
-            </tr>
-            </thead>
-            <tbody>
-            {foreach from=$laps key=i item=lap}
-            <tr>
-                <td>{$lap.lap_num}</td>
-                <td>{$lap.duration}</td>
-                <td>{$lap.distance}</td>
-                <td>{$lap.avg_speed}</td>
-                <td>{$lap.max_speed}</td>
-                <td>{$lap.avg_heartrate}</td>
-                <td>{$lap.max_heartrate}</td>
-            </tr>
-            {foreachelse}
-            <tr>
-                <td colspan=7>No laps found.</td>
-            </tr>
-            {/foreach}
-            </tbody>
-            </table>
-        </div>
-        <br />
-
         <!-- Climbs, expandable -->
         <div class="expand">
             <h3>Climbs</h3>
@@ -178,7 +142,7 @@
             <tbody>
             {foreach from=$climbs key=i item=climb}
             <tr>
-                <td>{$climb.climb_num}</td>
+                <td><a href="{url module=SessionGraphs action=viewClimbs session_date=$session_date|escape:url climb_num=$climb.climb_num|escape:url}">{$climb.climb_num}</a></td>
                 <td>{$climb.category}</td>
                 <td>{$climb.duration}</td>
                 <td>{$climb.total_distance}</td>
