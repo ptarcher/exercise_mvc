@@ -119,7 +119,6 @@ class ModuleSessionGraphs extends CoreModule {
         $zones   = $this->api->getZones($session_date, $climb['bottom'], $climb['top']);
         $climbs  = $this->api->getClimbs($session_date);
 
-        $view->laps         = $laps;
         $view->zones        = $zones;
         $view->climbs       = $climbs;
         $view->climb        = $climb;
