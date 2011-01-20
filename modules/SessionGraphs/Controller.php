@@ -106,21 +106,23 @@ class ModuleSessionGraphs extends CoreModule {
 
     function viewClimbs() {
         $session_date = Common::getRequestVar('session_date', null, 'string');
-        $climb_num    = Common::getRequestVar('climb_num', null, 'string');
+        $climb_num    = Common::getRequestVar('climb_num',    null, 'string');
 
         $view = CoreView::factory('sessionclimbs');
 
         $view->session_date = $session_date;
         $view->climb_num    = $climb_num;
 
+        $climb   = $this->api->getClimb($session_date, $climb_num);
+
         $session = $this->api->getSession($session_date);
-        $laps    = $this->api->getLaps($session_date);
-        $zones   = $this->api->getZones($session_date);
+        $zones   = $this->api->getZones($session_date, $climb['bottom'], $climb['top']);
         $climbs  = $this->api->getClimbs($session_date);
 
         $view->laps         = $laps;
         $view->zones        = $zones;
         $view->climbs       = $climbs;
+        $view->climb        = $climb;
 
         $session_labels = array();
         $session_labels[] = array("label" => 'Date',
