@@ -40,7 +40,8 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
 		return self::$instance;
 	}
 	
-    function getSessionDataField($session_date, $field) 
+    function getSessionDataField($session_date, $field, $min_time = NULL, $max_time = NULL) 
+    //function getSessionDataField($session_date, $field) 
     {
         $valid_fields = array('distance','speed','heartrate',
                               'altitude','power','temperature',
@@ -59,13 +60,26 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     t_exercise_data
                 WHERE 
                     userid       = :userid  AND
-                    session_date = :session_date
-                ORDER BY
+                    session_date = :session_date ';
+        if (!is_null($min_time)) {
+            $sql .= 'AND "time" >= :min_time ';
+        }
+        if (!is_null($max_time)) {
+            $sql .= 'AND "time" <= :max_time ';
+        }
+        $sql .= 'ORDER BY
                     "time"     DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
         $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
+
+        if (!is_null($min_time)) {
+            $stmt->bindParam(':min_time', $min_time, PDO::PARAM_STR);
+        }
+        if (!is_null($max_time)) {
+            $stmt->bindParam(':max_time', $max_time, PDO::PARAM_STR);
+        }
 
         $stmt->execute();
 
@@ -181,7 +195,7 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function getZones($session_date) 
+    function getZones($session_date, $min_time = NULL, $max_time = NULL) 
     {
         $sql = 'SELECT
                     userid,
@@ -191,8 +205,14 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     v_exercise_data
                 WHERE 
                     userid       = :userid       AND
-                    session_date = :session_date
-                GROUP BY
+                    session_date = :session_date ';
+        if (!is_null($min_time)) {
+            $sql .= 'AND "time" >= :min_time ';
+        }
+        if (!is_null($max_time)) {
+            $sql .= 'AND "time" <= :max_time ';
+        }
+        $sql .= 'GROUP BY
                     zone, userid
                 ORDER BY
                     zone ASC';
@@ -200,6 +220,13 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
 
         $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
         $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+
+        if (!is_null($min_time)) {
+            $stmt->bindParam(':min_time', $min_time, PDO::PARAM_STR);
+        }
+        if (!is_null($max_time)) {
+            $stmt->bindParam(':max_time', $max_time, PDO::PARAM_STR);
+        }
 
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
 
@@ -237,6 +264,44 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    function getClimb($session_date, $climb_num) 
+    {
+        $sql = 'SELECT
+                    userid,
+                    session_date,
+                    climb_num,
+                    cat AS category,
+                    top,
+                    bottom,
+                    total_distance,
+                    total_climbed,
+                    gradient_avg,
+                    gradient_max,
+                    min_altitude,
+                    max_altitude
+                FROM 
+                    v_climbs_data
+                WHERE 
+                    userid       = :userid       AND
+                    session_date = :session_date AND
+                    climb_num    = :climb_num';
+        $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
+        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':climb_num',    $climb_num,          PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $climbs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (is_array($climbs)) {
+            return $climbs[0];
+        } else {
+            return array();
+        }
+    }
+
     function getGPXClimbData($session_date, $climb_num) 
     {
         $sql = 'SELECT 
@@ -266,15 +331,9 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
         $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
         $stmt->bindParam(':climb_num',    $climb_num,          PDO::PARAM_INT);
 
-        //print_r($session_date);
-        //print_r($climb_num);
-
         $stmt->execute();
 
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        //print_r($stmt);
-        //print_r($data);
-
         return $data;
     }
 }
