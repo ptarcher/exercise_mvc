@@ -95,7 +95,7 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
         return $rows;
     }
 
-    function getGPXData($session_date) 
+    function getGPXData($session_date, $min_time = null, $max_time = null) 
     {
     	// Get time in seconds since the start of the session
         $sql = 'SELECT 
@@ -105,13 +105,26 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     t_exercise_data
                 WHERE 
                     userid       = :userid  AND
-                    session_date = :session_date
-                ORDER BY
+                    session_date = :session_date ';
+        if (!is_null($min_time)) {
+            $sql .= 'AND "time" >= :min_time ';
+        }
+        if (!is_null($max_time)) {
+            $sql .= 'AND "time" <= :max_time ';
+        }
+        $sql .= 'ORDER BY
                     "time"     DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
         $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
+
+        if (!is_null($min_time)) {
+            $stmt->bindParam(':min_time', $min_time, PDO::PARAM_STR);
+        }
+        if (!is_null($max_time)) {
+            $stmt->bindParam(':max_time', $max_time, PDO::PARAM_STR);
+        }
 
         $stmt->execute();
 
@@ -167,6 +180,7 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     session_date,
                     lap_num,
                     start_time,
+                    start_time + duration AS end_time,
                     start_pos_lat,
                     start_pos_long,
                     duration,
