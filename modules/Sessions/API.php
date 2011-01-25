@@ -201,7 +201,8 @@ class ModuleSessionsAPI extends CoreModuleAPI {
     function insertLap($session_date,  $lap_num,
                        $start_time, 
                        $start_pos_lat, $start_pos_long,
-                       $duration,      $calories,
+                       $timer_duration, $total_duration,
+                       $calories,
                        $avg_heartrate, $max_heartrate,
                        $avg_speed,     $max_speed,
                        $total_ascent,  $total_descent,
@@ -213,6 +214,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     start_pos_lat,
                     start_pos_long,
                     duration,
+                    total_duration,
                     calories,
                     distance,
                     avg_heartrate,
@@ -229,6 +231,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     :start_pos_lat,
                     :start_pos_long,
                     :duration,
+                    :total_duration,
                     :calories,
                     :distance,
                     :avg_heartrate,
@@ -246,7 +249,8 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $stmt->bindParam(':start_time',    $start_time);
         $stmt->bindParam(':start_pos_lat', $start_pos_lat);
         $stmt->bindParam(':start_pos_long',$start_pos_long);
-        $stmt->bindParam(':duration',      $duration);
+        $stmt->bindParam(':duration',      $timer_duration);
+        $stmt->bindParam(':total_duration', $total_duration);
         $stmt->bindParam(':calories',      $calories);
         $stmt->bindParam(':distance',      $distance);
         $stmt->bindParam(':avg_heartrate', $avg_heartrate);
