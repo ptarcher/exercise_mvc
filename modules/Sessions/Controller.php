@@ -343,14 +343,13 @@ class ModuleSessions extends CoreModule {
                                       $ftime['tm_year'] + 1900);
 
                 $lap_start    = $start_epoch    - $session_epoch;
-                $lap_duration = $lap->total_timer_time;
-
                 $this->api->insertLap($session_timestamp,
                                       $lap_num,
                                       $lap_start,
                                       $lap->start_position_lat,
                                       $lap->start_position_long,
-                                      $lap_duration,
+                                      $lap->total_timer_time,
+                                      $lap->total_elapsed_time,
                                       $lap->total_calories,
                                       $lap->avg_heart_rate,
                                       $lap->max_heart_rate,
