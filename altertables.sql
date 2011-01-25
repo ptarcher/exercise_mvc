@@ -282,3 +282,6 @@ VALUES
      150.897371,
      -34.320387,
      150.913961);
+
+ALTER TABLE t_exercise_laps ADD COLUMN total_duration interval;
+UPDATE t_exercise_laps SET total_duration = duration;
