@@ -2,12 +2,10 @@ $(function () {
     // Call the Open Streetmap API
     //OSM_Init();
     // Call the googlemaps API
-        /*
     GoogleMaps_Init("index.php?module=APIAccess&"+
                                 "method=SessionGraphs.getGPXData&"+
                                 "format=gpx&"+
                                 "session_date="+encodeURIComponent(session_date));
-*/
 
     // jqplot
     var jqplot_options = {
