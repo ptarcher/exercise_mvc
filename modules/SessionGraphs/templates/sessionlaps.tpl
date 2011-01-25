@@ -9,7 +9,7 @@
 	{postEvent name="template_js_import"}
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript">var session_date="{$session_date}";var climb_num="{$lap_num}";var min_time="{$lap.start_time}";var max_time="{$lap.end_time}";</script>
+    <script type="text/javascript">var session_date="{$session_date}";var min_time="{$lap.start_time}";var max_time="{$lap.end_time}";</script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.metadata.js"></script>
 
@@ -36,7 +36,7 @@
     <script src="modules/SessionGraphs/templates/loadgpx.4.js" type="text/javascript"></script>
     <script src="modules/SessionGraphs/templates/googlemaps.js" type="text/javascript"></script>
 
-    <script type="text/javascript" src="modules/SessionGraphs/templates/sessionclimbs.js"></script>
+    <script type="text/javascript" src="modules/SessionGraphs/templates/sessionlaps.js"></script>
 </head>
 
 <body>
