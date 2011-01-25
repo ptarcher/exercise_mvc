@@ -180,7 +180,7 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     session_date,
                     lap_num,
                     start_time,
-                    start_time + duration AS end_time,
+                    start_time + total_duration AS end_time,
                     start_pos_lat,
                     start_pos_long,
                     duration,
