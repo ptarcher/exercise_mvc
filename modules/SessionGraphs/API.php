@@ -338,7 +338,6 @@ class ModuleSessionGraphsAPI extends CoreModuleAPI {
                     exercise.time         <= climb.top
                 ORDER BY
                     "time"     DESC;';
-        //print_r($sql);
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
