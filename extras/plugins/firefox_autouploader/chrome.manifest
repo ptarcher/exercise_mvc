@@ -1,0 +1,8 @@
+content     autouploader    chrome/content/
+content     autouploader    chrome/content/ contentaccessible=yes
+overlay chrome://browser/content/browser.xul chrome://autouploader/content/browser.xul
+
+locale  autouploader    en-US   locale/en-US/
+
+skin    autouploader    classic/1.0 skin/
+style   chrome://global/content/customizeToolbar.xul    chrome://autouploader/skin/skin.css
