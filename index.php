@@ -37,9 +37,12 @@ if(!defined('INCLUDE_PATH'))
 $incPath = get_include_path();
 set_include_path('libraries' . PATH_SEPARATOR . $incPath);
 
-require_once(INCLUDE_PATH.DIRECTORY_SEPARATOR.'core/Session.php');
-require_once(INCLUDE_PATH.DIRECTORY_SEPARATOR.'core/FrontController.php');
-require_once(INCLUDE_PATH.DIRECTORY_SEPARATOR.'core/Navigator.php');
+require_once(INCLUDE_PATH.'/libraries/Zend/Loader/Autoloader.php');
+Zend_Loader_Autoloader::getInstance();
+
+require_once(INCLUDE_PATH.'/core/Session.php');
+require_once(INCLUDE_PATH.'/core/FrontController.php');
+require_once(INCLUDE_PATH.'/core/Navigator.php');
 
 $controller = CoreFrontController::getInstance();
 $controller->init();
