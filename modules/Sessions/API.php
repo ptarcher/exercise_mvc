@@ -22,6 +22,7 @@
  */
 
 require_once('core/ModuleAPI.php');
+require_once('core/Db.php');
 
 class ModuleSessionsAPI extends CoreModuleAPI {
 	static private $instance = null;
@@ -41,31 +42,18 @@ class ModuleSessionsAPI extends CoreModuleAPI {
 	}
 	
     function getSessions() {
-        $sql = 'SELECT
-                    userid,
-                    session_date,
-                    type_short,
-                    description,
-                    duration,
-                    distance,
-                    avg_heartrate,
-                    avg_speed,
-                    comment
-                FROM 
-                    t_exercise_totals
-                WHERE 
-                    userid = :userid
-                ORDER BY
-                    session_date DESC
-                LIMIT 
-                    100';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $db = CoreDb::getInstance();
+        $select = $db->select()
+                     ->from('t_exercise_totals',
+                            array('userid','session_date','type_short',
+                                  'description','duration','distance',
+                                  'avg_heartrate','avg_speed','comment'))
+                     ->where('userid = ?', $_SESSION['userid'])
+                     ->order('session_date DESC');
+        $stmt = $db->query($select);
+        $result = $stmt->fetchAll();
 
-        $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
-
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 
     function updateSession($session_date, $type_short, $description,
