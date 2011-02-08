@@ -11,6 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/superfish/css/superfish.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/dateplustimepicker/themes/default/jquery-dateplustimepicker.min.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/jqueryui/themes/base/jquery-ui.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/tablesorter/addons/pager/jquery.tablesorter.pager.css" media="screen" />
 	{postEvent name="template_js_import"}
     <!-- TODO: Move this into the module code -->
     <script type="text/javascript" src="themes/common.js"></script>
@@ -20,6 +21,7 @@
 
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.metadata.js"></script>
+    <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/addons/pager/jquery.tablesorter.pager.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/dateplustimepicker/jquery-dateplustimepicker.js"></script>
     <script type="text/javascript" src="libraries/javascript/superfish/js/superfish.js"></script>
     <script type="text/javascript" src="themes/menu.js"></script>
@@ -87,12 +89,30 @@
     {/foreach}
     </tbody>
 </table>
-
 <!-- end the table -->
 
-<!-- TODO: Just add a blank row to the table to allow direct input all the time  -->
-<div class="addRowSession">
-<a href="#"><img src='themes/default/images/add.png' alt="" />AddSession</a>
+<!-- Pagination -->
+<div id="pager" class="pager">
+    <form>
+        <img src="libraries/javascript/jquery/plugins/tablesorter/addons/pager/icons/first.png" class="first"/>
+        <img src="libraries/javascript/jquery/plugins/tablesorter/addons/pager/icons/prev.png" class="prev"/>
+        <input type="text" class="pagedisplay"/>
+        <img src="libraries/javascript/jquery/plugins/tablesorter/addons/pager/icons/next.png" class="next"/>
+        <img src="libraries/javascript/jquery/plugins/tablesorter/addons/pager/icons/last.png" class="last"/>
+        <select class="pagesize">
+            <option selected="selected"  value="10">10</option>
+
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option  value="40">40</option>
+        </select>
+    </form>
 </div>
+
+
+<!-- TODO: Just add a blank row to the table to allow direct input all the time  -->
+<!--div class="addRowSession">
+<a href="#"><img src='themes/default/images/add.png' alt="" />AddSession</a>
+</div-->
 
 {include file="templates/footer.tpl"}
