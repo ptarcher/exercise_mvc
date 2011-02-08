@@ -28,6 +28,8 @@ require_once('modules/Sessions/FITLap.php');
 require_once('modules/Sessions/FITSession.php');
 require_once('modules/Sessions/FITRecords.php');
 
+require_once('modules/UserManagement/API.php');
+
 /* PEAR benchmark */
 require_once 'Benchmark/Timer.php';
 
@@ -153,6 +155,11 @@ class ModuleSessions extends CoreModule {
 
             /* TODO: Get these from either the record OR
              * From the user settings */
+            $UserAPI = ModuleUserManagementAPI::getInstance();
+            $user = $UserAPI->getUser();
+            $rider_weight = $user['rider_weight'];
+            $bike_weight  = $user['bike_weight'];
+            print_r($user);
             $rider_weight = 75;
             $bike_weight  = 9;
 
