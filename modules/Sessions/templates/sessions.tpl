@@ -100,11 +100,10 @@
         <img src="libraries/javascript/jquery/plugins/tablesorter/addons/pager/icons/next.png" class="next"/>
         <img src="libraries/javascript/jquery/plugins/tablesorter/addons/pager/icons/last.png" class="last"/>
         <select class="pagesize">
-            <option selected="selected"  value="10">10</option>
-
-            <option value="20">20</option>
+            <option value="10">10</option>
+            <option selected="selected" value="20">20</option>
             <option value="30">30</option>
-            <option  value="40">40</option>
+            <option value="40">40</option>
         </select>
     </form>
 </div>
