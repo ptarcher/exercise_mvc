@@ -68,9 +68,9 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function updateSession($session_date, $type_short, $description,
-                           $duration,     $distance,   $avg_heartrate,
-                           $avg_speed,    $comment) {
+    function updateSession($session_date = "", $type_short = "", $description     = "",
+                           $duration     = "", $distance   = "",   $avg_heartrate = "",
+                           $avg_speed    = "", $comment    = "") {
         $sql = 'UPDATE t_exercise_totals
                 SET
                     type_short    = :type_short,
