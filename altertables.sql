@@ -285,3 +285,5 @@ VALUES
 
 ALTER TABLE t_exercise_laps ADD COLUMN total_duration interval;
 UPDATE t_exercise_laps SET total_duration = duration;
+
+ALTER TABLE t_users ADD COLUMN dob date;
