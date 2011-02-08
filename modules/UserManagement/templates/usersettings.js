@@ -40,7 +40,11 @@ $(document).ready( function() {
 
             var id             = 'edit_'+$(this).attr('id');
             var content_before = $(this).html();
-            var content_after  = '<input id="'+id+'" value="'+content_before+'">';
+            if ($(this).attr('id') == 'password') {
+                var content_after  = '<input id="'+id+'" type=password value="">';
+            } else {
+                var content_after  = '<input id="'+id+'" type=text value="'+content_before+'">';
+            }
             $(this).html(content_after)
                    .keypress(submitSessionOnEnter);
 
