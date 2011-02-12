@@ -146,7 +146,7 @@ function parseRecords($xml, $session_epoch) {
     }
     $timer->setMarker('gradient calcs - done');
 
-    $timer->display();
+    //$timer->display();
 
     return $records;
 }
