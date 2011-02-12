@@ -183,7 +183,7 @@ class ModuleSessions extends CoreModule {
                                                           $record->speed    - $record_prev->speed,
                                                           $record->interval - $record_prev->interval,
                                                           $user['rider_weight'],
-                                                          $user['bike_weight'];
+                                                          $user['bike_weight']);
                 }
                 $record_prev = $record;
             }
