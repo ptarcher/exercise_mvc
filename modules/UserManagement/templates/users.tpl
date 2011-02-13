@@ -1,13 +1,13 @@
-{include file="templates/header.tpl"}
-<head>
-    <title>Bike &rsaquo; Users</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	{postEvent name="template_css_import"}
-    <!-- TODO: Move this into the module code -->
+{extends file="templates/layout.tpl"}
+
+{block name=title}Users{/block}
+
+{block name=css}
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/tablesorter/themes/blue/style.css" media="screen" />
-	{postEvent name="template_js_import"}
-    <!-- TODO: Move this into the module code -->
+{/block}
+
+{block name=javascript}
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/sprintf.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
@@ -24,10 +24,9 @@
 
     </script>
     {/literal}
-</head>
+{/block}
 
-{include file="default/templates/menu.tpl"}
-
+{block name=body}
 <center>
 <h1>Users</h1>
 </center>
@@ -77,5 +76,5 @@
 </table>
 
 <!-- end the table -->
+{/block}
 
-{include file="templates/footer.tpl"}

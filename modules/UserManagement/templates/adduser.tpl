@@ -1,19 +1,18 @@
+{extends file="templates/layout.tpl"}
+
+{block name=title}Add User{/block}
 {include file="templates/header.tpl"}
-<head>
-    <title>Bike &rsaquo; Add User</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	{postEvent name="template_css_import"}
-    <!-- TODO: Move this into the module code -->
+{block name=css}
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
-	{postEvent name="template_js_import"}
-    <!-- TODO: Move this into the module code -->
+{/block}
+
+{block name=javascript}
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/sprintf.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery.js"></script>
-</head>
+{/block}
 
-{include file="default/templates/menu.tpl"}
-
+{block name=body}
 <center>
 <h1>Add User</h1>
 </center>
@@ -61,4 +60,4 @@
 	</p>
 </form>
 
-{include file="templates/footer.tpl"}
+{/block}
