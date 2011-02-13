@@ -103,3 +103,4 @@
 <a href="#"><img src='themes/default/images/add.png' alt="" />AddSession</a>
 </div-->
 {/block}
+
