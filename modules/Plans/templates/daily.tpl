@@ -1,14 +1,14 @@
-{include file="templates/header.tpl"}
-<head>
-    <title>Bike &rsaquo; Plans &rsaquo; {$week_date}</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	{postEvent name="template_css_import"}
-    <!-- TODO: Move this into the module code -->
+{extends file="templates/layout.tpl"}
+
+{block name=title}{$week_date}{/block}
+
+{block name=css}
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/tablesorter/themes/blue/style.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="modules/Plans/templates/daily.css" />
-	{postEvent name="template_js_import"}
-    <!-- TODO: Move this into the module code -->
+{/block}
+
+{block name=javascript}
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.tablesorter.min.js"></script>
@@ -47,12 +47,9 @@
 {/foreach}
     ];
     </script>
-</head>
+{/block}
 
-<body>
-
-{include file="default/templates/menu.tpl"}
-
+{block name=body}
 <center>
 <h1>Daily Exercise Plans</h1>
 </center>
@@ -121,5 +118,4 @@
 <div class="addPlan"><a href="#"><img src='themes/default/images/add.png' alt="" />Add Daily Plan</a></div>
 </div>
 
-
-{include file="templates/footer.tpl"}
+{/block}
