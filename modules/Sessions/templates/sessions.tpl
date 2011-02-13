@@ -58,15 +58,7 @@
     </tr>
     </thead>
     <tbody>
-    {* assign var=showSitesSelection value=false *}
-    {* assign var=week value="false" *}
     {foreach from=$sessions key=i item=session}
-    {if $week != $session.week}
-    <tr>
-        <th colspan="8">Week 1</th>
-        {* assign var=week value=$session.week *}
-    </tr>
-    {/if}
     <tr id="row{$i}">
     {if $coach}
         <td>{$session.userid}</td>
