@@ -1,8 +1,9 @@
 <?php
 /**
  * Smarty plugin
+ *
  * @package Smarty
- * @subpackage plugins
+ * @subpackage PluginsFilter
  */
 
 /**
@@ -22,10 +23,11 @@
  * @author   Monte Ohrt <monte at ohrt dot com>
  * @author Contributions from Lars Noschinski <lars@usenet.noschinski.de>
  * @version  1.3
- * @param string
- * @param Smarty
+ * @param string $source input string
+ * @param object &$smarty Smarty object
+ * @return string filtered output
  */
-function smarty_outputfilter_trimwhitespace($source, &$smarty)
+function smarty_outputfilter_trimwhitespace($source, $smarty)
 {
     // Pull out the script blocks
     preg_match_all("!<script[^>]*?>.*?</script>!is", $source, $match);
@@ -62,14 +64,6 @@ function smarty_outputfilter_trimwhitespace($source, &$smarty)
 }
 
 function smarty_outputfilter_trimwhitespace_replace($search_str, $replace, &$subject) {
-    // If mbstring overloads substr and strlen functions, we have to
-    // override it's internal encoding
-    if (function_exists('mb_internal_encoding') &&
-        	(((int) ini_get('mbstring.func_overload')) & 2)) {
-        $mbIntEnc = mb_internal_encoding();
-        mb_internal_encoding('ASCII');
-    }
-
     $_len = strlen($search_str);
     $_pos = 0;
     for ($_i=0, $_count=count($replace); $_i<$_count; $_i++)
@@ -78,9 +72,6 @@ function smarty_outputfilter_trimwhitespace_replace($search_str, $replace, &$sub
         else
             break;
 
-    if (isset($mbIntEnc)) {
-        mb_internal_encoding($mbIntEnc);
-    }
 }
 
 ?>
