@@ -149,8 +149,8 @@ class ModuleSessions extends CoreModule {
             $records_input = parseRecords($xml_records, $session_epoch);
             $timer->setMarker('Decode Records - End');
 
-            if (is_array($records)) {
-                $record_prev = $records[0];
+            if (is_array($records_input)) {
+                $record_prev = $records_input[0];
             }
 
             /* Get the array of records, removing duplicates */
