@@ -1,22 +1,19 @@
-{include file="templates/header.tpl"}
-<head>
-    <title>Bike &rsaquo; Upload session</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	{postEvent name="template_css_import"}
-    <!-- TODO: Move this into the module code -->
+{extends file="templates/layout.tpl"}
+
+{block name=title}Upload session{/block}
+
+{block name=css}
     <link rel="stylesheet" type="text/css" href="modules/Sessions/templates/sessions.css" />
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
-	{postEvent name="template_js_import"}
-    <!-- TODO: Move this into the module code -->
+{/block}
+
+{block name=javascript}
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/sprintf.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery.js"></script>
-</head>
+{/block}
 
-<body>
-
-{include file="default/templates/menu.tpl"}
-
+{block name=body}
 <center>
 <h1>Upload Exercise Sessions</h1>
 </center>
@@ -48,5 +45,4 @@
 
 </div>
 <!-- end of upload file -->
-
-{include file="templates/footer.tpl"}
+{/block}

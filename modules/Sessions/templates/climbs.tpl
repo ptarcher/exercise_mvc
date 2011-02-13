@@ -1,9 +1,7 @@
-{include file="templates/header.tpl"}
-<head>
-    <title>Bike &rsaquo; Climbs</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	{postEvent name="template_css_import"}
-    <!-- TODO: Move this into the module code -->
+{extends file="templates/layout.tpl"}
+{block name=title}Climbs{/block}
+
+{block name=css}
     <link rel="stylesheet" type="text/css" href="modules/Sessions/templates/sessions.css" />
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="themes/default/menu.css" media="screen" />
@@ -11,8 +9,9 @@
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/superfish/css/superfish.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/dateplustimepicker/themes/default/jquery-dateplustimepicker.min.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/jqueryui/themes/base/jquery-ui.css" media="screen" />
-	{postEvent name="template_js_import"}
-    <!-- TODO: Move this into the module code -->
+{/block}
+
+{block name=javascript}
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/sprintf.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
@@ -24,12 +23,9 @@
     <script type="text/javascript" src="libraries/javascript/superfish/js/superfish.js"></script>
     <script type="text/javascript" src="themes/menu.js"></script>
     <script type="text/javascript" src="modules/Sessions/templates/sessions.js"></script>
-</head>
+{/block}
 
-<body>
-
-{include file="default/templates/menu.tpl"}
-
+{block name=body}
 <center>
 <h1>Climbs</h1>
 </center>
@@ -92,5 +88,4 @@
 <div class="addRowClimb">
 <a href="#"><img src='themes/default/images/add.png' alt="" />AddSession</a>
 </div>
-
-{include file="templates/footer.tpl"}
+{/block}
