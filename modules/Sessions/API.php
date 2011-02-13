@@ -56,9 +56,9 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         return $result;
     }
 
-    function updateSession($session_date, $type_short, $description,
-                           $duration,     $distance,   $avg_heartrate,
-                           $avg_speed,    $comment) {
+    function updateSession($session_date = "", $type_short = "", $description     = "",
+                           $duration     = "", $distance   = "",   $avg_heartrate = "",
+                           $avg_speed    = "", $comment    = "") {
         $sql = 'UPDATE t_exercise_totals
                 SET
                     type_short    = :type_short,
@@ -301,61 +301,77 @@ class ModuleSessionsAPI extends CoreModuleAPI {
         $this->dbQueries->dbh->commit();
     }
 
-    function insertSessionData($session_date, $time, $distance, 
-                               $heartrate,    $speed, 
-                               $latitude,     $longitude,
-                               $altitude,     $cadence,
-                               $temperature,  $power,
-                               $gradient) {
-        $sql = 'INSERT INTO t_exercise_data
-                   (session_date,
-                    time,
-                    distance,
-                    heartrate,
-                    speed,
-                    latitude,
-                    longitude,
-                    altitude,
-                    cadence,
-                    temperature,
-                    power,
-                    gradient,
-                    userid)
-                VALUES 
-                   (:session_date,
-                    :time,
-                    :distance,
-                    :heartrate,
-                    :speed,
-                    :latitude,
-                    :longitude,
-                    :altitude,
-                    :cadence,
-                    :temperature,
-                    :power,
-                    :gradient,
-                    :userid)';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+    function insertAllSessionData($session_date, $records) 
+    {
+        $i = 0;
+        $max_inserts = 9999;
 
-        // TODO: Add the types
-        $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':time',          $time);
-        $stmt->bindParam(':distance',      $distance);
-        $stmt->bindParam(':heartrate',     $heartrate);
-        $stmt->bindParam(':speed',         $speed);
-        $stmt->bindParam(':latitude',      $latitude);
-        $stmt->bindParam(':longitude',     $longitude);
-        $stmt->bindParam(':altitude',      $altitude);
-        $stmt->bindParam(':cadence',       $cadence);
-        $stmt->bindParam(':temperature',   $temperature);
-        $stmt->bindParam(':power',         $power);
-        $stmt->bindParam(':gradient',      $gradient);
-        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        for ($rows = 0; $rows < count($records); $rows += $max_inserts) {
+            $sql = 'INSERT INTO t_exercise_data
+                       (session_date,
+                        time,
+                        distance,
+                        heartrate,
+                        speed,
+                        latitude,
+                        longitude,
+                        altitude,
+                        cadence,
+                        temperature,
+                        power,
+                        gradient,
+                        userid)
+                    VALUES ';
 
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+            /* Do a multi insert */
+            for ($i = 0; ($i < $max_inserts) && 
+                         ($i + $rows < count($records)); $i++) {
+                if ($i != 0) {
+                    $sql .= ', ';
+                }
+                $sql .= '(:session_date,
+                          :time'        .$i.',
+                          :distance'    .$i.',
+                          :heartrate'   .$i.',
+                          :speed'       .$i.',
+                          :latitude'    .$i.',
+                          :longitude'   .$i.',
+                          :altitude'    .$i.',
+                          :cadence'     .$i.',
+                          :temperature' .$i.',
+                          :power'       .$i.',
+                          :gradient'    .$i.',
+                          :userid) ';
+            }
+
+            $stmt = $this->dbQueries->dbh->prepare($sql);
+
+            /* Add the constant values for all rows */
+            $stmt->bindParam(':session_date',  $session_date);
+            $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+
+            /* Now places the values in */
+            for ($i = 0; ($i < $max_inserts) && 
+                         ($i + $rows < count($records)); $i++) {
+                $stmt->bindParam(':time'.$i,        $records[$i+$rows]->interval);
+                $stmt->bindParam(':distance'.$i,    $records[$i+$rows]->distance);
+                $stmt->bindParam(':heartrate'.$i,   $records[$i+$rows]->heart_rate);
+                $stmt->bindParam(':speed'.$i,       $records[$i+$rows]->speed);
+                $stmt->bindParam(':latitude'.$i,    $records[$i+$rows]->position_lat);
+                $stmt->bindParam(':longitude'.$i,   $records[$i+$rows]->position_long);
+                $stmt->bindParam(':altitude'.$i,    $records[$i+$rows]->altitude);
+                $stmt->bindParam(':cadence'.$i,     $records[$i+$rows]->cadence);
+                $stmt->bindParam(':temperature'.$i, $records[$i+$rows]->temperature);
+                $stmt->bindParam(':power'.$i,       $records[$i+$rows]->power);
+                $stmt->bindParam(':gradient'.$i,    $records[$i+$rows]->gradient);
+            }
+
+            $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+        }
     }
 
-    function getTrainingTypes() {
+    function getTrainingTypes() 
+    {
         $sql = 'SELECT 
                     type_short,
                     type

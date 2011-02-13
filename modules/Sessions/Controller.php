@@ -28,6 +28,8 @@ require_once('modules/Sessions/FITLap.php');
 require_once('modules/Sessions/FITSession.php');
 require_once('modules/Sessions/FITRecords.php');
 
+require_once('modules/UserManagement/API.php');
+
 /* PEAR benchmark */
 require_once 'Benchmark/Timer.php';
 
@@ -144,63 +146,54 @@ class ModuleSessions extends CoreModule {
             $timer->setMarker('Decode Records - Start');
             exec('/usr/bin/fitdecode -r '.$upload['tmp_name'], $xml_records);
             $xml_records = implode("\n", $xml_records);
-            $records     = parseRecords($xml_records, $session_epoch);
+            $records_input = parseRecords($xml_records, $session_epoch);
             $timer->setMarker('Decode Records - End');
 
-            if (is_array($records)) {
-                $record_prev = $records[0];
+            if (is_array($records_input)) {
+                $record_prev = $records_input[0];
             }
+
+            /* Get the array of records, removing duplicates */
+            $records = Array();
+            foreach($records_input as $record) {
+                if (!isset($record_last) || 
+                        $record_last->interval != $record->interval) {
+                    $records[] = $record;
+                }
+                $record_last = $record;
+            }
+            unset($records_input);
+            unset($record_last);
+
+
 
             /* TODO: Get these from either the record OR
              * From the user settings */
-            $rider_weight = 75;
-            $bike_weight  = 9;
+            $UserAPI = ModuleUserManagementAPI::getInstance();
+            $user = $UserAPI->getUser();
 
             /* Add the matching data points */
-            $timer->setMarker('Power calcs - Start');
             foreach($records as $record) {
-               /* Skip duplicates, they will cause issues in graphs */
-                if (!isset($record_last) || 
-                        $record_last->interval != $record->interval) {
-
-                    if (!isset($record->power)) {
-                        $record->power = $this->api->getPower($record->gradient,
-                                                              $record->temperature,
-                                                              $record->altitude,
-                                                              $record->speed,
-                                                              $record->speed    - $record_prev->speed,
-                                                              $record->interval - $record_prev->interval,
-
-                                                              $rider_weight,
-                                                              $bike_weight);
-                    }
-                    $record_prev = $record;
+                /* Skip duplicates, they will cause issues in graphs */
+                if (!isset($record->power)) {
+                    $record->power = $this->api->getPower($record->gradient,
+                                                          $record->temperature,
+                                                          $record->altitude,
+                                                          $record->speed,
+                                                          $record->speed    - $record_prev->speed,
+                                                          $record->interval - $record_prev->interval,
+                                                          $user['rider_weight'],
+                                                          $user['bike_weight']);
                 }
-                $record_last = $record;
+                $record_prev = $record;
             }
-            $timer->setMarker('Power calcs - End');
+            unset($user);
+            unset($UserAPI);
 
             $timer->setMarker('Record insertion - start');
-            foreach($records as $record) {
-               /* Skip duplicates, they will cause issues in graphs */
-                if (!isset($record_last) || 
-                        $record_last->interval != $record->interval) {
-                    $this->api->insertSessionData($session_timestamp,
-                                                  $record->interval,
-                                                  $record->distance,
-                                                  $record->heart_rate,
-                                                  $record->speed,
-                                                  $record->position_lat,
-                                                  $record->position_long,
-                                                  $record->altitude,
-                                                  $record->cadence,
-                                                  $record->temperature,
-                                                  $record->power,
-                                                  $record->gradient);
-                    $record_prev = $record;
-                }
-                $record_last = $record;
-            }
+            $this->api->insertAllSessionData($session_timestamp, $records);
+
+            /* Insert all the data */
             $timer->setMarker('Record insertion - end');
 
             /* Calculate the climbs */
@@ -360,7 +353,7 @@ class ModuleSessions extends CoreModule {
                                       $lap->total_distance);
                 $lap_num++;
             }
-            $timer->display();
+            //$timer->display();
         }
 
         $view = CoreView::factory('sessionsfileupload');

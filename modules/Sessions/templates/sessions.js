@@ -48,7 +48,7 @@ function getUpdateSessionAJAX( row )
     parameters.format = 'json';
     parameters.method = 'Sessions.updateSession';
     parameters.session_date  = $(row).find('input#session_date').val();
-    parameters.type_short    = $(row).find('input#type').val();
+    parameters.type_short    = $(row).find('select#type').val();
     parameters.description   = $(row).find('input#description').val();
     parameters.duration      = $(row).find('input#duration').val();
     parameters.distance      = $(row).find('input#distance').val();
@@ -202,6 +202,9 @@ $(document).ready( function() {
 
     $('table#editSessions').tablesorter({
             widgets: ['zebra',],
+    }).tablesorterPager({
+            container: $('#pager'),
+            size: 20,
     });
 });
  

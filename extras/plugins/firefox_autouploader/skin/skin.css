@@ -1,0 +1,12 @@
+#auto-uploader-toolbar-button {
+    list-style-image: URL("chrome://autouploader/skin/toolbar-large.png");
+}
+
+#auto-uploader-status-bar-icon {
+    width: 83px;
+    margin: 0 5px;
+}
+
+.auto-uploader-selected {
+    outline: 2px solid red !important;
+}

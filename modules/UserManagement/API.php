@@ -46,7 +46,7 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
                     coach,
                     athlete,
                     superuser,
-                    \'07/03/1986\' AS dob,
+                    TO_CHAR(dob, \'DD/MM/YYYY\') AS dob,
                     max_heartrate,
                     resting_heartrate,
                     rider_weight,
@@ -73,29 +73,45 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
                               'resting_heartrate',
                               'rider_weight',
                               'bike_weight',
-                              //'dob',
-                              );
+                              'password',
+                              'dob');
         if (!in_array($id, $valid_fields)) {
             return;
         }
 
         if ($id == 'password') {
-            /* TODO: Need to convert with salt etc */
-            return;
+            /* Need to combine with salt etc */
+            $password_salt = Common::getRandomString(64);
+            $password_hash = sha1($value . $password_salt);
+
+            $sql = 'UPDATE
+                        t_users
+                    SET
+                        password_hash = :password_hash,
+                        password_salt = :password_salt
+                    WHERE
+                        userid = :userid';
+            $stmt = $this->dbQueries->dbh->prepare($sql);
+
+            $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+            $stmt->bindParam(':password_hash', $password_hash,      PDO::PARAM_STR);
+            $stmt->bindParam(':password_salt', $password_salt,      PDO::PARAM_STR);
+
+            $stmt->execute();
+        } else {
+            $sql = 'UPDATE
+                        t_users
+                    SET
+                        '.$id.' = :value 
+                    WHERE
+                        userid = :userid';
+            $stmt = $this->dbQueries->dbh->prepare($sql);
+
+            $stmt->bindParam(':value',  $value);
+            $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
+
+            $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
         }
-
-        $sql = 'UPDATE
-                    t_users
-                SET
-                    '.$id.' = :value 
-                WHERE
-                    :userid = :userid';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-
-        $stmt->bindParam(':value',  $value,              PDO::PARAM_STR);
-        $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
-                    
-        $stmt->execute();
     }
 
     function getUsers() {
