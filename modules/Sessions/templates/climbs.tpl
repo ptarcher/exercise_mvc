@@ -50,15 +50,7 @@
     </tr>
     </thead>
     <tbody>
-    {* assign var=showSitesSelection value=false *}
-    {* assign var=week value="false" *}
     {foreach from=$climbs key=i item=climb}
-    {if $week != $session.week}
-    <tr>
-        <th colspan="8">Week 1</th>
-        {* assign var=week value=$climb.week *}
-    </tr>
-    {/if}
     <tr id="row{$i}">
     {if $coach}
         <td>{$climb.userid}</td>
@@ -69,8 +61,8 @@
         <td id="description" class="editable">{$climb.description}</td>       
         <td id="duration"    class="editable">{$climb.duration}</td>       
         <td id="distance"    class="editable">{$climb.distance}</td>       
-        <!--td id="avg_speed"   class="editable">{$session.avg_speed}</td>       
-        <td id="avg_heartrate" class="editable">{$session.avg_heartrate}</td-->       
+        {* <td id="avg_speed"   class="editable">{$session.avg_speed}</td> *}
+        {* <td id="avg_heartrate" class="editable">{$session.avg_heartrate}</td> *}
         <td><center><img src='themes/default/images/edit.png' class="editClimb" id="row{$i}" alt="" /></center></td>
         <td><center><img src='themes/default/images/remove.png' class="deleteClimb" id="row{$i}" alt="" /></center></td>
     </tr>
