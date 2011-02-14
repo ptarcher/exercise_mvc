@@ -479,7 +479,9 @@ class ModuleSessionsAPI extends CoreModuleAPI {
                     session_date,
                     climb_num,
                     name,
-                    description
+                    description,
+                    \'0\' AS duration,
+                    \'0\' AS distance
                 FROM 
                     v_climbs_details
                 WHERE
