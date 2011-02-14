@@ -93,6 +93,8 @@ class ModuleLogin extends CoreModule {
         $view->linkTitle     = 'abc';
         $view->addForm($form);
         $view->subTemplate = 'genericForm.tpl';
+        //$view->AccessErrorString = "Failed";
+        $view->AccessErrorString = "";
         echo $view->render();
     }
 
