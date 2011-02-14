@@ -58,10 +58,10 @@ class ModuleLogin extends CoreModule {
                               Url::getReferer() : 
                               'index.php' . Url::getCurrentQueryString();
         */
+        $error_string = '';
         $currentUrl = 'index.php' . Url::getCurrentQueryString();
         $urlToRedirect = Common::getRequestVar('form_url', $currentUrl,   'string');
         $urlToRedirect = htmlspecialchars_decode($urlToRedirect);
-
 
         $form = new LoginForm();
         if ($form->validate()) {
@@ -85,16 +85,16 @@ class ModuleLogin extends CoreModule {
 
                 Url::redirectToUrl($urlToRedirect);
                 return;
+            } else {
+                $error_string = 'Incorrect Login Details';
             }
         }
 
         $view = CoreView::factory('login');
         $view->urlToRedirect = $urlToRedirect;
-        $view->linkTitle     = 'abc';
         $view->addForm($form);
         $view->subTemplate = 'genericForm.tpl';
-        //$view->AccessErrorString = "Failed";
-        $view->AccessErrorString = "";
+        $view->AccessErrorString = $error_string;
         echo $view->render();
     }
 
