@@ -35,7 +35,7 @@ class Core_View implements Core_iView
 		$this->template = $templateFile;
 		$this->smarty = new Smarty();
 
-        $template_dir = array('modules', 'themes/default', 'themes');
+        $template_dir = array('Module', 'themes/default', 'themes');
 		$this->smarty->template_dir = $template_dir;
 		array_walk($this->smarty->template_dir, array("Core_View","addPath"), INCLUDE_PATH);
 

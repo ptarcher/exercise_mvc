@@ -173,7 +173,7 @@ class API_Proxy
 	 */ 
 	public function getModuleNameFromClassName( $className )
 	{
-		return str_replace(array('Module', 'API'), '', $className);
+		return str_replace(array('Module_', '_API'), '', $className);
 	}
 	
 	/**
@@ -191,12 +191,12 @@ class API_Proxy
 			try{
 				if($defaultValue instanceof API_Proxy_NoDefaultValue)
 				{
-					$requestValue = Common::getRequestVar($name, null, null, $parametersRequest);
+					$requestValue = Core_Common::getRequestVar($name, null, null, $parametersRequest);
 				}
 				else
 				{
 					try{
-						$requestValue = Common::getRequestVar($name, $defaultValue, null, $parametersRequest);
+						$requestValue = Core_Common::getRequestVar($name, $defaultValue, null, $parametersRequest);
 					} catch(Exception $e) {
 						$requestValue = $defaultValue;
 					}
@@ -217,7 +217,7 @@ class API_Proxy
 	private function includeApiFile($fileName)
 	{
 		$module = self::getModuleNameFromClassName($fileName);
-		$path   = INCLUDE_PATH . '/modules/' . $module . '/API.php';
+		$path   = INCLUDE_PATH . '/Module/' . $module . '/API.php';
 
 		if(is_file($path))
 		{

@@ -34,7 +34,7 @@ class CoreAPIEncoder {
         // TODO
         //$this->checkLogin($requested_module, $requested_action);
 
-        $api_file = "modules".DIRECTORY_SEPARATOR.
+        $api_file = "Module".DIRECTORY_SEPARATOR.
                     $requested_module.DIRECTORY_SEPARATOR.
                     "API.php";
 

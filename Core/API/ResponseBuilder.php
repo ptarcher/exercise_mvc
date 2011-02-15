@@ -289,13 +289,13 @@ class API_ResponseBuilder
 
         // TODO: Open up the specific render file and class by the output format
         if ($format == 'xml') {
-            $render = new CoreDataRender_Xml($array);
+            $render = new Core_DataRender_Xml($array);
             return $render->render();
         } else if ($format == 'json') {
-            $render = new CoreDataRender_Json($array);
+            $render = new Core_DataRender_Json($array);
             return $render->render();
         } else if ($format == 'gpx') {
-            $render = new CoreDataRender_Gpx($array);
+            $render = new Core_DataRender_Gpx($array);
             return $render->render();
         } else {
             return 'Unknown format';

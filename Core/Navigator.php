@@ -45,16 +45,18 @@ class Core_Navigator
 	
     function __construct() 
     {
-        $dp = opendir("modules");
+        if (($dp = opendir("Module")) == false) {
+            return;
+        }
 
         while (($ent = readdir($dp)) !== false) {
             if ($ent{0} == '.') {
                 continue;
             }
 
-            $module_dir  = "modules" . DIRECTORY_SEPARATOR . $ent;
+            $module_dir  = "Module" . DIRECTORY_SEPARATOR . $ent;
             $module_file = $module_dir . DIRECTORY_SEPARATOR . "Controller.php";
-            $class_name  = "Module_".$ent;
+            $class_name  = "Module_".$ent.'_Controller';
 
             // Open up the module
             if (is_dir($module_dir) && is_file($module_file)) {

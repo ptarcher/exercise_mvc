@@ -28,14 +28,16 @@ class Core_Module {
 
     function __construct() {
         $parts = preg_split('/Module_/', get_class($this));
-        $module_name = $parts[1];
+        $controller  = $parts[1];
+        $parts = preg_split('/_Controller/', $controller);
+        $module_name = $parts[0];
 
-        $api_file  = 'modules/'.$module_name.'/API.php';
+        $api_file  = 'Module/'.$module_name.'/API.php';
 
         /* API */
         if (file_exists($api_file)) {
             require_once($api_file);
-            $api_class  = 'Module_' . $module_name . 'API';
+            $api_class  = 'Module_' . $module_name . '_API';
 
             if (class_exists($api_class)) {
                 $this->api  = new $api_class;

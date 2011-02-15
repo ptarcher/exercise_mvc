@@ -87,20 +87,20 @@ class API_Request
 	public function process()
 	{
 		// read the format requested for the output data
-		//$outputFormat = strtolower(Common::getRequestVar('format', 'xml', 'string', $this->request));
-		$outputFormat = strtolower(Common::getRequestVar('format', 'json', 'string', $this->request));
+		//$outputFormat = strtolower(Core_Common::getRequestVar('format', 'xml', 'string', $this->request));
+		$outputFormat = strtolower(Core_Common::getRequestVar('format', 'json', 'string', $this->request));
 		
 		// create the response
 		$response = new API_ResponseBuilder($this->request, $outputFormat);
 		
 		try {
 			// read parameters
-			$moduleMethod = Common::getRequestVar('method', null, null, $this->request);
+			$moduleMethod = Core_Common::getRequestVar('method', null, null, $this->request);
 			
 			list($module, $method) = $this->extractModuleAndMethod($moduleMethod); 
 			
             /* Load the request module */
-            $api_file = "modules".DIRECTORY_SEPARATOR.
+            $api_file = "Module".DIRECTORY_SEPARATOR.
                 $module.DIRECTORY_SEPARATOR."API.php";
 
             /* Include the module */
@@ -111,7 +111,7 @@ class API_Request
 
             require_once($api_file);
 
-            $api_class = "Module" . $module . "API";
+            $api_class = "Module_" . $module . "_API";
             if (!class_exists($api_class)) {
                 // Error
                 echo "Error: Unknown class " . $requested_module;
@@ -134,6 +134,7 @@ class API_Request
 		} catch(Exception $e ) {
 			$toReturn = $response->getResponseException( $e );
 		}
+
 		return $toReturn;
 	}
 
