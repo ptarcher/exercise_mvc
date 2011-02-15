@@ -21,9 +21,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('Core/Module.php');
-require_once('Core/Helper.php');
-require_once('Core/View.php');
 require_once('modules/Login/LoginForm.php');
 
 class ModuleLogin extends Core_Module {
@@ -102,7 +99,7 @@ class ModuleLogin extends Core_Module {
         session_unset();
         session_destroy();
 
-        Helper::redirectToModule('Sessions');
+        Core_Helper::redirectToModule('Sessions');
     }
 }
 

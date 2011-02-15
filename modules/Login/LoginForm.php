@@ -10,9 +10,6 @@
  * @package Core_Login
  */
 
-require_once('Core/Form.php');
-require_once('Core/Translate.php');
-
 /**
  *
  * @package Core_Login
