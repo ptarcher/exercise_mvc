@@ -10,8 +10,6 @@
  * @package Core_API
  */
 
-require_once('Core/API/Request.php');
-
 /**
  * 
  * @package Core_API
@@ -20,7 +18,7 @@ class Module_APIAccess_Controller extends Core_Module
 {
 	function index()
 	{
-		$request = new API_Request();
+		$request = new Core_API_Request();
 		echo $request->process();
 	}
 

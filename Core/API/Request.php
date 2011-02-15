@@ -39,7 +39,7 @@ require_once('Core/API/Proxy.php');
  * @package Core
  * @subpackage Core_API
  */
-class API_Request
+class Core_API_Request
 {	
 	protected $request = null;
 	

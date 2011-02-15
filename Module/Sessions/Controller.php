@@ -26,8 +26,6 @@ require_once('Module/Sessions/FITLap.php');
 require_once('Module/Sessions/FITSession.php');
 require_once('Module/Sessions/FITRecords.php');
 
-require_once('Module/UserManagement/API.php');
-
 /* PEAR benchmark */
 require_once 'Benchmark/Timer.php';
 
@@ -163,11 +161,7 @@ class Module_Sessions_Controller extends Core_Module {
             unset($records_input);
             unset($record_last);
 
-
-
-            /* TODO: Get these from either the record OR
-             * From the user settings */
-            $UserAPI = ModuleUserManagementAPI::getInstance();
+            $UserAPI = Module_UserManagement_API::getInstance();
             $user = $UserAPI->getUser();
 
             /* Add the matching data points */
