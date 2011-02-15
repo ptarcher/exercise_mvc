@@ -17,7 +17,7 @@ require_once('Core/API/Request.php');
  * 
  * @package Core_API
  */
-class ModuleAPIAccess extends Core_Module
+class Module_APIAccess extends Core_Module
 {
 	function index()
 	{

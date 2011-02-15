@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class ModuleLoginAPI extends Core_ModuleAPI {
+class Module_LoginAPI extends Core_ModuleAPI {
     function getUser($userid) 
     {
         $sql = 'SELECT 

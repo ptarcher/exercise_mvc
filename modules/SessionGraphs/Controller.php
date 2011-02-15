@@ -24,7 +24,7 @@
 require_once('Core/Module.php');
 require_once('Core/View.php');
 
-class ModuleSessionGraphs extends Core_Module {
+class Module_SessionGraphs extends Core_Module {
     var $module_description = array(
         'name'        => 'Session Graphs',
         'description' => 'View Exercise Session Graphs',

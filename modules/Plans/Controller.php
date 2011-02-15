@@ -24,7 +24,7 @@
 require_once('Core/Module.php');
 require_once('Core/View.php');
 
-class ModulePlans extends Core_Module {
+class Module_Plans extends Core_Module {
     var $module_description = array(
         'name'        => 'Plans',
         'description' => 'View, create and edit exercise plans',

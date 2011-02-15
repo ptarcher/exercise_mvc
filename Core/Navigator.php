@@ -54,7 +54,7 @@ class Core_Navigator
 
             $module_dir  = "modules" . DIRECTORY_SEPARATOR . $ent;
             $module_file = $module_dir . DIRECTORY_SEPARATOR . "Controller.php";
-            $class_name  = "Module".$ent;
+            $class_name  = "Module_".$ent;
 
             // Open up the module
             if (is_dir($module_dir) && is_file($module_file)) {

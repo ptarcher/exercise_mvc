@@ -67,7 +67,7 @@ class Core_FrontController
 			throw new Exception("Invalid module name '$module'");
 		}
 
-        $controllerClassName = "Module" . $module;
+        $controllerClassName = "Module_" . $module;
 
         if (!class_exists($controllerClassName)) {
             $module_file = "modules".DIRECTORY_SEPARATOR.

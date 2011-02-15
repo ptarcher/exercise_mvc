@@ -23,7 +23,7 @@
 
 require_once('Core/ModuleAPI.php');
 
-class ModuleUserManagementAPI extends Core_ModuleAPI {
+class Module_UserManagementAPI extends Core_ModuleAPI {
     static private $instance = null;
     /**
      * Returns the singleton ModuleUserManagementAPI

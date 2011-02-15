@@ -27,7 +27,7 @@ class Core_Module {
     var $module_description = array();
 
     function __construct() {
-        $parts = preg_split('/Module/', get_class($this));
+        $parts = preg_split('/Module_/', get_class($this));
         $module_name = $parts[1];
 
         $api_file  = 'modules/'.$module_name.'/API.php';
@@ -35,7 +35,7 @@ class Core_Module {
         /* API */
         if (file_exists($api_file)) {
             require_once($api_file);
-            $api_class  = 'Module' . $module_name . 'API';
+            $api_class  = 'Module_' . $module_name . 'API';
 
             if (class_exists($api_class)) {
                 $this->api  = new $api_class;

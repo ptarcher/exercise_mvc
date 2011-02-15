@@ -33,7 +33,7 @@ require_once('modules/UserManagement/API.php');
 /* PEAR benchmark */
 require_once 'Benchmark/Timer.php';
 
-class ModuleSessions extends Core_Module {
+class Module_Sessions extends Core_Module {
     var $module_description = array(
         'name'        => 'Session',
         'description' => 'View, create and edit exercise sessions',

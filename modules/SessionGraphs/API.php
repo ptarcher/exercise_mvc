@@ -23,7 +23,7 @@
 
 require_once('Core/ModuleAPI.php');
 
-class ModuleSessionGraphsAPI extends Core_ModuleAPI {
+class Module_SessionGraphsAPI extends Core_ModuleAPI {
 	static private $instance = null;
 	/**
 	 * Returns the singleton ModuleSessionGraphsAPI

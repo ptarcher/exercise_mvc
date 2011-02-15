@@ -24,7 +24,7 @@
 require_once('Core/ModuleAPI.php');
 require_once('Core/Db.php');
 
-class ModuleSessionsAPI extends Core_ModuleAPI {
+class Module_SessionsAPI extends Core_ModuleAPI {
 	static private $instance = null;
 	/**
 	 * Returns the singleton ModuleSessionsAPI

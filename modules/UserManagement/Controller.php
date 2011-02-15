@@ -25,7 +25,7 @@ require_once('Core/Module.php');
 require_once('Core/View.php');
 require_once('modules/UserManagement/AddUserFrom.php');
 
-class ModuleUserManagement extends Core_Module {
+class Module_UserManagement extends Core_Module {
     var $module_description = array(
         'name'        => 'Session',
         'description' => 'View, create and edit exercise sessions',
