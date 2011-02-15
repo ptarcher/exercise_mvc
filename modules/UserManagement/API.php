@@ -23,7 +23,7 @@
 
 require_once('Core/ModuleAPI.php');
 
-class ModuleUserManagementAPI extends CoreModuleAPI {
+class ModuleUserManagementAPI extends Core_ModuleAPI {
     static private $instance = null;
     /**
      * Returns the singleton ModuleUserManagementAPI
@@ -81,7 +81,7 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
 
         if ($id == 'password') {
             /* Need to combine with salt etc */
-            $password_salt = Common::getRandomString(64);
+            $password_salt = Core_Common::getRandomString(64);
             $password_hash = sha1($value . $password_salt);
 
             $sql = 'UPDATE
@@ -135,7 +135,7 @@ class ModuleUserManagementAPI extends CoreModuleAPI {
     }
 
     function createUser($userid, $password, $coach, $athlete, $usertype) {
-        $password_salt = Common::getRandomString(64);
+        $password_salt = Core_Common::getRandomString(64);
         $password_hash = sha1($password . $password_salt);
 
         /* TODO: Check that the current user is a super user */

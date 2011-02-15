@@ -24,7 +24,7 @@
 require_once('Core/Common.php');
 require_once('Core/Url.php');
 
-class Helper
+class Core_Helper
 {
     static private $instance = null;
 
@@ -48,7 +48,7 @@ class Helper
      */
     static public function getModule()
     {
-        return Common::getRequestVar('module', '', 'string');
+        return Core_Common::getRequestVar('module', '', 'string');
     }
 
     /**
@@ -58,7 +58,7 @@ class Helper
      */
     static public function getAction()
     {
-        return Common::getRequestVar('action', '', 'string');
+        return Core_Common::getRequestVar('action', '', 'string');
     }
 /**
      * Redirect to module (and action)
@@ -76,11 +76,11 @@ class Helper
                 ||  $currentAction != $newAction )
         {
 
-            $newUrl = 'index.php' . Url::                                 getCurrentQueryStringWithParametersModified(
+            $newUrl = 'index.php' . Core_Url::                                 getCurrentQueryStringWithParametersModified(
                     array('module' => $newModule, 'action' => $newAction)
                     );
 
-            Url::redirectToUrl($newUrl);
+            Core_Url::redirectToUrl($newUrl);
         }
         return false;
     }

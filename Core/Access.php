@@ -35,7 +35,7 @@
  * @package Core
  * @subpackage Core_Access
  */
-class Access
+class Core_Access
 {	
 	/**
 	 * Login of the current user
@@ -130,5 +130,5 @@ class Access
  * @package Core
  * @subpackage Core_Access
  */
-class Core_Access_NoAccessException extends Exception
+class Core_AccessNoAccessException extends Exception
 {}

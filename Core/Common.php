@@ -19,7 +19,7 @@
  *
  * @package Core
  */
-class Common
+class Core_Common
 {
 	/**
 	 * Const used to map the referer type to an integer in the log_visit table

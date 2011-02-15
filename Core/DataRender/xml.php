@@ -2,7 +2,7 @@
 
 require_once('Core/DataRender.php');
 
-class CoreDataRender_Xml extends CoreDataRender {
+class Core_DataRender_Xml extends Core_DataRender {
     function render() {
         header("Content-type: text/xml");
     }

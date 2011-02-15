@@ -13,7 +13,7 @@
 /**
  * @package gc
  */
-class Translate
+class Core_Translate
 {
 	static private $instance = null;
 	private $englishLanguageLoaded = false;

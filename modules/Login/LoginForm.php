@@ -17,7 +17,7 @@ require_once('Core/Translate.php');
  *
  * @package Core_Login
  */
-class LoginForm extends CoreForm
+class LoginForm extends Core_Form
 {
 	function __construct()
 	{

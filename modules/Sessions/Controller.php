@@ -33,7 +33,7 @@ require_once('modules/UserManagement/API.php');
 /* PEAR benchmark */
 require_once 'Benchmark/Timer.php';
 
-class ModuleSessions extends CoreModule {
+class ModuleSessions extends Core_Module {
     var $module_description = array(
         'name'        => 'Session',
         'description' => 'View, create and edit exercise sessions',
@@ -79,7 +79,7 @@ class ModuleSessions extends CoreModule {
 
     function view() {
         $sessions = $this->api->getSessions();
-        $view = CoreView::factory('sessions');
+        $view = Core_View::factory('sessions');
         $view->sessions = $sessions;
         $view->coach    = $_SESSION['coach'];
 
@@ -88,7 +88,7 @@ class ModuleSessions extends CoreModule {
 
     function viewClimbs() {
         $climbs = $this->api->getClimbs();
-        $view = CoreView::factory('climbs');
+        $view = Core_View::factory('climbs');
         $view->climbs = $climbs;
         $view->coach  = $_SESSION['coach'];
 
@@ -356,7 +356,7 @@ class ModuleSessions extends CoreModule {
             //$timer->display();
         }
 
-        $view = CoreView::factory('sessionsfileupload');
+        $view = Core_View::factory('sessionsfileupload');
         $view->addForm($form);
         $view->subTemplate = 'genericForm.tpl';
         echo $view->render();

@@ -13,7 +13,7 @@
 /**
  * @package Core
  */
-interface iView
+interface Core_iView
 {
 	/**
 	 * Outputs the data.

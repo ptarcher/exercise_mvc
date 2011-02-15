@@ -49,11 +49,11 @@ class Core_FrontController
     {
 		if(is_null($module)) {
 			$defaultModule = 'Sessions';
-			$module = Common::getRequestVar('module', $defaultModule, 'string');
+			$module = Core_Common::getRequestVar('module', $defaultModule, 'string');
         }
 
         if(is_null($action)) {
-            $action = Common::getRequestVar('action', false);
+            $action = Core_Common::getRequestVar('action', false);
         }
 		
 		if(is_null($parameters)) {

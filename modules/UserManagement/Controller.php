@@ -25,7 +25,7 @@ require_once('Core/Module.php');
 require_once('Core/View.php');
 require_once('modules/UserManagement/AddUserFrom.php');
 
-class ModuleUserManagement extends CoreModule {
+class ModuleUserManagement extends Core_Module {
     var $module_description = array(
         'name'        => 'Session',
         'description' => 'View, create and edit exercise sessions',
@@ -71,7 +71,7 @@ class ModuleUserManagement extends CoreModule {
         /* TODO: Check if administrator */
         $users = $this->api->getUsers();
 
-        $view = CoreView::factory('users');
+        $view = Core_View::factory('users');
         $view->users = $users;
         echo $view->render();
     }
@@ -96,12 +96,12 @@ class ModuleUserManagement extends CoreModule {
                     $redirect_module = 'Sessions';
                 }
 
-                Url::redirectToUrl($urlToRedirect);
+                Core_Url::redirectToUrl($urlToRedirect);
                 */
             }
         }
 
-        $view = CoreView::factory('adduser');
+        $view = Core_View::factory('adduser');
         //$view->users = $users;
         $view->addForm($form);
         $view->subTemplate = 'genericForm.tpl';
@@ -125,7 +125,7 @@ class ModuleUserManagement extends CoreModule {
     }
 
     function settings() {
-        $view = CoreView::factory('usersettings');
+        $view = Core_View::factory('usersettings');
 
         $user = $this->api->getUser();
 
@@ -181,7 +181,7 @@ class ModuleUserManagement extends CoreModule {
     }
 
     function bikes() {
-        $view = CoreView::factory('bikes');
+        $view = Core_View::factory('bikes');
 
         echo $view->render();
     }

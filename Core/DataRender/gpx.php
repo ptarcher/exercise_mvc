@@ -2,7 +2,7 @@
 
 require_once('Core/DataRender.php');
 
-class CoreDataRender_Gpx extends CoreDataRender {
+class Core_DataRender_Gpx extends Core_DataRender {
     function render() {
         $dom = new DOMDocument("1.0");
         

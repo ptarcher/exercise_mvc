@@ -2,7 +2,7 @@
 
 require_once('Core/DataRender.php');
 
-class CoreDataRender_Json extends CoreDataRender {
+class Core_DataRender_Json extends Core_DataRender {
     function render() {
         // Set the headers correctly
         header('Content-Type: text/javascript; charset=utf8');

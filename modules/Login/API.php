@@ -23,7 +23,7 @@
 
 require_once('Core/ModuleAPI.php');
 
-class ModuleLoginAPI extends CoreModuleAPI {
+class ModuleLoginAPI extends Core_ModuleAPI {
     function getUser($userid) 
     {
         $sql = 'SELECT 

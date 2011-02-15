@@ -71,7 +71,7 @@ class Core_Navigator
                             $link["module"] = $hook["module"];
                             $link["action"] = $hook["action"];
 
-                            $link["url"] = 'index.php?' . Url::getQueryStringFromParameters(array('module' => $hook['module'], 
+                            $link["url"] = 'index.php?' . Core_Url::getQueryStringFromParameters(array('module' => $hook['module'], 
                                        'action' => $hook['action']));
 
                             $this->categories[$hook["category"]][] = $link;

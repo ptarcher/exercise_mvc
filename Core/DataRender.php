@@ -1,6 +1,6 @@
 <?php
 
-class CoreDataRender {
+class Core_DataRender {
     function __construct($data) {
         $this->data = $data;
     }

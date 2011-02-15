@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class CoreModule {
+class Core_Module {
     var $api;
 
     var $module_description = array();

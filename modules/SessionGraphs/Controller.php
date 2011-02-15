@@ -24,7 +24,7 @@
 require_once('Core/Module.php');
 require_once('Core/View.php');
 
-class ModuleSessionGraphs extends CoreModule {
+class ModuleSessionGraphs extends Core_Module {
     var $module_description = array(
         'name'        => 'Session Graphs',
         'description' => 'View Exercise Session Graphs',
@@ -37,14 +37,14 @@ class ModuleSessionGraphs extends CoreModule {
     }
 
     function view() {
-        $session_date = Common::getRequestVar('session_date', null, 'string');
+        $session_date = Core_Common::getRequestVar('session_date', null, 'string');
 
         $session = $this->api->getSession($session_date);
         $laps    = $this->api->getLaps($session_date);
         $zones   = $this->api->getZones($session_date);
         $climbs  = $this->api->getClimbs($session_date);
 
-        $view = CoreView::factory('sessiongraphs');
+        $view = Core_View::factory('sessiongraphs');
         $view->session_date = $session_date;
         $view->laps         = $laps;
         $view->zones        = $zones;
@@ -106,10 +106,10 @@ class ModuleSessionGraphs extends CoreModule {
 
     function viewClimbs() 
     {
-        $session_date = Common::getRequestVar('session_date', null, 'string');
-        $climb_num    = Common::getRequestVar('climb_num',    null, 'string');
+        $session_date = Core_Common::getRequestVar('session_date', null, 'string');
+        $climb_num    = Core_Common::getRequestVar('climb_num',    null, 'string');
 
-        $view = CoreView::factory('sessionclimbs');
+        $view = Core_View::factory('sessionclimbs');
 
         $view->session_date = $session_date;
         $view->climb_num    = $climb_num;
@@ -181,10 +181,10 @@ class ModuleSessionGraphs extends CoreModule {
     }
 
     function viewLaps() {
-        $session_date = Common::getRequestVar('session_date', null, 'string');
-        $lap_num      = Common::getRequestVar('lap_num',      null, 'string');
+        $session_date = Core_Common::getRequestVar('session_date', null, 'string');
+        $lap_num      = Core_Common::getRequestVar('lap_num',      null, 'string');
 
-        $view = CoreView::factory('sessionlaps');
+        $view = Core_View::factory('sessionlaps');
 
         $view->session_date = $session_date;
         $view->lap_num      = $lap_num;

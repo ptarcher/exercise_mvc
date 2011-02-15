@@ -19,7 +19,7 @@ require_once('libraries/HTML/QuickForm/Renderer/ArraySmarty.php');
  *
  * @package Core
  */
-class CoreView implements iView
+class Core_View implements Core_iView
 {
 	// view types
 	const STANDARD = 0; // REGULAR, FULL, CLASSIC
@@ -37,16 +37,16 @@ class CoreView implements iView
 
         $template_dir = array('modules', 'themes/default', 'themes');
 		$this->smarty->template_dir = $template_dir;
-		array_walk($this->smarty->template_dir, array("CoreView","addPath"), INCLUDE_PATH);
+		array_walk($this->smarty->template_dir, array("Core_View","addPath"), INCLUDE_PATH);
 
 		$this->smarty->plugins_dir = array("Core/SmartyPlugins", "libraries/Smarty/plugins/");
-		array_walk($this->smarty->plugins_dir, array("CoreView","addPath"), INCLUDE_PATH);
+		array_walk($this->smarty->plugins_dir, array("Core_View","addPath"), INCLUDE_PATH);
 
 		$this->smarty->compile_dir = "tmp/templates_c";
-		CoreView::addPath($this->smarty->compile_dir, null, USER_PATH);
+		Core_View::addPath($this->smarty->compile_dir, null, USER_PATH);
 
 		$this->smarty->cache_dir = "tmp/cache";
-		CoreView::addPath($this->smarty->cache_dir, null, USER_PATH);
+		Core_View::addPath($this->smarty->cache_dir, null, USER_PATH);
 
 /*
 		$error_reporting = $smConf->error_reporting;
@@ -65,7 +65,7 @@ class CoreView implements iView
 		}
 
 		// global value accessible to all templates: the Core base URL for the current request
-		$this->CoreUrl = Url::getCurrentUrlWithoutFileName();
+		$this->Core_Url = Url::getCurrentUrlWithoutFileName();
         */
 
         /* The navigation menu */
@@ -99,15 +99,15 @@ class CoreView implements iView
 	public function render()
 	{
 		try {
-			$this->currentModule = Helper::getModule();
-			//$this->currentPluginName = Helper::getCurrentPlugin()->getName();
-			//$this->userLogin = Helper::getCurrentUserLogin();
+			$this->currentModule = Core_Helper::getModule();
+			//$this->currentPluginName = Core_Helper::getCurrentPlugin()->getName();
+			//$this->userLogin = Core_Helper::getCurrentUserLogin();
 			
-			//$this->url = Url::getCurrentUrl();
-			//$this->token_auth = Core::getCurrentUserTokenAuth();
-			//$this->userHasSomeAdminAccess = Core::isUserHasSomeAdminAccess();
-			//$this->userIsSuperUser = Core::isUserIsSuperUser();
-			//$this->Core_version = Version::VERSION;
+			//$this->url = Core_Url::getCurrentUrl();
+			//$this->token_auth = Core_Core::getCurrentUserTokenAuth();
+			//$this->userHasSomeAdminAccess = Core_Core::isUserHasSomeAdminAccess();
+			//$this->userIsSuperUser = Core_Core::isUserIsSuperUser();
+			//$this->Core_version = Core_Version::VERSION;
 			//$this->latest_version_available = UpdateCheck::isNewestVersionAvailable();
 
 			//$this->loginModule = Zend_Registry::get('auth')->getName();
@@ -241,7 +241,7 @@ class CoreView implements iView
 		// determine best view type
 		if($viewType === null)
 		{
-			if(Common::isPhpCliMode())
+			if(Core_Common::isPhpCliMode())
 			{
 				$viewType = self::CLI;
 			}
@@ -281,6 +281,6 @@ class CoreView implements iView
 			}
 		}
 
-		return new CoreView($templateFile);
+		return new Core_View($templateFile);
 	}
 }

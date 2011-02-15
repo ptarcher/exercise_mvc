@@ -24,7 +24,7 @@
 require_once('Core/Module.php');
 require_once('Core/View.php');
 
-class ModulePlans extends CoreModule {
+class ModulePlans extends Core_Module {
     var $module_description = array(
         'name'        => 'Plans',
         'description' => 'View, create and edit exercise plans',
@@ -50,18 +50,18 @@ class ModulePlans extends CoreModule {
     
     function view() {
         $weekly_plans = $this->api->getWeeklyPlans();
-        $view = CoreView::factory('plans');
+        $view = Core_View::factory('plans');
         $view->plans = $weekly_plans;
 
         echo $view->render();
     }
 
     function viewDaily() {
-        $week_date   = Common::getRequestVar('week_date', null, 'string');
+        $week_date   = Core_Common::getRequestVar('week_date', null, 'string');
 
         $daily_plans = $this->api->getDailyPlans($week_date);
 
-        $view = CoreView::factory('daily');
+        $view = Core_View::factory('daily');
         $view->plans     = $daily_plans;
         $view->week_date = $week_date;
 

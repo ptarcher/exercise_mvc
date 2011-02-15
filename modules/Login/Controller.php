@@ -26,7 +26,7 @@ require_once('Core/Helper.php');
 require_once('Core/View.php');
 require_once('modules/Login/LoginForm.php');
 
-class ModuleLogin extends CoreModule {
+class ModuleLogin extends Core_Module {
     var $module_description = array(
         'name'        => 'login',
         'description' => 'Performs login and logout operations',
@@ -55,12 +55,12 @@ class ModuleLogin extends CoreModule {
 
         /*
         $currentUrl = Helper::getModule() == 'Login' ? 
-                              Url::getReferer() : 
-                              'index.php' . Url::getCurrentQueryString();
+                              Core_Url::getReferer() : 
+                              'index.php' . Core_Url::getCurrentQueryString();
         */
         $error_string = '';
-        $currentUrl = 'index.php' . Url::getCurrentQueryString();
-        $urlToRedirect = Common::getRequestVar('form_url', $currentUrl,   'string');
+        $currentUrl = 'index.php' . Core_Url::getCurrentQueryString();
+        $urlToRedirect = Core_Common::getRequestVar('form_url', $currentUrl,   'string');
         $urlToRedirect = htmlspecialchars_decode($urlToRedirect);
 
         $form = new LoginForm();
@@ -83,14 +83,14 @@ class ModuleLogin extends CoreModule {
                     $redirect_module = 'Sessions';
                 }
 
-                Url::redirectToUrl($urlToRedirect);
+                Core_Url::redirectToUrl($urlToRedirect);
                 return;
             } else {
                 $error_string = 'Incorrect Login Details';
             }
         }
 
-        $view = CoreView::factory('login');
+        $view = Core_View::factory('login');
         $view->urlToRedirect = $urlToRedirect;
         $view->addForm($form);
         $view->subTemplate = 'genericForm.tpl';

@@ -24,7 +24,7 @@
 require_once('Core/ModuleAPI.php');
 require_once('Core/Db.php');
 
-class ModuleSessionsAPI extends CoreModuleAPI {
+class ModuleSessionsAPI extends Core_ModuleAPI {
 	static private $instance = null;
 	/**
 	 * Returns the singleton ModuleSessionsAPI
@@ -42,7 +42,7 @@ class ModuleSessionsAPI extends CoreModuleAPI {
 	}
 	
     function getSessions() {
-        $db = CoreDb::getInstance();
+        $db = Core_Db::getInstance();
         $select = $db->select()
                      ->from('t_exercise_totals',
                             array('userid','session_date','type_short',

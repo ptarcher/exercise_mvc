@@ -29,7 +29,7 @@ require_once ('libraries/Event/Notification.php');
  * @package Core
  * @subpackage Core_ModuleManager
  */
-class ModuleManager
+class Core_ModuleManager
 {
 	/**
 	 * @var Event_Dispatcher
@@ -43,7 +43,7 @@ class ModuleManager
 	protected $loadedModules = array();
 	
 	protected $doLoadAlwaysActivatedModules = true;
-	protected $moduleToAlwaysActivate = array( 'CoreHome', 'CoreUpdater', 'CoreAdminHome', 'CoreModulesAdmin' );
+	protected $moduleToAlwaysActivate = array( 'Core_Home', 'Core_Updater', 'Core_AdminHome', 'Core_ModulesAdmin' );
 
 	static private $instance = null;
 	
@@ -434,7 +434,7 @@ class ModuleManager
  * @package Core
  * @subpackage Core_ModuleManager
  */
-class ModuleManager_ModuleException extends Exception 
+class Core_ModuleManager_ModuleException extends Exception 
 {
 	function __construct($moduleName, $className, $message)
 	{
@@ -452,7 +452,7 @@ class ModuleManager_ModuleException extends Exception
 function PostEvent( $eventName,  &$object = null, $info = array() )
 {
 	$notification = new Event_Notification($object, $eventName, $info);
-	ModuleManager::getInstance()->dispatcher->postNotification( $notification, true, false );
+	Core_ModuleManager::getInstance()->dispatcher->postNotification( $notification, true, false );
 }
 
 /**
@@ -460,5 +460,5 @@ function PostEvent( $eventName,  &$object = null, $info = array() )
  */
 function AddAction( $hookName, $function )
 {
-	ModuleManager::getInstance()->dispatcher->addObserver( $function, $hookName );
+	Core_ModuleManager::getInstance()->dispatcher->addObserver( $function, $hookName );
 }

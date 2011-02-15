@@ -23,7 +23,7 @@
 
 require_once('config.php');
 
-class CoreDb {
+class Core_Db {
 	static private $instance = null;
 
 	/**

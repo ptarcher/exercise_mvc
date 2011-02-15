@@ -26,5 +26,5 @@
  */
 function smarty_function_url($params, &$smarty)
 {
-	return htmlspecialchars('index.php' . Url::getCurrentQueryStringWithParametersModified( $params ));
+	return htmlspecialchars('index.php' . Core_Url::getCurrentQueryStringWithParametersModified( $params ));
 }

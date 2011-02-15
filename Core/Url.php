@@ -23,7 +23,7 @@
 
 require_once('Core/Common.php');
 
-class Url
+class Core_Url
 {
 	/**
 	 * If current URL is "http://example.org/dir1/dir2/index.php?param1=value1&param2=value2"
@@ -54,7 +54,7 @@ class Url
 	static function getArrayFromCurrentQueryString()
 	{	
 		$queryString = self::getCurrentQueryString();
-		$urlValues = Common::getArrayFromQueryString($queryString);
+		$urlValues = Core_Common::getArrayFromQueryString($queryString);
 		return $urlValues;
 	}
 
