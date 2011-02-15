@@ -40,11 +40,6 @@ class Core_FrontController
     {
     }
 
-    /* Must be called before dispatch() */
-    function init() {
-        return null;
-    }
-
 	function dispatch( $module = null, $action = null, $parameters = null)
     {
 		if(is_null($module)) {
