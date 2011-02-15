@@ -71,15 +71,16 @@ class Module_Sessions_API extends Core_ModuleAPI {
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         // TODO: Add the types
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':type_short',    $type_short,         PDO::PARAM_STR);
-        $stmt->bindParam(':description',   $description,        PDO::PARAM_STR);
+        $stmt->bindParam(':type_short',    $type_short,   PDO::PARAM_STR);
+        $stmt->bindParam(':description',   $description,  PDO::PARAM_STR);
         $stmt->bindParam(':duration',      $duration);
         $stmt->bindParam(':distance',      $distance);
         $stmt->bindParam(':avg_heartrate', $avg_heartrate);
         $stmt->bindParam(':avg_speed',     $avg_speed);
-        $stmt->bindParam(':comment',       $comment,            PDO::PARAM_STR);
-        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':comment',       $comment,      PDO::PARAM_STR);
+        $stmt->bindParam(':userid',        $user->userid, PDO::PARAM_STR);
 
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }
@@ -112,15 +113,16 @@ class Module_Sessions_API extends Core_ModuleAPI {
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         // TODO: Add the types
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':type_short',    $type_short,         PDO::PARAM_STR);
-        $stmt->bindParam(':description',   $description,        PDO::PARAM_STR);
+        $stmt->bindParam(':type_short',    $type_short,   PDO::PARAM_STR);
+        $stmt->bindParam(':description',   $description,  PDO::PARAM_STR);
         $stmt->bindParam(':duration',      $duration);
         $stmt->bindParam(':distance',      $distance);
         $stmt->bindParam(':avg_heartrate', $avg_heartrate);
         $stmt->bindParam(':avg_speed',     $avg_speed);
-        $stmt->bindParam(':comment',       $comment,            PDO::PARAM_STR);
-        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':comment',       $comment,      PDO::PARAM_STR);
+        $stmt->bindParam(':userid',        $user->userid, PDO::PARAM_STR);
 
         $stmt->execute();
     }
@@ -165,9 +167,10 @@ class Module_Sessions_API extends Core_ModuleAPI {
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         // TODO: Add the types
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':type_short',    $type_short,         PDO::PARAM_STR);
-        $stmt->bindParam(':description',   $description,        PDO::PARAM_STR);
+        $stmt->bindParam(':type_short',    $type_short,   PDO::PARAM_STR);
+        $stmt->bindParam(':description',   $description,  PDO::PARAM_STR);
         $stmt->bindParam(':duration',      $duration);
         $stmt->bindParam(':distance',      $distance);
         $stmt->bindParam(':calories',      $calories);
@@ -177,8 +180,8 @@ class Module_Sessions_API extends Core_ModuleAPI {
         $stmt->bindParam(':max_speed',     $max_speed);
         $stmt->bindParam(':total_ascent',  $total_ascent);
         $stmt->bindParam(':total_descent', $total_descent);
-        $stmt->bindParam(':comment',       $comment,            PDO::PARAM_STR);
-        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':comment',       $comment,      PDO::PARAM_STR);
+        $stmt->bindParam(':userid',        $user->userid, PDO::PARAM_STR);
 
         $stmt->execute();
     }
@@ -229,6 +232,7 @@ class Module_Sessions_API extends Core_ModuleAPI {
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         // TODO: Add the types
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':session_date',  $session_date);
         $stmt->bindParam(':lap_num',       $lap_num);
         $stmt->bindParam(':start_time',    $start_time);
@@ -244,7 +248,7 @@ class Module_Sessions_API extends Core_ModuleAPI {
         $stmt->bindParam(':max_speed',     $max_speed);
         $stmt->bindParam(':total_ascent',  $total_ascent);
         $stmt->bindParam(':total_descent', $total_descent);
-        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':userid',        $user->userid, PDO::PARAM_STR);
 
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }
@@ -260,8 +264,10 @@ class Module_Sessions_API extends Core_ModuleAPI {
                     session_date = :session_date AND
                     userid       = :userid;';
         $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':userid',        $user->userid, PDO::PARAM_STR);
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
         
         /* Delete all the laps */
@@ -270,8 +276,10 @@ class Module_Sessions_API extends Core_ModuleAPI {
                     session_date = :session_date AND
                     userid       = :userid;';
         $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':userid',        $user->userid, PDO::PARAM_STR);
         $stmt->execute() or die("Unable to execute $sql");
 
         /* Delete all the climbs */
@@ -280,8 +288,10 @@ class Module_Sessions_API extends Core_ModuleAPI {
                     session_date = :session_date AND
                     userid       = :userid;';
         $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':userid',        $user->userid, PDO::PARAM_STR);
         $stmt->execute() or die("Unable to execute $sql");
 
         /* Remove the session totals */
@@ -290,8 +300,11 @@ class Module_Sessions_API extends Core_ModuleAPI {
                     session_date = :session_date AND
                     userid       = :userid;';
         $stmt = $this->dbQueries->dbh->prepare($sql);
+
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':userid',        $user->userid, PDO::PARAM_STR);
+
         $stmt->execute() or die("Unable to execute $sql");
 
         /* Finalise */
@@ -344,8 +357,9 @@ class Module_Sessions_API extends Core_ModuleAPI {
             $stmt = $this->dbQueries->dbh->prepare($sql);
 
             /* Add the constant values for all rows */
+            $user = new Zend_Session_Namespace('user');
             $stmt->bindParam(':session_date',  $session_date);
-            $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+            $stmt->bindParam(':userid',        $user->userid, PDO::PARAM_STR);
 
             /* Now places the values in */
             for ($i = 0; ($i < $max_inserts) && 
@@ -455,6 +469,7 @@ class Module_Sessions_API extends Core_ModuleAPI {
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
         // TODO: Add the types
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':session_date',   $session_date);
         $stmt->bindParam(':climb_num',      $climb_num);
         $stmt->bindParam(':bottom',         $bottom);
@@ -465,7 +480,7 @@ class Module_Sessions_API extends Core_ModuleAPI {
         $stmt->bindParam(':total_climbed',  $total_climbed);
         $stmt->bindParam(':min_altitude',   $min_altitude);
         $stmt->bindParam(':max_altitude',   $max_altitude);
-        $stmt->bindParam(':userid',         $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':userid',         $user->userid, PDO::PARAM_STR);
 
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }
@@ -486,7 +501,9 @@ class Module_Sessions_API extends Core_ModuleAPI {
                 ORDER BY
                     climb_num ASC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
-        $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
+
+        $user = new Zend_Session_Namespace('user');
+        $stmt->bindParam(':userid', $user->userid, PDO::PARAM_STR);
 
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
 

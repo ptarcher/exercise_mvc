@@ -55,7 +55,8 @@ class Module_UserManagement_API extends Core_ModuleAPI {
                     userid = :userid';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
+        $user = new Zend_Session_Namespace('user');
+        $stmt->bindParam(':userid', $user->userid, PDO::PARAM_STR);
 
         $stmt->execute();
 
@@ -91,7 +92,8 @@ class Module_UserManagement_API extends Core_ModuleAPI {
                         userid = :userid';
             $stmt = $this->dbQueries->dbh->prepare($sql);
 
-            $stmt->bindParam(':userid',        $_SESSION['userid'], PDO::PARAM_STR);
+            $user = new Zend_Session_Namespace('user');
+            $stmt->bindParam(':userid',        $user->userid, PDO::PARAM_STR);
             $stmt->bindParam(':password_hash', $password_hash,      PDO::PARAM_STR);
             $stmt->bindParam(':password_salt', $password_salt,      PDO::PARAM_STR);
 
@@ -105,8 +107,9 @@ class Module_UserManagement_API extends Core_ModuleAPI {
                         userid = :userid';
             $stmt = $this->dbQueries->dbh->prepare($sql);
 
+            $user = new Zend_Session_Namespace('user');
             $stmt->bindParam(':value',  $value);
-            $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
+            $stmt->bindParam(':userid', $user->userid, PDO::PARAM_STR);
 
             $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
         }

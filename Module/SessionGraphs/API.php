@@ -69,8 +69,9 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                     "time"     DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
-        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
+        $user = new Zend_Session_Namespace('user');
+        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
+        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
 
         if (!is_null($min_time)) {
             $stmt->bindParam(':min_time', $min_time, PDO::PARAM_STR);
@@ -114,8 +115,9 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                     "time"     DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
-        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
+        $user = new Zend_Session_Namespace('user');
+        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
+        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
 
         if (!is_null($min_time)) {
             $stmt->bindParam(':min_time', $min_time, PDO::PARAM_STR);
@@ -157,7 +159,8 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                     session_date DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+        $user = new Zend_Session_Namespace('user');
+        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
         $stmt->bindParam(':session_date', $session_date);
 
         $stmt->execute();
@@ -199,8 +202,9 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                     lap_num ASC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
-        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+        $user = new Zend_Session_Namespace('user');
+        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
+        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
 
         $stmt->execute();
 
@@ -230,8 +234,9 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                     zone ASC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
-        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+        $user = new Zend_Session_Namespace('user');
+        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
+        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
 
         if (!is_null($min_time)) {
             $stmt->bindParam(':min_time', $min_time, PDO::PARAM_STR);
@@ -268,8 +273,9 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                     climb_num';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
-        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
+        $user = new Zend_Session_Namespace('user');
+        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
+        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
 
         $stmt->execute();
 
@@ -299,9 +305,10 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                     climb_num    = :climb_num';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
-        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
-        $stmt->bindParam(':climb_num',    $climb_num,          PDO::PARAM_INT);
+        $user = new Zend_Session_Namespace('user');
+        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
+        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
+        $stmt->bindParam(':climb_num',    $climb_num,    PDO::PARAM_INT);
 
         $stmt->execute();
 
@@ -338,9 +345,10 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                     "time"     DESC;';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':userid',       $_SESSION['userid'], PDO::PARAM_STR);
-        $stmt->bindParam(':session_date', $session_date,       PDO::PARAM_STR);
-        $stmt->bindParam(':climb_num',    $climb_num,          PDO::PARAM_INT);
+        $user = new Zend_Session_Namespace('user');
+        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
+        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
+        $stmt->bindParam(':climb_num',    $climb_num,    PDO::PARAM_INT);
 
         $stmt->execute();
 

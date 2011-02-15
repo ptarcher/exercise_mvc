@@ -54,7 +54,8 @@ class Module_Plans_API extends Core_ModuleAPI {
                     week_date DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_STR);
+        $user = new Zend_Session_Namespace('user');
+        $stmt->bindParam(':userid', $user->userid, PDO::PARAM_STR);
 
         $stmt->execute();
 
@@ -76,11 +77,12 @@ class Module_Plans_API extends Core_ModuleAPI {
                     :comment);';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':week_date',   $week_date);
-        $stmt->bindParam(':period',      $period,             PDO::PARAM_STR);
-        $stmt->bindParam(':description', $description,        PDO::PARAM_STR);
-        $stmt->bindParam(':comment',     $comemnt,            PDO::PARAM_STR);
-        $stmt->bindParam(':userid',      $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':period',      $period,       PDO::PARAM_STR);
+        $stmt->bindParam(':description', $description,  PDO::PARAM_STR);
+        $stmt->bindParam(':comment',     $comemnt,      PDO::PARAM_STR);
+        $stmt->bindParam(':userid',      $user->userid, PDO::PARAM_STR);
 
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }
@@ -97,11 +99,12 @@ class Module_Plans_API extends Core_ModuleAPI {
 
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':week_date',   $week_date);
-        $stmt->bindParam(':period',      $period,             PDO::PARAM_STR);
-        $stmt->bindParam(':description', $description,        PDO::PARAM_STR);
-        $stmt->bindParam(':comment',     $comemnt,            PDO::PARAM_STR);
-        $stmt->bindParam(':userid',      $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':period',      $period,       PDO::PARAM_STR);
+        $stmt->bindParam(':description', $description,  PDO::PARAM_STR);
+        $stmt->bindParam(':comment',     $comemnt,      PDO::PARAM_STR);
+        $stmt->bindParam(':userid',      $user->userid, PDO::PARAM_STR);
 
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }
@@ -113,8 +116,9 @@ class Module_Plans_API extends Core_ModuleAPI {
                    week_date = :week_date;';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':week_date',   $week_date);
-        $stmt->bindParam(':userid',      $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':userid',      $user->userid, PDO::PARAM_STR);
 
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }
@@ -141,8 +145,9 @@ class Module_Plans_API extends Core_ModuleAPI {
                     timestamp DESC';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
+        $user = new Zend_Session_Namespace('user');
         $stmt->bindParam(':week_date', $week_date);
-        $stmt->bindParam(':userid',    $_SESSION['userid'], PDO::PARAM_STR);
+        $stmt->bindParam(':userid',    $user->userid, PDO::PARAM_STR);
 
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
 
@@ -179,16 +184,17 @@ class Module_Plans_API extends Core_ModuleAPI {
                     :comment);';
         $stmt = $this->dbQueries->dbh->prepare($sql);
 
-        $stmt->bindParam(':userid',      $_SESSION['userid'], PDO::PARAM_STR);
+        $user = new Zend_Session_Namespace('user');
+        $stmt->bindParam(':userid',      $user->userid, PDO::PARAM_STR);
         $stmt->bindParam(':week_date',   $week_date);
-        $stmt->bindParam(':timestamp',   $timestamp,          PDO::PARAM_STR);
-        $stmt->bindParam(':category',    $category,           PDO::PARAM_STR);
-        $stmt->bindParam(':description', $description,        PDO::PARAM_STR);
-        $stmt->bindParam(':volume',      $volume,             PDO::PARAM_STR);
-        $stmt->bindParam(':intensity',   $intensity,          PDO::PARAM_STR);
-        $stmt->bindParam(':duration',    $duration,           PDO::PARAM_STR);
-        $stmt->bindParam(':focus',       $focus,              PDO::PARAM_STR);
-        $stmt->bindParam(':comment',     $comemnt,            PDO::PARAM_STR);
+        $stmt->bindParam(':timestamp',   $timestamp,    PDO::PARAM_STR);
+        $stmt->bindParam(':category',    $category,     PDO::PARAM_STR);
+        $stmt->bindParam(':description', $description,  PDO::PARAM_STR);
+        $stmt->bindParam(':volume',      $volume,       PDO::PARAM_STR);
+        $stmt->bindParam(':intensity',   $intensity,    PDO::PARAM_STR);
+        $stmt->bindParam(':duration',    $duration,     PDO::PARAM_STR);
+        $stmt->bindParam(':focus',       $focus,        PDO::PARAM_STR);
+        $stmt->bindParam(':comment',     $comemnt,      PDO::PARAM_STR);
 
         $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
     }

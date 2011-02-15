@@ -69,6 +69,12 @@ class Module_Login_Controller extends Core_Module {
             if ($success) {
                 $user_credentials = $this->api->getUser($userid);
 
+                $user = new Zend_Session_Namespace('user');
+                $user->userid    = $user_credentials['userid'];
+                $user->coach     = $user_credentials['coach']     == 't';
+                $user->athlete   = $user_credentials['athlete']   == 't';
+                $user->superuser = $user_credentials['superuser'] == 't';
+
                 $_SESSION['userid']    = $user_credentials['userid'];
                 $_SESSION['coach']     = $user_credentials['coach']     == 't';
                 $_SESSION['athlete']   = $user_credentials['athlete']   == 't';
