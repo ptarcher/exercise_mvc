@@ -21,10 +21,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('core/DataRender.php');
-require_once('core/DataRender/json.php');
-require_once('core/DataRender/xml.php');
-require_once('core/DataRender/gpx.php');
+require_once('Core/DataRender.php');
+require_once('Core/DataRender/json.php');
+require_once('Core/DataRender/xml.php');
+require_once('Core/DataRender/gpx.php');
 
 class CoreAPIEncoder {
     function __construct() {

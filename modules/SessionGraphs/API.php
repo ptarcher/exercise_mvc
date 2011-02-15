@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('core/ModuleAPI.php');
+require_once('Core/ModuleAPI.php');
 
 class ModuleSessionGraphsAPI extends CoreModuleAPI {
 	static private $instance = null;

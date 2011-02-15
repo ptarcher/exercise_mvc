@@ -1,6 +1,6 @@
 <?php
 
-require_once('core/DataRender.php');
+require_once('Core/DataRender.php');
 
 class CoreDataRender_Xml extends CoreDataRender {
     function render() {

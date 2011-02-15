@@ -21,8 +21,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('core/Module.php');
-require_once('core/View.php');
+require_once('Core/Module.php');
+require_once('Core/View.php');
 
 class ModuleSessionGraphs extends CoreModule {
     var $module_description = array(

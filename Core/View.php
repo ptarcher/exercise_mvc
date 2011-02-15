@@ -2,7 +2,7 @@
 /**
  * Core - Open source web analytics
  * 
- * @link http://core.org
+ * @link http://Core.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html Gpl v3 or later
  * @version $Id: View.php 1834 2010-02-10 08:32:03Z vipsoft $
  * 
@@ -10,7 +10,7 @@
  * @package Core
  */
 
-require_once('core/iView.php');
+require_once('Core/iView.php');
 require_once('libraries/Smarty/Smarty.class.php');
 require_once('libraries/HTML/QuickForm/Renderer/ArraySmarty.php');
 
@@ -39,7 +39,7 @@ class CoreView implements iView
 		$this->smarty->template_dir = $template_dir;
 		array_walk($this->smarty->template_dir, array("CoreView","addPath"), INCLUDE_PATH);
 
-		$this->smarty->plugins_dir = array("core/SmartyPlugins", "libraries/Smarty/plugins/");
+		$this->smarty->plugins_dir = array("Core/SmartyPlugins", "libraries/Smarty/plugins/");
 		array_walk($this->smarty->plugins_dir, array("CoreView","addPath"), INCLUDE_PATH);
 
 		$this->smarty->compile_dir = "tmp/templates_c";
@@ -56,7 +56,7 @@ class CoreView implements iView
 		}
 		$this->smarty->error_reporting = $error_reporting;
 
-		$this->smarty->assign('tag', 'core=' . Version::VERSION);
+		$this->smarty->assign('tag', 'Core=' . Version::VERSION);
 		if($filter)
 		{
 			$this->smarty->load_filter('output', 'cachebuster');
@@ -64,12 +64,12 @@ class CoreView implements iView
 			$this->smarty->load_filter('output', 'trimwhitespace');
 		}
 
-		// global value accessible to all templates: the core base URL for the current request
-		$this->coreUrl = Url::getCurrentUrlWithoutFileName();
+		// global value accessible to all templates: the Core base URL for the current request
+		$this->CoreUrl = Url::getCurrentUrlWithoutFileName();
         */
 
         /* The navigation menu */
-        $this->CoreNavigationMenu = CoreNavigator::getInstance()->getMenu();
+        $this->Core_NavigationMenu = Core_Navigator::getInstance()->getMenu();
 	}
 	
 	/**
@@ -107,7 +107,7 @@ class CoreView implements iView
 			//$this->token_auth = Core::getCurrentUserTokenAuth();
 			//$this->userHasSomeAdminAccess = Core::isUserHasSomeAdminAccess();
 			//$this->userIsSuperUser = Core::isUserIsSuperUser();
-			//$this->core_version = Version::VERSION;
+			//$this->Core_version = Version::VERSION;
 			//$this->latest_version_available = UpdateCheck::isNewestVersionAvailable();
 
 			//$this->loginModule = Zend_Registry::get('auth')->getName();

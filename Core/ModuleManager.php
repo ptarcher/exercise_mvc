@@ -11,16 +11,16 @@
  */
 
 /**
- * @see core/ModulesFunctions/Menu.php
- * @see core/ModulesFunctions/AdminMenu.php
- * @see core/ModulesFunctions/WidgetsList.php
- * @see core/ModulesFunctions/Sql.php
+ * @see Core/ModulesFunctions/Menu.php
+ * @see Core/ModulesFunctions/AdminMenu.php
+ * @see Core/ModulesFunctions/WidgetsList.php
+ * @see Core/ModulesFunctions/Sql.php
  */
  /*
-require_once CORE_INCLUDE_PATH . '/core/ModulesFunctions/Menu.php';
-require_once CORE_INCLUDE_PATH . '/core/ModulesFunctions/AdminMenu.php';
-require_once CORE_INCLUDE_PATH . '/core/ModulesFunctions/WidgetsList.php';
-require_once CORE_INCLUDE_PATH . '/core/ModulesFunctions/Sql.php';
+require_once CORE_INCLUDE_PATH . '/Core/ModulesFunctions/Menu.php';
+require_once CORE_INCLUDE_PATH . '/Core/ModulesFunctions/AdminMenu.php';
+require_once CORE_INCLUDE_PATH . '/Core/ModulesFunctions/WidgetsList.php';
+require_once CORE_INCLUDE_PATH . '/Core/ModulesFunctions/Sql.php';
 */
 require_once ('libraries/Event/Dispatcher.php');
 require_once ('libraries/Event/Notification.php');

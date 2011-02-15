@@ -28,7 +28,7 @@
  * @return string The string eventually modified by the plugins listening to this event
  */
 
-require_once('core/ModuleManager.php');
+require_once('Core/ModuleManager.php');
 
 function smarty_function_postEvent($params, &$smarty)
 {

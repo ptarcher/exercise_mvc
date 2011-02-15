@@ -38,13 +38,14 @@ $incPath = get_include_path();
 set_include_path('libraries' . PATH_SEPARATOR . $incPath);
 
 require_once(INCLUDE_PATH.'/libraries/Zend/Loader/Autoloader.php');
-Zend_Loader_Autoloader::getInstance();
+$autoloader = Zend_Loader_Autoloader::getInstance();
+$autoloader->registerNamespace('Core_');
 
-require_once(INCLUDE_PATH.'/core/Session.php');
-require_once(INCLUDE_PATH.'/core/FrontController.php');
-require_once(INCLUDE_PATH.'/core/Navigator.php');
+require_once(INCLUDE_PATH.'/Core/Session.php');
+//require_once(INCLUDE_PATH.'/Core/FrontController.php');
+require_once(INCLUDE_PATH.'/Core/Navigator.php');
 
-$controller = CoreFrontController::getInstance();
+$controller = Core_FrontController::getInstance();
 $controller->init();
 $controller->dispatch();
 

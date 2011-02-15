@@ -1,6 +1,6 @@
 <!-- Start Navigator -->
 <ul class="nav">
-{foreach from=$CoreNavigationMenu key=mainMenu item=subMenu name=menu}
+{foreach from=$Core_NavigationMenu key=mainMenu item=subMenu name=menu}
     <li>
     {$mainMenu}
     {*<a name='{$subMenu.url}' href='index.php{$subMenu.url}'>{$mainMenu}</a>*}

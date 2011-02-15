@@ -21,9 +21,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('core/Common.php');
+require_once('Core/Common.php');
 
-class CoreFrontController 
+class Core_FrontController 
 {
     static private $instance = null;
 

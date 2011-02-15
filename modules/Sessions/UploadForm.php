@@ -10,8 +10,8 @@
  * @package Core_Sessions
  */
 
-require_once('core/Form.php');
-require_once('core/Translate.php');
+require_once('Core/Form.php');
+require_once('Core/Translate.php');
 
 /**
  *

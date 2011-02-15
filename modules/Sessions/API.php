@@ -21,8 +21,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('core/ModuleAPI.php');
-require_once('core/Db.php');
+require_once('Core/ModuleAPI.php');
+require_once('Core/Db.php');
 
 class ModuleSessionsAPI extends CoreModuleAPI {
 	static private $instance = null;

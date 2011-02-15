@@ -21,9 +21,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('core/Module.php');
-require_once('core/Helper.php');
-require_once('core/View.php');
+require_once('Core/Module.php');
+require_once('Core/Helper.php');
+require_once('Core/View.php');
 require_once('modules/Login/LoginForm.php');
 
 class ModuleLogin extends CoreModule {

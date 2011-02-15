@@ -10,7 +10,7 @@
  * @package SmartyPlugins
  */
 
-require_once('core/Translate.php');
+require_once('Core/Translate.php');
 
 /**
  * Read the translation string from the given index (read form the selected language in Core).

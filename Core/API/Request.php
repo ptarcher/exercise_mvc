@@ -10,8 +10,8 @@
  * @package Core
  */
 
-require_once('core/API/ResponseBuilder.php');
-require_once('core/API/Proxy.php');
+require_once('Core/API/ResponseBuilder.php');
+require_once('Core/API/Proxy.php');
 
 /**
  * An API request is the object used to make a call to the API and get the result.

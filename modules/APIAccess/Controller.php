@@ -10,8 +10,8 @@
  * @package Core_API
  */
 
-require_once('core/Module.php');
-require_once('core/API/Request.php');
+require_once('Core/Module.php');
+require_once('Core/API/Request.php');
 
 /**
  * 

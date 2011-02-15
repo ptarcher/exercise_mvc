@@ -21,9 +21,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('core/Url.php');
+require_once('Core/Url.php');
 
-class CoreNavigator 
+class Core_Navigator 
 {
     private $categories = array();
 	static private $instance = null;
