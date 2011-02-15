@@ -37,10 +37,13 @@ if(!defined('INCLUDE_PATH'))
 $incPath = get_include_path();
 set_include_path('libraries' . PATH_SEPARATOR . $incPath);
 
+/* Zend Autoloader */
 require_once(INCLUDE_PATH.'/libraries/Zend/Loader/Autoloader.php');
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->registerNamespace('Core_');
+$autoloader->registerNamespace('Module_');
 
+/* The rest of the bootstrap */
 require_once(INCLUDE_PATH.'/Core/Session.php');
 //require_once(INCLUDE_PATH.'/Core/FrontController.php');
 require_once(INCLUDE_PATH.'/Core/Navigator.php');
