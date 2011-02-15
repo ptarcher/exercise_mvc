@@ -21,8 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-/* TODO: Set up the include path */
+/* Set up the include path */
 @ini_set('magic_quotes_runtime', 0);
 define('DOCUMENT_ROOT', dirname(__FILE__)=='/'?'':dirname(__FILE__));
 if(!defined('USER_PATH'))
@@ -43,13 +42,10 @@ $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->registerNamespace('Core_');
 $autoloader->registerNamespace('Module_');
 
-/* The rest of the bootstrap */
-require_once(INCLUDE_PATH.'/Core/Session.php');
-//require_once(INCLUDE_PATH.'/Core/FrontController.php');
-require_once(INCLUDE_PATH.'/Core/Navigator.php');
+/* Zend Session */
+Zend_Session::start();
 
-$controller = Core_FrontController::getInstance();
-$controller->init();
-$controller->dispatch();
+/* Start the front controller */
+Core_FrontController::getInstance()->dispatch();
 
 ?>
