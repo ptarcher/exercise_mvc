@@ -40,6 +40,17 @@ class Core_FrontController
     {
     }
 
+	function init()
+    {
+        try {
+            $db = Core_Db::getInstance();
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+        Zend_Registry::set('db', $db);
+    }
+
 	function dispatch( $module = null, $action = null, $parameters = null)
     {
 		if(is_null($module)) {

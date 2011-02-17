@@ -46,6 +46,8 @@ $autoloader->registerNamespace('Module_');
 Zend_Session::start();
 
 /* Start the front controller */
-Core_FrontController::getInstance()->dispatch();
+$controller = Core_FrontController::getInstance();
+$controller->init();
+$controller->dispatch();
 
 ?>

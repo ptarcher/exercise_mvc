@@ -39,7 +39,8 @@ class Module_Sessions_API extends Core_ModuleAPI {
 	}
 	
     function getSessions() {
-        $db = Core_Db::getInstance();
+        //$db = Core_Db::getInstance();
+        $db = Zend_Registry::get('db');
         $select = $db->select()
                      ->from('t_exercise_totals',
                             array('userid','session_date','type_short',
