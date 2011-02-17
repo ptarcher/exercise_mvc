@@ -24,23 +24,19 @@
 class Module_Login_API extends Core_ModuleAPI {
     function getUser($userid) 
     {
-        $sql = 'SELECT 
-                    userid,
-                    password_hash,
-                    password_salt,
-                    athlete,
-                    coach,
-                    superuser
-                FROM 
-                    t_users
-                WHERE
-                    userid = :userid';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-        $stmt->bindParam(':userid', $userid, PDO::PARAM_STR);
-
-        $stmt->execute();
-        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $users[0];
+        $db = Zend_Registry::get('db');
+        $select = $db->select()
+                     ->from('t_users',
+                             array('userid',
+                                   'password_hash',
+                                   'password_salt',
+                                   'athlete',
+                                   'coach',
+                                   'superuser'))
+                     ->where('userid = ?', $userid);
+        $stmt = $db->query($select);
+        $result = $stmt->fetchAll();
+        return $result[0];
     }
 
     function checkLogin($userid, $password) 
