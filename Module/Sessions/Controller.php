@@ -29,7 +29,8 @@ require_once('Module/Sessions/FITRecords.php');
 /* PEAR benchmark */
 require_once 'Benchmark/Timer.php';
 
-class Module_Sessions_Controller extends Core_Module {
+class Module_Sessions_Controller extends Core_Controller 
+{
     var $module_description = array(
         'name'        => 'Session',
         'description' => 'View, create and edit exercise sessions',

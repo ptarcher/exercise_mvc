@@ -21,7 +21,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class Module_Plans_Controller extends Core_Module {
+class Module_Plans_Controller extends Core_Controller 
+{
     var $module_description = array(
         'name'        => 'Plans',
         'description' => 'View, create and edit exercise plans',

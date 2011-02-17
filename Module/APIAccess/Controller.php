@@ -14,7 +14,7 @@
  * 
  * @package Core_API
  */
-class Module_APIAccess_Controller extends Core_Module
+class Module_APIAccess_Controller extends Core_Controller
 {
 	function index()
 	{

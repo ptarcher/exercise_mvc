@@ -21,7 +21,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class Module_SessionGraphs_Controller extends Core_Module {
+class Module_SessionGraphs_Controller extends Core_Controller 
+{
     var $module_description = array(
         'name'        => 'Session Graphs',
         'description' => 'View Exercise Session Graphs',

@@ -23,7 +23,8 @@
 
 require_once('Module/Login/LoginForm.php');
 
-class Module_Login_Controller extends Core_Module {
+class Module_Login_Controller extends Core_Controller 
+{
     var $module_description = array(
         'name'        => 'login',
         'description' => 'Performs login and logout operations',
