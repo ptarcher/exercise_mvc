@@ -42,12 +42,14 @@ class Core_Db {
      */
     public static function factory()
     {
-        $adapter = Zend_Db::factory('Pdo_'.DB_TYPE,
-                array('host'     => DB_HOST,
-                      'port'     => DB_PORT,
-                      'username' => DB_USER,
-                      'password' => DB_PASSWORD,
-                      'dbname'   => DB_NAME));
+        $database = Zend_Registry::get('config')->database;
+
+        $adapter = Zend_Db::factory($database->adapter,
+                array('host'     => $database->host,
+                      'port'     => $database->port,
+                      'username' => $database->username,
+                      'password' => $database->password,
+                      'dbname'   => $database->dbname));
 
         return $adapter;
     }
