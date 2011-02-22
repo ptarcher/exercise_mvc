@@ -36,6 +36,8 @@ if(!defined('INCLUDE_PATH'))
 $incPath = get_include_path();
 set_include_path('libraries' . PATH_SEPARATOR . $incPath);
 
+require_once(INCLUDE_PATH.'/Core/testMinimumPhpVersion.php');
+
 /* Zend Autoloader */
 require_once(INCLUDE_PATH.'/libraries/Zend/Loader/Autoloader.php');
 $autoloader = Zend_Loader_Autoloader::getInstance();
