@@ -1,5 +1,6 @@
 # Don't publish configuration changes
 config.php
+config/config.ini.php
 
 # Ignore ctags
 tags
