@@ -54,7 +54,6 @@ class Core_User {
 	/**
      */
     function __destruct() {
-        unset($this->instance);
         unset($this->user);
     }
 }
