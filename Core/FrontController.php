@@ -43,6 +43,15 @@ class Core_FrontController
 	function init()
     {
         try {
+            $config = new Core_Config();
+        } catch(Exception $e) {
+            throw $e;
+        }
+
+        Zend_Registry::set('config', $config);
+        $config->init();
+
+        try {
             $db = Core_Db::getInstance();
         } catch (Exception $e) {
             throw $e;
