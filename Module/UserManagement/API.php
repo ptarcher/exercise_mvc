@@ -38,34 +38,31 @@ class Module_UserManagement_API extends Core_ModuleAPI {
         return self::$instance;
     }
 
-    function getUser() {
-        $sql = 'SELECT 
-                    userid,
-                    coach,
-                    athlete,
-                    superuser,
-                    TO_CHAR(dob, \'DD/MM/YYYY\') AS dob,
-                    max_heartrate,
-                    resting_heartrate,
-                    rider_weight,
-                    bike_weight
-                FROM 
-                    t_users
-                WHERE
-                    userid = :userid';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+    function getUser() 
+    {
+        $db = Zend_Registry::get('db');
+        $select = $db->select()
+                     ->from('t_users',
+                             array('userid',
+                                   'coach',
+                                   'athlete',
+                                   'superuser',
+                                   'dob'=>'TO_CHAR(dob, \'DD/MM/YYYY\')',
+                                   'max_heartrate',
+                                   'resting_heartrate',
+                                   'rider_weight',
+                                   'bike_weight'))
+                     ->where('userid = ?', Core_User::getUserId());
 
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':userid', $user->userid, PDO::PARAM_STR);
-
-        $stmt->execute();
-
-        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $db->query($select);
+        $users = $stmt->fetchAll();
         return $users[0];
     }
 
     function updateSetting($id, $value)
     {
+        $db = Zend_Registry::get('db');
+
         $valid_fields = array('coach',
                               'athlete',
                               'max_heartrate',
