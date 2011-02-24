@@ -57,32 +57,18 @@ class Module_Sessions_API extends Core_ModuleAPI {
     function updateSession($session_date = "", $type_short = "", $description     = "",
                            $duration     = "", $distance   = "",   $avg_heartrate = "",
                            $avg_speed    = "", $comment    = "") {
-        $sql = 'UPDATE t_exercise_totals
-                SET
-                    type_short    = :type_short,
-                    description   = :description,
-                    duration      = :duration,
-                    distance      = :distance,
-                    avg_heartrate = :avg_heartrate,
-                    avg_speed     = :avg_speed,
-                    comment       = :comment
-                WHERE 
-                    session_date = :session_date AND
-                    userid       = :userid';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $db = Zend_Registry::get('db');
 
-        // TODO: Add the types
-        $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':type_short',    $type_short,   PDO::PARAM_STR);
-        $stmt->bindParam(':description',   $description,  PDO::PARAM_STR);
-        $stmt->bindParam(':duration',      $duration);
-        $stmt->bindParam(':distance',      $distance);
-        $stmt->bindParam(':avg_heartrate', $avg_heartrate);
-        $stmt->bindParam(':avg_speed',     $avg_speed);
-        $stmt->bindParam(':comment',       $comment,      PDO::PARAM_STR);
-        $stmt->bindParam(':userid',        Core_User::getUserId, PDO::PARAM_STR);
-
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+        $db->update('t_exercise_totals',
+                array('type_short'    => $type_short,
+                      'description'   => $description,
+                      'duration'      => $duration,
+                      'distance'      => $distance,
+                      'avg_heartrate' => $avg_heartrate,
+                      'avg_speed'     => $avg_speed,
+                      'comment'       => $comment),
+                array('session_date = \''.$session_date.'\'',
+                      'userid       = \''.Core_User::getUserId().'\'',));
     }
 
 
