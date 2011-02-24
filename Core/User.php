@@ -44,11 +44,21 @@ class Core_User {
     }
 
 	/**
+     * Get the current users username
      */
 	static public function getUserId()
     {
         $me = self::getInstance();
         return $me->user->userid;
+    }
+
+    /**
+     * Checks if the current user is a super user
+     */
+    static public function isSuperUser()
+    {
+        $me = self::getInstance();
+        return $me->user->superuser;
     }
 
 	/**
