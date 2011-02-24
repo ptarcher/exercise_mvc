@@ -21,8 +21,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('config.php');
-
 class Core_Db {
 	static private $instance = null;
 
