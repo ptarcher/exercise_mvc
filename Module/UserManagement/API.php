@@ -21,7 +21,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class Module_UserManagement_API extends Core_ModuleAPI {
+class Module_UserManagement_API extends Core_ModuleAPI 
+{
     static private $instance = null;
     /**
      * Returns the singleton ModuleUserManagementAPI
@@ -80,108 +81,69 @@ class Module_UserManagement_API extends Core_ModuleAPI {
             $password_salt = Core_Common::getRandomString(64);
             $password_hash = sha1($value . $password_salt);
 
-            $sql = 'UPDATE
-                        t_users
-                    SET
-                        password_hash = :password_hash,
-                        password_salt = :password_salt
-                    WHERE
-                        userid = :userid';
-            $stmt = $this->dbQueries->dbh->prepare($sql);
-
-            $user = new Zend_Session_Namespace('user');
-            $stmt->bindParam(':userid',        $user->userid, PDO::PARAM_STR);
-            $stmt->bindParam(':password_hash', $password_hash,      PDO::PARAM_STR);
-            $stmt->bindParam(':password_salt', $password_salt,      PDO::PARAM_STR);
-
-            $stmt->execute();
+            $db->update('t_users',
+                    array('password_hash' => $password_hash,
+                          'password_salt' => $password_salt),
+                    'userid = \''.Core_User::getUserId().'\'');
         } else {
-            $sql = 'UPDATE
-                        t_users
-                    SET
-                        '.$id.' = :value 
-                    WHERE
-                        userid = :userid';
-            $stmt = $this->dbQueries->dbh->prepare($sql);
-
-            $user = new Zend_Session_Namespace('user');
-            $stmt->bindParam(':value',  $value);
-            $stmt->bindParam(':userid', $user->userid, PDO::PARAM_STR);
-
-            $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+            $db->update('t_users',
+                    array($id => $value),
+                    'userid = \''.Core_User::getUserId().'\'');
         }
     }
 
-    function getUsers() {
-        if (!$_SESSION['superuser']) {
+    function getUsers() 
+    {
+        if (!Core_User::isSuperUser()) {
             throw exception('You need to be super user to perform this action');
         }
 
-        $sql = 'SELECT 
-                    userid,
-                    coach,
-                    athlete,
-                    superuser
-                FROM 
-                    t_users
-                ORDER BY
-                    userid DESC';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-        $stmt->execute();
+        $db = Zend_Registry::get('db');
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $select = $db->select()
+                     ->from('t_users',
+                             array('userid',
+                                   'coach',
+                                   'athlete',
+                                   'superuser'))
+                     ->order('userid DESC');
+        $stmt = $db->query($select);
+
+        return $stmt->fetchAll();
     }
 
-    function createUser($userid, $password, $coach, $athlete, $usertype) {
+    function createUser($userid, $password, $coach, $athlete, $usertype) 
+    {
         $password_salt = Core_Common::getRandomString(64);
         $password_hash = sha1($password . $password_salt);
+        $db = Zend_Registry::get('db');
 
-        /* TODO: Check that the current user is a super user */
-        if (!$_SESSION['superuser']) {
+        if (!Core_User::isSuperUser()) {
             throw exception('You need to be super user to perform this action');
         }
 
-        $sql = 'INSERT INTO t_users
-                   (userid,
-                    password_hash,
-                    password_salt,
-                    coach,
-                    athlete,
-                    superuser)
-                VALUES 
-                   (:userid,
-                    :password_hash,
-                    :password_salt,
-                    :coach,
-                    :athlete,
-                    :superuser
-                   )';
-
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-
-        $stmt->bindParam(':userid',        $userid,        PDO::PARAM_STR);
-        $stmt->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
-        $stmt->bindParam(':password_salt', $password_salt, PDO::PARAM_STR);
-        $stmt->bindParam(':coach',         $coach,         PDO::PARAM_BOOL);
-        $stmt->bindParam(':athlete',       $athlete,       PDO::PARAM_BOOL);
-        $stmt->bindParam(':superuser',     $superuser,     PDO::PARAM_BOOL);
-
-        $stmt->execute() or die("failed to execute $sql");
+        $db->insert('t_users',
+                array('userid'        => $userid,
+                      'password_hash' => $password_hash,
+                      'password_salt' => $password_salt,
+                      'coach'         => $coach,
+                      'athlete'       => $athlete,
+                      'superuser'     => $superuser));
     }
 
     // TODO: Convert this into user groups
-    function getExerciseTypes() {
-        $sql = 'SELECT 
-                    type_short,
-                    type
-                FROM 
-                    t_training_types
-                ORDER BY
-                    type_short';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-        $stmt->execute();
+    function getExerciseTypes() 
+    {
+        $db = Zend_Registry::get('db');
 
-        $types = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $db->select()
+           ->from('t_training_types',
+                   array('type_short',
+                         'type'))
+           ->order('type_short');
+        $stmt = $db->query($select);
+
+        $types = $stmt->fetchAll();
 
         /* Convert into a nice display table */
         $exercise_types = array();
