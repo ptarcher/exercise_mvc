@@ -21,14 +21,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('config.php');
-
 class dbQueries
 {
     function __construct() {
+        $database = Zend_Registry::get('config')->database;
+
         /* Connect to the database */
         try {
-            $this->dbh = new PDO(DB_TYPE.':host='.DB_HOST.';dbname='.DB_NAME.';port='.DB_PORT,DB_USER,DB_PASSWORD);
+            $this->dbh = new PDO('pgsql:host='.$database->host.';dbname='.$database->dbname.';port='.$database->port,$database->username,$database->password);
 
         } catch (PDOException $e) {
             $debug=true;
