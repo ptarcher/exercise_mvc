@@ -94,6 +94,10 @@ class Module_Sessions_Controller extends Core_Controller
 
     function viewUpload() {
         $form = new SessionUploadForm();
+
+        $UploadErrorString = "";
+        $UploadStatus      = "Error"
+
         if ($form->validate()) {
             $timer = new Benchmark_Timer();
             $timer->start();
@@ -111,246 +115,261 @@ class Module_Sessions_Controller extends Core_Controller
                 unset($sessions);
             }
 
-            /* Insert the session data into the database */
-            $this->api->createSessionFull($session->start_time,
-                                          'E1',
-                                          'Untitled',
-                                          $session->total_timer_time,
-                                          $session->total_distance,
-                                          $session->total_calories,
-                                          $session->avg_heart_rate,
-                                          $session->max_heart_rate,
-                                          $session->avg_speed,
-                                          $session->max_speed,
-                                          $session->total_ascent,
-                                          $session->total_descent,
-                                          '');
+            $db = Zend_Registry::get('db');
+            $db->beginTransaction();
 
-            /* Find the seconds since epoch so we can do simple maths */
-            $ftime = strptime($session->start_time, '%FT%T%z');
-            $session_epoch = mktime($ftime['tm_hour'],
-                                    $ftime['tm_min'],
-                                    $ftime['tm_sec'],
-                                    1 ,
-                                    $ftime['tm_yday'] + 1,
-                                    $ftime['tm_year'] + 1900); 
-            $session_timestamp = $session->start_time;
+            try {
+                /* Insert the session data into the database */
+                $this->api->createSessionFull($session->start_time,
+                                              'E1',
+                                              'Untitled',
+                                              $session->total_timer_time,
+                                              $session->total_distance,
+                                              $session->total_calories,
+                                              $session->avg_heart_rate,
+                                              $session->max_heart_rate,
+                                              $session->avg_speed,
+                                              $session->max_speed,
+                                              $session->total_ascent,
+                                              $session->total_descent,
+                                              '');
+
+                /* Find the seconds since epoch so we can do simple maths */
+                $ftime = strptime($session->start_time, '%FT%T%z');
+                $session_epoch = mktime($ftime['tm_hour'],
+                                        $ftime['tm_min'],
+                                        $ftime['tm_sec'],
+                                        1 ,
+                                        $ftime['tm_yday'] + 1,
+                                        $ftime['tm_year'] + 1900); 
+                $session_timestamp = $session->start_time;
 
 
-            unset($session);
-            unset($sessions);
+                unset($session);
+                unset($sessions);
 
-            $timer->setMarker('Decode Records - Start');
-            exec('/usr/bin/fitdecode -r '.$upload['tmp_name'], $xml_records);
-            $xml_records = implode("\n", $xml_records);
-            $records_input = parseRecords($xml_records, $session_epoch);
-            $timer->setMarker('Decode Records - End');
+                $timer->setMarker('Decode Records - Start');
+                exec('/usr/bin/fitdecode -r '.$upload['tmp_name'], $xml_records);
+                $xml_records = implode("\n", $xml_records);
+                $records_input = parseRecords($xml_records, $session_epoch);
+                $timer->setMarker('Decode Records - End');
 
-            if (is_array($records_input)) {
-                $record_prev = $records_input[0];
-            }
-
-            /* Get the array of records, removing duplicates */
-            $records = Array();
-            foreach($records_input as $record) {
-                if (!isset($record_last) || 
-                        $record_last->interval != $record->interval) {
-                    $records[] = $record;
+                if (is_array($records_input)) {
+                    $record_prev = $records_input[0];
                 }
-                $record_last = $record;
-            }
-            unset($records_input);
-            unset($record_last);
 
-            $UserAPI = Module_UserManagement_API::getInstance();
-            $user = $UserAPI->getUser();
-
-            /* Add the matching data points */
-            foreach($records as $record) {
-                /* Skip duplicates, they will cause issues in graphs */
-                if (!isset($record->power)) {
-                    $record->power = $this->api->getPower($record->gradient,
-                                                          $record->temperature,
-                                                          $record->altitude,
-                                                          $record->speed,
-                                                          $record->speed    - $record_prev->speed,
-                                                          $record->interval - $record_prev->interval,
-                                                          $user['rider_weight'],
-                                                          $user['bike_weight']);
-                }
-                $record_prev = $record;
-            }
-            unset($user);
-            unset($UserAPI);
-
-            $timer->setMarker('Record insertion - start');
-            $this->api->insertAllSessionData($session_timestamp, $records);
-
-            /* Insert all the data */
-            $timer->setMarker('Record insertion - end');
-
-            /* Calculate the climbs */
-            $climbs = $this->api->getClimbCategories();
-
-            $timer->setMarker('Climb - Start');
-            $min_climb = $climbs[0];
-
-            /* 500m with an average gradient of more than 3% (cat 5)*/
-            /* Find the points that have a distance of 500m */
-            $window_distance = 0;
-            $window_altitude = 0;
-            $cat             = -1;
-            $climb_num       = 1;
-
-            $num_records = count($records);
-            $num_climbs  = count($climbs);
-
-            for ($front = 0, $back = 0; $front < $num_records; $front++) {
-                $window_distance += $records[$front]->delta_distance * 1000;
-                $window_altitude += $records[$front]->delta_altitude;
-
-                if ($window_distance > $min_climb['min_distance']) {
-                    $window_gradient = ($window_altitude/$window_distance)*100;
-
-                    /* Check if we have found the start of a climb */
-                    if ($cat == -1 && (($window_gradient >= $climbs[$cat+1]['min_gradient']))) {
-                        $cat++;
-
-                        /* Go through and find the minimum height */
-                        $min = $back;
-                        for ($i = $back; $i < $front; $i++) {
-                            if ($records[$i]->altitude <= $records[$min]->altitude) {
-                                $min = $i;
-                            }
-                        }
-                        $climb['bottom']       = $records[$min]->interval;
-                        $climb['min_altitude'] = $records[$min]->altitude;
+                /* Get the array of records, removing duplicates */
+                $records = Array();
+                foreach($records_input as $record) {
+                    if (!isset($record_last) || 
+                            $record_last->interval != $record->interval) {
+                        $records[] = $record;
                     }
+                    $record_last = $record;
+                }
+                unset($records_input);
+                unset($record_last);
 
-                    /* Check if we have finished the climb */
-                    if ($cat != -1 && ($window_gradient < $climbs[$cat]['min_gradient'])) {
-                        /* Need to go back and find the maximum altitude */
-                        $max = $back;
-                        for ($i = $back; $i < $front; $i++) {
-                            if ($records[$i]->altitude > $records[$max]->altitude) {
-                                $max = $i;
-                            }
-                        }
-                        $climb['top']          = $records[$max]->interval;
-                        $climb['max_altitude'] = $records[$max]->altitude;
+                $UserAPI = Module_UserManagement_API::getInstance();
+                $user = $UserAPI->getUser();
 
-                        /* Get the max gradient */
-                        $climb['gradient_max'] = $records[$min]->gradient;
-                        for ($i = $min; $i <= $max; $i++) {
-                            if ($climb['gradient_max'] < $records[$i]->gradient) {
-                                $climb['gradient_max'] = $records[$i]->gradient;
-                            }
-                        }
+                /* Add the matching data points */
+                foreach($records as $record) {
+                    /* Skip duplicates, they will cause issues in graphs */
+                    if (!isset($record->power)) {
+                        $record->power = $this->api->getPower($record->gradient,
+                                                              $record->temperature,
+                                                              $record->altitude,
+                                                              $record->speed,
+                                                              $record->speed    - $record_prev->speed,
+                                                              $record->interval - $record_prev->interval,
+                                                              $user['rider_weight'],
+                                                              $user['bike_weight']);
+                    }
+                    $record_prev = $record;
+                }
+                unset($user);
+                unset($UserAPI);
 
-                        /* Tally the totals */
-                        $climb['total_climbed'] = 0;
-                        for ($i = $min+1; $i <= $max; $i++) {
-                            $climb['total_climbed']  += $records[$i]->delta_altitude;
-                        }
+                $timer->setMarker('Record insertion - start');
+                $this->api->insertAllSessionData($session_timestamp, $records);
 
-                        $climb['total_distance'] = round($records[$max]->distance - $records[$min]->distance, 2);
-                        $climb['gradient_avg']   = round(($climb['total_climbed'] / ($climb['total_distance'] * 1000)) * 100, 2);
+                /* Insert all the data */
+                $timer->setMarker('Record insertion - end');
 
-                        /* Find the category of the climb */
-                        $cat = -1;
-                        while ((($cat+1) < $num_climbs) && 
-                                ($climb['gradient_avg']        >= $climbs[$cat+1]['min_gradient'])  &&
-                                ($climb['total_distance']*1000 >= $climbs[$cat+1]['min_distance']) &&
-                                ($climb['total_climbed']       >= $climbs[$cat+1]['min_height'])) {
+                /* Calculate the climbs */
+                $climbs = $this->api->getClimbCategories();
+
+                $timer->setMarker('Climb - Start');
+                $min_climb = $climbs[0];
+
+                /* 500m with an average gradient of more than 3% (cat 5)*/
+                /* Find the points that have a distance of 500m */
+                $window_distance = 0;
+                $window_altitude = 0;
+                $cat             = -1;
+                $climb_num       = 1;
+
+                $num_records = count($records);
+                $num_climbs  = count($climbs);
+
+                for ($front = 0, $back = 0; $front < $num_records; $front++) {
+                    $window_distance += $records[$front]->delta_distance * 1000;
+                    $window_altitude += $records[$front]->delta_altitude;
+
+                    if ($window_distance > $min_climb['min_distance']) {
+                        $window_gradient = ($window_altitude/$window_distance)*100;
+
+                        /* Check if we have found the start of a climb */
+                        if ($cat == -1 && (($window_gradient >= $climbs[$cat+1]['min_gradient']))) {
                             $cat++;
-                        }
-                        $climb['cat']            = $cat;
 
-                        if ($cat != -1) {
-                            /* Store it into the database */
-                            $this->api->insertClimb($session_timestamp,       $climb_num++,
-                                                    $climb['bottom'],         $climb['top'],
-                                                    $climb['gradient_avg'],   $climb['gradient_max'],
-                                                    $climb['total_distance'], $climb['total_climbed'],
-                                                    $climb['min_altitude'],   $climb['max_altitude']);
-
-                            /* Start search for the next climb */
-                            $front           = $max;
-                            $back            = $max;
-                            $window_distance = 0;
-                            $window_altitude = 0;
-                        } else {
-                            /* It was a false climb, either not steep enough, 
-                             * too short, and the window just masked this 
-                             * Keep searching for the next climb
-                             */
+                            /* Go through and find the minimum height */
+                            $min = $back;
+                            for ($i = $back; $i < $front; $i++) {
+                                if ($records[$i]->altitude <= $records[$min]->altitude) {
+                                    $min = $i;
+                                }
+                            }
+                            $climb['bottom']       = $records[$min]->interval;
+                            $climb['min_altitude'] = $records[$min]->altitude;
                         }
 
-                        $cat = -1;
-                    }
+                        /* Check if we have finished the climb */
+                        if ($cat != -1 && ($window_gradient < $climbs[$cat]['min_gradient'])) {
+                            /* Need to go back and find the maximum altitude */
+                            $max = $back;
+                            for ($i = $back; $i < $front; $i++) {
+                                if ($records[$i]->altitude > $records[$max]->altitude) {
+                                    $max = $i;
+                                }
+                            }
+                            $climb['top']          = $records[$max]->interval;
+                            $climb['max_altitude'] = $records[$max]->altitude;
 
-                    /* Move the back of the window up */
-                    while ($window_distance > $min_climb['min_distance'] && $back < $num_records) {
-                        $window_distance -= $records[$back]->delta_distance * 1000;
-                        $window_altitude -= $records[$back]->delta_altitude;
-                        $back++;
+                            /* Get the max gradient */
+                            $climb['gradient_max'] = $records[$min]->gradient;
+                            for ($i = $min; $i <= $max; $i++) {
+                                if ($climb['gradient_max'] < $records[$i]->gradient) {
+                                    $climb['gradient_max'] = $records[$i]->gradient;
+                                }
+                            }
+
+                            /* Tally the totals */
+                            $climb['total_climbed'] = 0;
+                            for ($i = $min+1; $i <= $max; $i++) {
+                                $climb['total_climbed']  += $records[$i]->delta_altitude;
+                            }
+
+                            $climb['total_distance'] = round($records[$max]->distance - $records[$min]->distance, 2);
+                            $climb['gradient_avg']   = round(($climb['total_climbed'] / ($climb['total_distance'] * 1000)) * 100, 2);
+
+                            /* Find the category of the climb */
+                            $cat = -1;
+                            while ((($cat+1) < $num_climbs) && 
+                                    ($climb['gradient_avg']        >= $climbs[$cat+1]['min_gradient'])  &&
+                                    ($climb['total_distance']*1000 >= $climbs[$cat+1]['min_distance']) &&
+                                    ($climb['total_climbed']       >= $climbs[$cat+1]['min_height'])) {
+                                $cat++;
+                            }
+                            $climb['cat']            = $cat;
+
+                            if ($cat != -1) {
+                                /* Store it into the database */
+                                $this->api->insertClimb($session_timestamp,       $climb_num++,
+                                                        $climb['bottom'],         $climb['top'],
+                                                        $climb['gradient_avg'],   $climb['gradient_max'],
+                                                        $climb['total_distance'], $climb['total_climbed'],
+                                                        $climb['min_altitude'],   $climb['max_altitude']);
+
+                                /* Start search for the next climb */
+                                $front           = $max;
+                                $back            = $max;
+                                $window_distance = 0;
+                                $window_altitude = 0;
+                            } else {
+                                /* It was a false climb, either not steep enough, 
+                                 * too short, and the window just masked this 
+                                 * Keep searching for the next climb
+                                 */
+                            }
+
+                            $cat = -1;
+                        }
+
+                        /* Move the back of the window up */
+                        while ($window_distance > $min_climb['min_distance'] && $back < $num_records) {
+                            $window_distance -= $records[$back]->delta_distance * 1000;
+                            $window_altitude -= $records[$back]->delta_altitude;
+                            $back++;
+                        }
                     }
                 }
-            }
-            $timer->setMarker('Climb - End');
+                $timer->setMarker('Climb - End');
 
-            /*
-             * Bikes
-             * userid
-             * name
-             * description
-             * type, TT or Road
-             * weight
-             * picture?
-             * Assign a bike to an exercise session at creation time?
-             */
+                /*
+                 * Bikes
+                 * userid
+                 * name
+                 * description
+                 * type, TT or Road
+                 * weight
+                 * picture?
+                 * Assign a bike to an exercise session at creation time?
+                 */
 
-            unset($records);
+                unset($records);
 
-            $timer->setMarker('Laps - Start');
-            exec('/usr/bin/fitdecode -l '.$upload['tmp_name'], $xml_laps);
-            $xml_laps = implode("\n", $xml_laps);
-            $laps     = parseLaps($xml_laps);
-            $timer->setMarker('Laps - End');
+                $timer->setMarker('Laps - Start');
+                exec('/usr/bin/fitdecode -l '.$upload['tmp_name'], $xml_laps);
+                $xml_laps = implode("\n", $xml_laps);
+                $laps     = parseLaps($xml_laps);
+                $timer->setMarker('Laps - End');
 
-            $lap_num = 1;
-            foreach($laps as $lap) {
-                $ftime = strptime($lap->start_time, '%FT%T%z');
-                $start_epoch = mktime($ftime['tm_hour'],
-                                      $ftime['tm_min'],
-                                      $ftime['tm_sec'],
-                                      1 ,
-                                      $ftime['tm_yday'] + 1,
-                                      $ftime['tm_year'] + 1900);
+                $lap_num = 1;
+                foreach($laps as $lap) {
+                    $ftime = strptime($lap->start_time, '%FT%T%z');
+                    $start_epoch = mktime($ftime['tm_hour'],
+                                          $ftime['tm_min'],
+                                          $ftime['tm_sec'],
+                                          1 ,
+                                          $ftime['tm_yday'] + 1,
+                                          $ftime['tm_year'] + 1900);
 
-                $lap_start    = $start_epoch    - $session_epoch;
-                $this->api->insertLap($session_timestamp,
-                                      $lap_num,
-                                      $lap_start,
-                                      $lap->start_position_lat,
-                                      $lap->start_position_long,
-                                      $lap->total_timer_time,
-                                      $lap->total_elapsed_time,
-                                      $lap->total_calories,
-                                      $lap->avg_heart_rate,
-                                      $lap->max_heart_rate,
-                                      $lap->avg_speed,
-                                      $lap->max_speed,
-                                      $lap->total_ascent,
-                                      $lap->total_descent,
-                                      $lap->total_distance);
-                $lap_num++;
+                    $lap_start    = $start_epoch    - $session_epoch;
+                    $this->api->insertLap($session_timestamp,
+                                          $lap_num,
+                                          $lap_start,
+                                          $lap->start_position_lat,
+                                          $lap->start_position_long,
+                                          $lap->total_timer_time,
+                                          $lap->total_elapsed_time,
+                                          $lap->total_calories,
+                                          $lap->avg_heart_rate,
+                                          $lap->max_heart_rate,
+                                          $lap->avg_speed,
+                                          $lap->max_speed,
+                                          $lap->total_ascent,
+                                          $lap->total_descent,
+                                          $lap->total_distance);
+                    $lap_num++;
+                }
+                //$timer->display();
+
+                $db->commit();
+                $UploadErrorString = "Session can be view here";
+                $UploadStatus      = "Success";
+            } catch (Exception $e) {
+                $db->rollback();
+                $UploadErrorString = "Failed to upload";
+                $e->getMessage();
             }
             //$timer->display();
         }
 
         $view = Core_View::factory('sessionsfileupload');
         $view->addForm($form);
+        $view->UploadErrorString = $UploadErrorString;
         $view->subTemplate = 'genericForm.tpl';
         echo $view->render();
     }
