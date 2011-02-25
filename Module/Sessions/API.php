@@ -21,7 +21,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class Module_Sessions_API extends Core_ModuleAPI {
+class Module_Sessions_API extends Core_ModuleAPI 
+{
 	static private $instance = null;
 	/**
 	 * Returns the singleton ModuleSessionsAPI
@@ -38,7 +39,8 @@ class Module_Sessions_API extends Core_ModuleAPI {
 		return self::$instance;
 	}
 	
-    function getSessions() {
+    function getSessions() 
+    {
         $db = Zend_Registry::get('db');
 
         $select = $db->select()
@@ -56,7 +58,8 @@ class Module_Sessions_API extends Core_ModuleAPI {
 
     function updateSession($session_date = "", $type_short = "", $description     = "",
                            $duration     = "", $distance   = "",   $avg_heartrate = "",
-                           $avg_speed    = "", $comment    = "") {
+                           $avg_speed    = "", $comment    = "") 
+    {
         $db = Zend_Registry::get('db');
 
         $db->update('t_exercise_totals',
@@ -75,41 +78,20 @@ class Module_Sessions_API extends Core_ModuleAPI {
     function createSession($session_date, $type_short, 
                            $description,  $duration, 
                            $distance,     $avg_heartrate, 
-                           $avg_speed,    $comment) {
-        $sql = 'INSERT INTO t_exercise_totals
-                   (session_date,
-                    type_short,
-                    description,
-                    duration,
-                    distance,
-                    avg_heartrate,
-                    avg_speed,
-                    comment,
-                    userid)
-                VALUES 
-                   (:session_date,
-                    :type_short,
-                    :description,
-                    :duration,
-                    :distance,
-                    :avg_heartrate,
-                    :avg_speed,
-                    :comment,
-                    :userid)';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+                           $avg_speed,    $comment) 
+    {
+        $db = Zend_Registry::get('db');
 
-        // TODO: Add the types
-        $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':type_short',    $type_short,   PDO::PARAM_STR);
-        $stmt->bindParam(':description',   $description,  PDO::PARAM_STR);
-        $stmt->bindParam(':duration',      $duration);
-        $stmt->bindParam(':distance',      $distance);
-        $stmt->bindParam(':avg_heartrate', $avg_heartrate);
-        $stmt->bindParam(':avg_speed',     $avg_speed);
-        $stmt->bindParam(':comment',       $comment,      PDO::PARAM_STR);
-        $stmt->bindParam(':userid',        Core_User::getUserId, PDO::PARAM_STR);
-
-        $stmt->execute();
+        $db->insert('t_exercise_totals',
+                array('session_date'  => $session_date,
+                      'type_short'    => $type_short,
+                      'description'   => $description,
+                      'duration'      => $duration,
+                      'distance'      => $distance,
+                      'avg_heartrate' => $avg_heartrate,
+                      'avg_speed'     => $avg_speed,
+                      'comment'       => $comment,
+                      'userid'        => Core_User::getUserId()));
     }
 
     function createSessionFull($session_date,  $type_short, 
@@ -118,56 +100,25 @@ class Module_Sessions_API extends Core_ModuleAPI {
                                $avg_heartrate, $max_heartrate,
                                $avg_speed,     $max_speed,
                                $total_ascent,  $total_descent,
-                               $comment) {
-        $sql = 'INSERT INTO t_exercise_totals
-                   (session_date,
-                    type_short,
-                    description,
-                    duration,
-                    distance,
-                    calories,
-                    avg_heartrate,
-                    max_heartrate,
-                    avg_speed,
-                    max_speed,
-                    total_ascent,
-                    total_descent,
-                    comment,
-                    userid)
-                VALUES 
-                   (:session_date,
-                    :type_short,
-                    :description,
-                    :duration,
-                    :distance,
-                    :calories,
-                    :avg_heartrate,
-                    :max_heartrate,
-                    :avg_speed,
-                    :max_speed,
-                    :total_ascent,
-                    :total_descent,
-                    :comment,
-                    :userid)';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+                               $comment) 
+    {
+        $db = Zend_Registry::get('db');
 
-        // TODO: Add the types
-        $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':type_short',    $type_short,   PDO::PARAM_STR);
-        $stmt->bindParam(':description',   $description,  PDO::PARAM_STR);
-        $stmt->bindParam(':duration',      $duration);
-        $stmt->bindParam(':distance',      $distance);
-        $stmt->bindParam(':calories',      $calories);
-        $stmt->bindParam(':avg_heartrate', $avg_heartrate);
-        $stmt->bindParam(':max_heartrate', $max_heartrate);
-        $stmt->bindParam(':avg_speed',     $avg_speed);
-        $stmt->bindParam(':max_speed',     $max_speed);
-        $stmt->bindParam(':total_ascent',  $total_ascent);
-        $stmt->bindParam(':total_descent', $total_descent);
-        $stmt->bindParam(':comment',       $comment,      PDO::PARAM_STR);
-        $stmt->bindParam(':userid',        Core_User::getUserId, PDO::PARAM_STR);
-
-        $stmt->execute();
+        $db->insert('t_exercise_totals',
+                array('session_date'  => $session_date,
+                      'type_short'    => $type_short,
+                      'description'   => $description,
+                      'duration'      => $duration,
+                      'distance'      => $distance,
+                      'calories'      => $calories,
+                      'avg_heartrate' => $avg_heartrate,
+                      'max_heartrate' => $max_heartrate,
+                      'avg_speed'     => $avg_speed,
+                      'max_speed'     => $max_speed,
+                      'total_ascent'  => $total_ascent,
+                      'total_descent' => $total_descent,
+                      'comment'       => $comment,
+                      'userid'        => Core_User::getUserId()));
     }
 
     function insertLap($session_date,  $lap_num,
@@ -178,124 +129,62 @@ class Module_Sessions_API extends Core_ModuleAPI {
                        $avg_heartrate, $max_heartrate,
                        $avg_speed,     $max_speed,
                        $total_ascent,  $total_descent,
-                       $distance) {
-        $sql = 'INSERT INTO t_exercise_laps
-                   (session_date,
-                    lap_num,
-                    start_time,
-                    start_pos_lat,
-                    start_pos_long,
-                    duration,
-                    total_duration,
-                    calories,
-                    distance,
-                    avg_heartrate,
-                    max_heartrate,
-                    avg_speed,
-                    max_speed,
-                    total_ascent,
-                    total_descent,
-                    userid)
-                VALUES 
-                   (:session_date,
-                    :lap_num,
-                    :start_time,
-                    :start_pos_lat,
-                    :start_pos_long,
-                    :duration,
-                    :total_duration,
-                    :calories,
-                    :distance,
-                    :avg_heartrate,
-                    :max_heartrate,
-                    :avg_speed,
-                    :max_speed,
-                    :total_ascent,
-                    :total_descent,
-                    :userid)';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+                       $distance) 
+    {
+        $db = Zend_Registry::get('db');
 
-        // TODO: Add the types
-        $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':lap_num',       $lap_num);
-        $stmt->bindParam(':start_time',    $start_time);
-        $stmt->bindParam(':start_pos_lat', $start_pos_lat);
-        $stmt->bindParam(':start_pos_long',$start_pos_long);
-        $stmt->bindParam(':duration',      $timer_duration);
-        $stmt->bindParam(':total_duration', $total_duration);
-        $stmt->bindParam(':calories',      $calories);
-        $stmt->bindParam(':distance',      $distance);
-        $stmt->bindParam(':avg_heartrate', $avg_heartrate);
-        $stmt->bindParam(':max_heartrate', $max_heartrate);
-        $stmt->bindParam(':avg_speed',     $avg_speed);
-        $stmt->bindParam(':max_speed',     $max_speed);
-        $stmt->bindParam(':total_ascent',  $total_ascent);
-        $stmt->bindParam(':total_descent', $total_descent);
-        $stmt->bindParam(':userid',        Core_User::getUserId, PDO::PARAM_STR);
-
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+        $db->insert('t_exercise_laps',
+                array('session_date'    => $session_date,
+                      'lap_num'         => $lap_num,
+                      'start_time'      => $start_time,
+                      'start_pos_lat'   => $start_pos_lat,
+                      'start_pos_long'  => $start_pos_long,
+                      'duration'        => $timer_duration,
+                      'total_duration'  => $total_duration,
+                      'calories'        => $calories,
+                      'distance'        => $distance,
+                      'avg_heartrate'   => $avg_heartrate,
+                      'max_heartrate'   => $max_heartrate,
+                      'avg_speed'       => $avg_speed,
+                      'max_speed'       => $max_speed,
+                      'total_ascent'    => $total_ascent,
+                      'total_descent'   => $total_descent,
+                      'userid'          => Core_User::getUserId()));
     }
 
 
-    function deleteSession($session_date) {
-        /* Start the changes */
-        $this->dbQueries->dbh->beginTransaction();
+    function deleteSession($session_date) 
+    {
+        $db = Zend_Registry::get('db');
 
-        /* Remove all the data points */
-        $sql = 'DELETE FROM t_exercise_data
-                WHERE
-                    session_date = :session_date AND
-                    userid       = :userid;';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $db->beginTransaction();
 
-        $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':userid',        Core_User::getUserId, PDO::PARAM_STR);
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
-        
-        /* Delete all the laps */
-        $sql = 'DELETE FROM t_exercise_laps
-                WHERE
-                    session_date = :session_date AND
-                    userid       = :userid;';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+        try {
+            $where = array('session_date = \''.$session_date.'\'',
+                           'userid       = \''.Core_User::getUserId().'\'');
 
-        $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':userid',        Core_User::getUserId, PDO::PARAM_STR);
-        $stmt->execute() or die("Unable to execute $sql");
+            /* Delete all different data associated with the session */
+            $db->delete('t_exercise_data',   $where);
+            $db->delete('t_exercise_laps',   $where);
+            $db->delete('t_climbs_data',     $where);
+            $db->delete('t_exercise_totals', $where);
 
-        /* Delete all the climbs */
-        $sql = 'DELETE FROM t_climbs_data
-                WHERE
-                    session_date = :session_date AND
-                    userid       = :userid;';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-
-        $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':userid',        Core_User::getUserId, PDO::PARAM_STR);
-        $stmt->execute() or die("Unable to execute $sql");
-
-        /* Remove the session totals */
-        $sql = 'DELETE FROM t_exercise_totals
-                WHERE
-                    session_date = :session_date AND
-                    userid       = :userid;';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-
-        $stmt->bindParam(':session_date',  $session_date);
-        $stmt->bindParam(':userid',        Core_User::getUserId, PDO::PARAM_STR);
-
-        $stmt->execute() or die("Unable to execute $sql");
-
-        /* Finalise */
-        $this->dbQueries->dbh->commit();
+            $db->commit();
+        } catch (Exception $e) {
+            $db->rollback();
+            $e->getMessage();
+        }
     }
 
     function insertAllSessionData($session_date, $records) 
     {
+        $db = Zend_Registry::get('db');
+
         $i = 0;
         $max_inserts = 9999;
 
         for ($rows = 0; $rows < count($records); $rows += $max_inserts) {
+            $values = array();
             $sql = 'INSERT INTO t_exercise_data
                        (session_date,
                         time,
@@ -331,47 +220,43 @@ class Module_Sessions_API extends Core_ModuleAPI {
                           :power'       .$i.',
                           :gradient'    .$i.',
                           :userid) ';
+
+                $values[':time'.       $i] = $records[$i+$rows]->interval;
+                $values[':distance'.   $i] = $records[$i+$rows]->distance;
+                $values[':heartrate'.  $i] = $records[$i+$rows]->heart_rate;
+                $values[':speed'.      $i] = $records[$i+$rows]->speed;
+                $values[':latitude'.   $i] = $records[$i+$rows]->position_lat;
+                $values[':longitude'.  $i] = $records[$i+$rows]->position_long;
+                $values[':altitude'.   $i] = $records[$i+$rows]->altitude;
+                $values[':cadence'.    $i] = $records[$i+$rows]->cadence;
+                $values[':temperature'.$i] = $records[$i+$rows]->temperature;
+                $values[':power'.      $i] = $records[$i+$rows]->power;
+                $values[':gradient'.   $i] = $records[$i+$rows]->gradient;
             }
 
-            $stmt = $this->dbQueries->dbh->prepare($sql);
+            //$stmt = new Zend_Db_Statement($db, $sql);
+            $stmt = new Zend_Db_Statement_Pdo($db, $sql);
 
             /* Add the constant values for all rows */
-            $stmt->bindParam(':session_date',  $session_date);
-            $stmt->bindParam(':userid',        Core_User::getUserId, PDO::PARAM_STR);
+            $values[':session_date'] = $session_date;
+            $values[':userid']       = Core_User::getUserId();
 
-            /* Now places the values in */
-            for ($i = 0; ($i < $max_inserts) && 
-                         ($i + $rows < count($records)); $i++) {
-                $stmt->bindParam(':time'.$i,        $records[$i+$rows]->interval);
-                $stmt->bindParam(':distance'.$i,    $records[$i+$rows]->distance);
-                $stmt->bindParam(':heartrate'.$i,   $records[$i+$rows]->heart_rate);
-                $stmt->bindParam(':speed'.$i,       $records[$i+$rows]->speed);
-                $stmt->bindParam(':latitude'.$i,    $records[$i+$rows]->position_lat);
-                $stmt->bindParam(':longitude'.$i,   $records[$i+$rows]->position_long);
-                $stmt->bindParam(':altitude'.$i,    $records[$i+$rows]->altitude);
-                $stmt->bindParam(':cadence'.$i,     $records[$i+$rows]->cadence);
-                $stmt->bindParam(':temperature'.$i, $records[$i+$rows]->temperature);
-                $stmt->bindParam(':power'.$i,       $records[$i+$rows]->power);
-                $stmt->bindParam(':gradient'.$i,    $records[$i+$rows]->gradient);
-            }
-
-            $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+            $stmt->execute($values);
         }
     }
 
     function getTrainingTypes() 
     {
-        $sql = 'SELECT 
-                    type_short,
-                    type
-                FROM 
-                    t_training_types
-                ORDER BY
-                    type_short';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+        $db = Zend_Registry::get('db');
 
-        $types = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $select = $db->select()
+                     ->from('t_training_types',
+                             array('type_short',
+                                   'type'))
+                     ->order('type_short');
+
+        $stmt = $db->query($select);
+        $types =  $stmt->fetchAll();
 
         /* Convert into a nice display table */
         $exercise_types = array();
@@ -383,35 +268,34 @@ class Module_Sessions_API extends Core_ModuleAPI {
         return $exercise_types;
     }
 
-    function getSessionTypes() {
-        $sql = 'SELECT 
-                    total_type,
-                FROM 
-                    t_exercise_total_types
-                ORDER BY
-                    total_type';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+    function getSessionTypes() 
+    {
+        $db = Zend_Registry::get('db');
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $select = $db->select()
+                     ->from('t_exercise_total_types',
+                             array('total_type'))
+                     ->order('total_type');
+        $stmt = $db->query($select);
+        return $stmt->fetchAll();
     }
 
-    function getClimbCategories() {
-        $sql = 'SELECT 
-                    rank,
-                    category,
-                    cat,
-                    min_gradient,
-                    min_distance,
-                    min_height
-                FROM 
-                    t_climbs_categories
-                ORDER BY
-                    rank DESC';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+    function getClimbCategories() 
+    {
+        $db = Zend_Registry::get('db');
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $select = $db->select()
+                     ->from('t_climbs_categories',
+                             array('rank',
+                                   'category',
+                                   'cat',
+                                   'min_gradient',
+                                   'min_distance',
+                                   'min_height'))
+                     ->order('rank DESC');
+
+        $stmt = $db->query($select);
+        return $stmt->fetchAll();
     }
 
     function insertClimb($session_date,   $climb_num,
@@ -420,73 +304,40 @@ class Module_Sessions_API extends Core_ModuleAPI {
                          $total_distance, $total_climbed,
                          $min_altitude,   $max_altitude)
     {
-        $sql = 'INSERT INTO t_climbs_data
-                   (session_date,
-                    climb_num,
-                    bottom,
-                    top,
-                    gradient_avg,
-                    gradient_max,
-                    total_distance,
-                    total_climbed,
-                    min_altitude,
-                    max_altitude,
-                    userid)
-                VALUES 
-                   (:session_date,
-                    :climb_num,
-                    :bottom,
-                    :top,
-                    :gradient_avg,
-                    :gradient_max,
-                    :total_distance,
-                    :total_climbed,
-                    :min_altitude,
-                    :max_altitude,
-                    :userid)';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $db = Zend_Registry::get('db');
 
-        // TODO: Add the types
-        $stmt->bindParam(':session_date',   $session_date);
-        $stmt->bindParam(':climb_num',      $climb_num);
-        $stmt->bindParam(':bottom',         $bottom);
-        $stmt->bindParam(':top',            $top);
-        $stmt->bindParam(':gradient_avg',   $gradient_avg);
-        $stmt->bindParam(':gradient_max',   $gradient_max);
-        $stmt->bindParam(':total_distance', $total_distance);
-        $stmt->bindParam(':total_climbed',  $total_climbed);
-        $stmt->bindParam(':min_altitude',   $min_altitude);
-        $stmt->bindParam(':max_altitude',   $max_altitude);
-        $stmt->bindParam(':userid',        Core_User::getUserId, PDO::PARAM_STR);
-
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+        $db->insert('t_climbs_data',
+                array('session_date'   => $session_date,
+                      'climb_num'      => $climb_num,
+                      'bottom'         => $bottom,
+                      'top'            => $top,
+                      'gradient_avg'   => $gradient_avg,
+                      'gradient_max'   => $gradient_max,
+                      'total_distance' => $total_distance,
+                      'total_climbed'  => $total_climbed,
+                      'min_altitude'   => $min_altitude,
+                      'max_altitude'   => $max_altitude,
+                      'userid'         => Core_User::getUserId()));
     }
 
-    function getClimbs() {
-        $sql = 'SELECT 
-                    userid,
-                    session_date,
-                    climb_num,
-                    name,
-                    description,
-                    \'0\' AS duration,
-                    \'0\' AS distance
-                FROM 
-                    v_climbs_details
-                WHERE
-                    userid = :userid
-                ORDER BY
-                    climb_num ASC';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+    function getClimbs() 
+    {
+        $db = Zend_Registry::get('db');
 
-        $stmt->bindParam(':userid', Core_User::getUserId, PDO::PARAM_STR);
-
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $select = $db->select()
+                     ->from('v_climbs_details',
+                             array('userid',
+                                   'session_date',
+                                   'climb_num',
+                                   'name',
+                                   'description',
+                                   'name AS duration',
+                                   'name AS distance'))
+                     ->where('userid = ?', Core_User::getUserId())
+                     ->order('climb_num ASC');
+        $stmt = $db->query($select);
+        return $stmt->fetchAll();
     }
-
-
 
     function getPower($gradient,       $temperature, 
                       $altitude,       $velocity,
