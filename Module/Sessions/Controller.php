@@ -96,7 +96,7 @@ class Module_Sessions_Controller extends Core_Controller
         $form = new SessionUploadForm();
 
         $UploadErrorString = "";
-        $UploadStatus      = "Error"
+        $UploadStatus      = "Error";
 
         if ($form->validate()) {
             $timer = new Benchmark_Timer();
