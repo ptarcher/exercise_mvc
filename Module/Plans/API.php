@@ -39,119 +39,80 @@ class Module_Plans_API extends Core_ModuleAPI {
 	}
 
     /* Weekly functoins */
-    function getWeeklyPlans() {
-        $sql = 'SELECT
-                    userid,
-                    week_date,
-                    period,
-                    description,
-                    "comment"
-                FROM 
-                    t_exercise_plans_weekly
-                WHERE 
-                    userid = :userid
-                ORDER BY
-                    week_date DESC';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+    function getWeeklyPlans() 
+    {
+        $db = Zend_Registry::get('db');
 
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':userid', $user->userid, PDO::PARAM_STR);
+        $select = $db->select()
+                     ->from('t_exercise_plans_weekly',
+                             array('userid',
+                                 'week_date',
+                                 'period',
+                                 'description',
+                                 'comment'))
+                     ->where('userid = ?', Core_User::getUserId())
+                     ->order('week_date DESC');
+        $stmt = $db->query($select);
 
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 
-    function createWeeklyPlan($week_date, $period, $description, $comment) {
-        $sql = 'INSERT INTO t_exercise_plans_weekly
-                   (userid,
-                    week_date,
-                    period,
-                    description,
-                    "comment")
-                VALUES
-                   (:userid,
-                    :week_date,
-                    :period,
-                    :description,
-                    :comment);';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+    function createWeeklyPlan($week_date, $period, $description, $comment) 
+    {
+        $db = Zend_Registry::get('db');
 
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':week_date',   $week_date);
-        $stmt->bindParam(':period',      $period,       PDO::PARAM_STR);
-        $stmt->bindParam(':description', $description,  PDO::PARAM_STR);
-        $stmt->bindParam(':comment',     $comemnt,      PDO::PARAM_STR);
-        $stmt->bindParam(':userid',      $user->userid, PDO::PARAM_STR);
-
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+        $db->insert('t_exercise_plans_weekly',
+                array('userid'      => Core_User::getUserId(),
+                      'week_date'   => $week_date,
+                      'period'      => $period,
+                      'description' => $description,
+                      '"comment"'   => $comment));
     }
 
-    function updateWeeklyPlan($week_date, $period, $description, $comment) {
-        $sql = 'UPDATE t_exercise_plans_weekly
-                SET
-                    period      = :period,
-                    description = :description,
-                    "comment"   = :comment
-                WHERE 
-                    userid      = :userid    AND
-                    week_date   = :week_date;';
+    function updateWeeklyPlan($week_date, $period, $description, $comment) 
+    {
+        $db = Zend_Registry::get('db');
 
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':week_date',   $week_date);
-        $stmt->bindParam(':period',      $period,       PDO::PARAM_STR);
-        $stmt->bindParam(':description', $description,  PDO::PARAM_STR);
-        $stmt->bindParam(':comment',     $comemnt,      PDO::PARAM_STR);
-        $stmt->bindParam(':userid',      $user->userid, PDO::PARAM_STR);
-
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+        $db->update('t_exercise_plans_weekly',
+                array('period'      => $period,
+                      'description' => $description,
+                      '"comment"'   => $comment),
+                array('userid    = \''.Core_User::getUserId().'\'',
+                      'week_date = \''.$weel_date.'\''));
     }
 
-    function deleteWeeklyPlan($week_date) {
-        $sql = 'DELETE FROM t_exercise_plans_weekly
-                WHERE
-                   userid    = :userid    AND
-                   week_date = :week_date;';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+    function deleteWeeklyPlan($week_date) 
+    {
+        $db = Zend_Registry::get('db');
 
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':week_date',   $week_date);
-        $stmt->bindParam(':userid',      $user->userid, PDO::PARAM_STR);
-
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+        $db->delete('t_exercise_plans_weekly',
+                array('userid    = \''.Core_User::getUserId().'\'',
+                      'week_date = \''.$week_date.'\''));
     }
 
     /* Daily functoins */
-    function getDailyPlans($week_date) {
-        $sql = 'SELECT 
-                    userid,
-                    week_date,
-                    timestamp,
-                    category,
-                    description,
-                    volume    * 100 AS volume,
-                    intensity * 100 AS intensity,
-                    duration,
-                    focus,
-                    comment
-                FROM 
-                    t_exercise_plans_daily
-                WHERE 
-                    userid    = :userid AND
-                    week_date = :week_date
-                ORDER BY
-                    timestamp DESC';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+    function getDailyPlans($week_date) 
+    {
+        $db = Zend_Registry::get('db');
 
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':week_date', $week_date);
-        $stmt->bindParam(':userid',    $user->userid, PDO::PARAM_STR);
+        $select = $db->select()
+                     ->from('t_exercise_plans_daily',
+                             array('userid',
+                                   'week_date',
+                                   'timestamp',
+                                   'category',
+                                   'description',
+                                   '(volume    * 100) AS volume',
+                                   '(intensity * 100) AS intensity',
+                                   'duration',
+                                   'focus',
+                                   'comment'))
+                     ->where('userid = ? AND week_date = ?',
+                             Core_User::getUserId(), $week_date)
+                     ->order('timestamp DESC');
+        $stmt = $db->query($select);
 
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 
     function addDailyPlan($week_date,   $timestamp,
@@ -160,43 +121,19 @@ class Module_Plans_API extends Core_ModuleAPI {
                           $comment,     $volume,
                           $intensity) 
     {
-        $sql = 'INSERT INTO t_exercise_plans_daily
-                   (userid,
-                    week_date,
-                    timestamp,
-                    category,
-                    description,
-                    volume,
-                    intensity,
-                    duration,
-                    focus,
-                    comment)
-                VALUES
-                   (:userid,
-                    :week_date,
-                    :timestamp,
-                    :category,
-                    :description,
-                    :volume,
-                    :intensity,
-                    :duration,
-                    :focus,
-                    :comment);';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $db = Zend_Registry::get('db');
 
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':userid',      $user->userid, PDO::PARAM_STR);
-        $stmt->bindParam(':week_date',   $week_date);
-        $stmt->bindParam(':timestamp',   $timestamp,    PDO::PARAM_STR);
-        $stmt->bindParam(':category',    $category,     PDO::PARAM_STR);
-        $stmt->bindParam(':description', $description,  PDO::PARAM_STR);
-        $stmt->bindParam(':volume',      $volume,       PDO::PARAM_STR);
-        $stmt->bindParam(':intensity',   $intensity,    PDO::PARAM_STR);
-        $stmt->bindParam(':duration',    $duration,     PDO::PARAM_STR);
-        $stmt->bindParam(':focus',       $focus,        PDO::PARAM_STR);
-        $stmt->bindParam(':comment',     $comemnt,      PDO::PARAM_STR);
-
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+        $db->insert('t_exercise_plans_daily',
+                array('userid'      => Core_User::getUserId(),
+                      'week_date'   => $week_date,
+                      'timestamp'   => $timestamp,
+                      'category'    => $category,
+                      'description' => $description,
+                      'volume'      => $volume,
+                      'intensity'   => $intensity,
+                      'duration'    => $duration,
+                      'focus'       => $focus,
+                      'comment'     => $comment));
     }
 }
 
