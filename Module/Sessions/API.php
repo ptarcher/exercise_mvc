@@ -277,6 +277,7 @@ class Module_Sessions_API extends Core_ModuleAPI
                              array('total_type'))
                      ->order('total_type');
         $stmt = $db->query($select);
+
         return $stmt->fetchAll();
     }
 
@@ -293,8 +294,8 @@ class Module_Sessions_API extends Core_ModuleAPI
                                    'min_distance',
                                    'min_height'))
                      ->order('rank DESC');
-
         $stmt = $db->query($select);
+
         return $stmt->fetchAll();
     }
 
@@ -336,6 +337,7 @@ class Module_Sessions_API extends Core_ModuleAPI
                      ->where('userid = ?', Core_User::getUserId())
                      ->order('climb_num ASC');
         $stmt = $db->query($select);
+
         return $stmt->fetchAll();
     }
 
