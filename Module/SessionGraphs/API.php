@@ -39,7 +39,6 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
 	}
 	
     function getSessionDataField($session_date, $field, $min_time = NULL, $max_time = NULL) 
-    //function getSessionDataField($session_date, $field) 
     {
         $valid_fields = array('distance','speed','heartrate',
                               'altitude','power','temperature',
@@ -49,41 +48,25 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
         if (!in_array($field, $valid_fields)) {
             return;
         }
+        $db = Zend_Registry::get('db');
 
-    	// Get time in seconds since the start of the session
-        $sql = 'SELECT 
-                    (extract(EPOCH from "time") * 1000) AS "time",
-                    '.$field.'
-                FROM 
-                    t_exercise_data
-                WHERE 
-                    userid       = :userid  AND
-                    session_date = :session_date ';
+        $select = $db->select()
+                     ->from('t_exercise_data',
+                             array('(extract(EPOCH from "time")*1000) AS time',
+                                   $field))
+                     ->where('userid = ? AND session_date = ?',
+                             Core_User::getUserId(), $session_date)
+                     ->order('time DESC');
         if (!is_null($min_time)) {
-            $sql .= 'AND "time" >= :min_time ';
+            $select->where('time >= ?', $min_time);
         }
         if (!is_null($max_time)) {
-            $sql .= 'AND "time" <= :max_time ';
+            $select->where('time <= ?', $max_time);
         }
-        $sql .= 'ORDER BY
-                    "time"     DESC';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
-        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
-
-        if (!is_null($min_time)) {
-            $stmt->bindParam(':min_time', $min_time, PDO::PARAM_STR);
-        }
-        if (!is_null($max_time)) {
-            $stmt->bindParam(':max_time', $max_time, PDO::PARAM_STR);
-        }
-
-        $stmt->execute();
+        $stmt = $db->query($select);
 
         /* TODO: Do this in a more generic way */
-        $data = $stmt->fetchAll(PDO::FETCH_NUM);
+        $data = $stmt->fetchAll();
         $rows = array();
         foreach ($data as $row) {
             for ($i = 0; $i < count($row); $i++) {
@@ -96,233 +79,168 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
 
     function getGPXData($session_date, $min_time = null, $max_time = null) 
     {
-    	// Get time in seconds since the start of the session
-        $sql = 'SELECT 
-                    latitude as lat,
-                    longitude as lon
-                FROM 
-                    t_exercise_data
-                WHERE 
-                    userid       = :userid  AND
-                    session_date = :session_date ';
-        if (!is_null($min_time)) {
-            $sql .= 'AND "time" >= :min_time ';
-        }
-        if (!is_null($max_time)) {
-            $sql .= 'AND "time" <= :max_time ';
-        }
-        $sql .= 'ORDER BY
-                    "time"     DESC';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $db = Zend_Registry::get('db');
 
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
-        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
+        $select = $db->select()
+                     ->from('t_exercise_data',
+                             array('latitude as lat',
+                                   'longitude as lon'))
+                     ->where('userid = ? AND session_date = ?',
+                             Core_User::getUserId(), $session_date)
+                     ->order('time DESC');
 
         if (!is_null($min_time)) {
-            $stmt->bindParam(':min_time', $min_time, PDO::PARAM_STR);
+            $select->where('time >= ?', $min_time);
         }
         if (!is_null($max_time)) {
-            $stmt->bindParam(':max_time', $max_time, PDO::PARAM_STR);
+            $select->where('time <= ?', $max_time);
         }
+        $stmt = $db->query($select);
 
-        $stmt->execute();
-
-        return $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 
     function getSession($session_date) 
     {
-        $sql = 'SELECT
-                    userid,
-                    session_date,
-                    type_short,
-                    description,
-                    duration,
-                    distance,
-                    avg_heartrate,
-                    max_heartrate,
-                    avg_heartrate_percent,
-                    max_heartrate_percent,
-                    avg_speed,
-                    max_speed,
-                    calories,
-                    total_ascent,
-                    total_descent,
-                    comment
-                FROM 
-                    v_exercise_totals
-                WHERE 
-                    userid =       :userid       AND
-                    session_date = :session_date
-                ORDER BY
-                    session_date DESC';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $db = Zend_Registry::get('db');
 
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
-        $stmt->bindParam(':session_date', $session_date);
+        $select = $db->select()
+                     ->from('v_exercise_totals',
+                             array('userid',
+                                   'session_date',
+                                   'type_short',
+                                   'description',
+                                   'duration',
+                                   'distance',
+                                   'avg_heartrate',
+                                   'max_heartrate',
+                                   'avg_heartrate_percent',
+                                   'max_heartrate_percent',
+                                   'avg_speed',
+                                   'max_speed',
+                                   'calories',
+                                   'total_ascent',
+                                   'total_descent',
+                                   'comment'))
+                     ->where('userid = ? AND session_date = ?',
+                             Core_User::getUserId(), $session_date);
+        $stmt = $db->query($select);
 
-        $stmt->execute();
-
-        $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if (is_array($sessions)) {
-            return $sessions[0];
-        } else {
-            return array();
-        }
+        return $stmt->fetchRow(0);
     }
 
     function getLaps($session_date) 
     {
-        $sql = 'SELECT
-                    userid,
-                    session_date,
-                    lap_num,
-                    start_time,
-                    start_time + total_duration AS end_time,
-                    start_pos_lat,
-                    start_pos_long,
-                    duration,
-                    calories,
-                    distance,
-                    avg_heartrate,
-                    max_heartrate,
-                    avg_speed,
-                    max_speed,
-                    total_ascent,
-                    total_descent
-                FROM 
-                    t_exercise_laps
-                WHERE 
-                    userid       = :userid       AND
-                    session_date = :session_date
-                ORDER BY
-                    lap_num ASC';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $db = Zend_Registry::get('db');
 
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
-        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
+        $select = $db->select()
+                     ->from('t_exercise_laps',
+                             array('userid',
+                                   'session_date',
+                                   'lap_num',
+                                   'start_time',
+                                   '(start_time + total_duration) AS end_time',
+                                   'start_pos_lat',
+                                   'start_pos_long',
+                                   'duration',
+                                   'calories',
+                                   'distance',
+                                   'avg_heartrate',
+                                   'max_heartrate',
+                                   'avg_speed',
+                                   'max_speed',
+                                   'total_ascent'))
+                     ->where('userid = ? AND session_date = ?',
+                             Core_User::getUserId(), $session_date)
+                     ->order('lap_num ASC');
+        $stmt = $db->query($select);
 
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 
     function getZones($session_date, $min_time = NULL, $max_time = NULL) 
     {
-        $sql = 'SELECT
-                    userid,
-                    zone,
-                    SUM(length) as length
-                FROM 
-                    v_exercise_data
-                WHERE 
-                    userid       = :userid       AND
-                    session_date = :session_date ';
+        $db = Zend_Registry::get('db');
+
+        $select = $db->select()
+                     ->from('v_exercise_data',
+                             array('userid',
+                                   'zone',
+                                   'SUM(length) AS length'))
+                     ->where('userid = ? AND session_date = ?',
+                             Core_User::getUserId(), $session_date)
+                     ->group('zone, userid')
+                     ->order('zone ASC');
         if (!is_null($min_time)) {
-            $sql .= 'AND "time" >= :min_time ';
+            $select->where('time >= ?', $min_time);
         }
         if (!is_null($max_time)) {
-            $sql .= 'AND "time" <= :max_time ';
-        }
-        $sql .= 'GROUP BY
-                    zone, userid
-                ORDER BY
-                    zone ASC';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
-        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
-
-        if (!is_null($min_time)) {
-            $stmt->bindParam(':min_time', $min_time, PDO::PARAM_STR);
-        }
-        if (!is_null($max_time)) {
-            $stmt->bindParam(':max_time', $max_time, PDO::PARAM_STR);
+            $select->where('time <= ?', $max_time);
         }
 
-        $stmt->execute() or die(print_r($this->dbQueries->dbh->errorInfo(), true));
+        $stmt = $db->query($select);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 
     function getClimbs($session_date) 
     {
-        $sql = 'SELECT
-                    userid,
-                    session_date,
-                    climb_num,
-                    cat AS category,
-                    top - bottom AS duration,
-                    total_distance,
-                    total_climbed,
-                    gradient_avg,
-                    gradient_max,
-                    min_altitude,
-                    max_altitude
-                FROM 
-                    v_climbs_data
-                WHERE 
-                    userid       = :userid       AND
-                    session_date = :session_date
-                ORDER BY
-                    climb_num';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $db = Zend_Registry::get('db');
 
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
-        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
+        $select = $db->select()
+                     ->from('v_climbs_data',
+                             array('userid',
+                                   'session_date',
+                                   'climb_num',
+                                   'cat AS category',
+                                   '(top - bottom) AS duration',
+                                   'total_distance',
+                                   'total_climbed',
+                                   'gradient_avg',
+                                   'gradient_max',
+                                   'min_altitude',
+                                   'max_altitude'))
+                     ->where('userid = ? AND session_date = ?',
+                             Core_User::getUserId(), $session_date)
+                     ->order('climb_num');
+        $stmt = $db->query($select);
 
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 
     function getClimb($session_date, $climb_num) 
     {
-        $sql = 'SELECT
-                    userid,
-                    session_date,
-                    climb_num,
-                    cat AS category,
-                    top,
-                    bottom,
-                    total_distance,
-                    total_climbed,
-                    gradient_avg,
-                    gradient_max,
-                    min_altitude,
-                    max_altitude
-                FROM 
-                    v_climbs_data
-                WHERE 
-                    userid       = :userid       AND
-                    session_date = :session_date AND
-                    climb_num    = :climb_num';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
+        $db = Zend_Registry::get('db');
 
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
-        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
-        $stmt->bindParam(':climb_num',    $climb_num,    PDO::PARAM_INT);
+        $select = $db->select()
+                     ->from('v_climbs_data',
+                             array('userid',
+                                   'session_date',
+                                   'climb_num',
+                                   'cat AS category',
+                                   'top',
+                                   'bottom',
+                                   'total_distance',
+                                   'total_climbed',
+                                   'gradient_avg',
+                                   'gradient_max',
+                                   'min_altitude',
+                                   'max_altitude'))
+                     ->where('userid       = ? AND 
+                              session_date = ? AND 
+                              climb_num    = ?',
+                             Core_User::getUserId(), 
+                             $session_date,
+                             $climb_num);
+        $stmt = $db->query($select);
 
-        $stmt->execute();
-
-        $climbs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if (is_array($climbs)) {
-            return $climbs[0];
-        } else {
-            return array();
-        }
+        return $stmt->fetchRow();
     }
 
     function getGPXClimbData($session_date, $climb_num) 
     {
+        $db = Zend_Registry::get('db');
+
         $sql = 'SELECT 
                     latitude  AS lat,
                     longitude AS lon
