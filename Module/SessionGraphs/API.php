@@ -126,7 +126,8 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                      ->where('session_date = ?', $session_date);
         $stmt = $db->query($select);
 
-        return $stmt->fetchRow(0);
+        $sessions = $stmt->fetchAll();
+        return $sessions[0];
     }
 
     function getLaps($session_date) 
@@ -151,7 +152,7 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                                    'max_speed',
                                    'total_ascent'))
                      ->where('userid = ?', Core_User::getUserId())
-                     ->where('session_date = ?', $session_date);
+                     ->where('session_date = ?', $session_date)
                      ->order('lap_num ASC');
         $stmt = $db->query($select);
 
@@ -163,13 +164,14 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
         $db = Zend_Registry::get('db');
 
         $select = $db->select()
-                     ->from('v_exercise_data',
+                     ->from(array('data' => 'v_exercise_data'),
                              array('userid',
                                    'zone',
                                    'SUM(length) AS length'))
-                     ->where('userid = ?', Core_User::getUserId())
-                     ->where('session_date = ?', $session_date);
-                     ->group('zone, userid')
+                     ->where('userid       = ?', Core_User::getUserId())
+                     ->where('session_date = ?', $session_date)
+                     ->group('zone')
+                     ->group('userid')
                      ->order('zone ASC');
         if (!is_null($min_time)) {
             $select->where('time >= ?', $min_time);
@@ -201,7 +203,7 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                                    'min_altitude',
                                    'max_altitude'))
                      ->where('userid = ?', Core_User::getUserId())
-                     ->where('session_date = ?', $session_date);
+                     ->where('session_date = ?', $session_date)
                      ->order('climb_num');
         $stmt = $db->query($select);
 
@@ -231,7 +233,8 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                      ->where('climb_num    = ?', $climb_num);
         $stmt = $db->query($select);
 
-        return $stmt->fetchRow();
+        $climbs = $stmt->fetchAll();
+        return $climbs[0];
     }
 
     function getGPXClimbData($session_date, $climb_num) 
