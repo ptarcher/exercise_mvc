@@ -122,8 +122,8 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                                    'total_ascent',
                                    'total_descent',
                                    'comment'))
-                     ->where('userid = ? AND session_date = ?',
-                             Core_User::getUserId(), $session_date);
+                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('session_date = ?', $session_date);
         $stmt = $db->query($select);
 
         return $stmt->fetchRow(0);
@@ -150,8 +150,8 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                                    'avg_speed',
                                    'max_speed',
                                    'total_ascent'))
-                     ->where('userid = ? AND session_date = ?',
-                             Core_User::getUserId(), $session_date)
+                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('session_date = ?', $session_date);
                      ->order('lap_num ASC');
         $stmt = $db->query($select);
 
@@ -167,8 +167,8 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                              array('userid',
                                    'zone',
                                    'SUM(length) AS length'))
-                     ->where('userid = ? AND session_date = ?',
-                             Core_User::getUserId(), $session_date)
+                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('session_date = ?', $session_date);
                      ->group('zone, userid')
                      ->order('zone ASC');
         if (!is_null($min_time)) {
@@ -200,8 +200,8 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                                    'gradient_max',
                                    'min_altitude',
                                    'max_altitude'))
-                     ->where('userid = ? AND session_date = ?',
-                             Core_User::getUserId(), $session_date)
+                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('session_date = ?', $session_date);
                      ->order('climb_num');
         $stmt = $db->query($select);
 
@@ -226,12 +226,9 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                                    'gradient_max',
                                    'min_altitude',
                                    'max_altitude'))
-                     ->where('userid       = ? AND 
-                              session_date = ? AND 
-                              climb_num    = ?',
-                             Core_User::getUserId(), 
-                             $session_date,
-                             $climb_num);
+                     ->where('userid       = ?', Core_User::getUserId())
+                     ->where('session_date = ?', $session_date)
+                     ->where('climb_num    = ?', $climb_num);
         $stmt = $db->query($select);
 
         return $stmt->fetchRow();
