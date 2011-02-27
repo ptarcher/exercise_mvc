@@ -69,9 +69,8 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
         $data = $stmt->fetchAll();
         $rows = array();
         foreach ($data as $row) {
-            for ($i = 0; $i < count($row); $i++) {
-                $myrow[$i] = doubleval($row[$i]);
-            }
+            $myrow['timestamp'] = doubleval($row['timestamp']);
+            $myrow[$field]      = doubleval($row[$field]);
             $rows[] = $myrow;
         }
         return $rows;
