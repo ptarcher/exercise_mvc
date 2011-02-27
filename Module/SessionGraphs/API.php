@@ -54,8 +54,8 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                      ->from('t_exercise_data',
                              array('(extract(EPOCH from "time")*1000) AS time',
                                    $field))
-                     ->where('userid = ? AND session_date = ?',
-                             Core_User::getUserId(), $session_date)
+                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('session_date = ?', $session_date)
                      ->order('time DESC');
         if (!is_null($min_time)) {
             $select->where('time >= ?', $min_time);
@@ -85,8 +85,8 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                      ->from('t_exercise_data',
                              array('latitude as lat',
                                    'longitude as lon'))
-                     ->where('userid = ? AND session_date = ?',
-                             Core_User::getUserId(), $session_date)
+                     ->where('userid       = ?', Core_User::getUserId())
+                     ->where('session_date = ?', $session_date)
                      ->order('time DESC');
 
         if (!is_null($min_time)) {
