@@ -50,6 +50,7 @@ class Module_Plans_Controller extends Core_Controller
         $weekly_plans = $this->api->getWeeklyPlans();
         $view = Core_View::factory('plans');
         $view->plans = $weekly_plans;
+        $view->coach = $_SESSION['coach'];
 
         echo $view->render();
     }
@@ -62,6 +63,7 @@ class Module_Plans_Controller extends Core_Controller
         $view = Core_View::factory('daily');
         $view->plans     = $daily_plans;
         $view->week_date = $week_date;
+        $view->coach     = $_SESSION['coach'];
 
         echo $view->render();
     }

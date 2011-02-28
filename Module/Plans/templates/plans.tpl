@@ -47,7 +47,7 @@
         <td id="date"><input type="hidden" id="week_date" value="{$plan.week_date}" /><a href="{url module=Plans action=viewDaily week_date=$plan.week_date|escape:url}">{$plan.week_date}</a></td>
         <td id="period"      class="editable">{$plan.period}</td>
         <td id="description" class="editable">{$plan.description}</td>       
-        <td id="comment"     class="editable">{$plan.comments}</td>       
+        <td id="comment"     class="editable">{$plan.comment}</td>       
         <td><center><img src="themes/default/images/edit.png"   class="editPlan"   id="row{$i}" alt="" /></center></td>
         <td><center><img src="themes/default/images/remove.png" class="deletePlan" id="row{$i}" alt="" /></center></td>
     </tr>
