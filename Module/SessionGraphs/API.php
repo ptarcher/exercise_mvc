@@ -235,43 +235,6 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
         $climbs = $stmt->fetchAll();
         return $climbs[0];
     }
-
-    function getGPXClimbData($session_date, $climb_num) 
-    {
-        $db = Zend_Registry::get('db');
-
-        $sql = 'SELECT 
-                    latitude  AS lat,
-                    longitude AS lon
-                FROM 
-                    t_exercise_data exercise,
-                    (SELECT 
-                         *
-                     FROM
-                         t_climbs_data
-                     WHERE
-                         userid       = :userid       AND
-                         session_date = :session_date AND
-                         climb_num    = :climb_num) climb
-                WHERE 
-                    exercise.userid        = :userid       AND
-                    exercise.session_date  = :session_date AND
-                    exercise.time         >= climb.bottom  AND
-                    exercise.time         <= climb.top
-                ORDER BY
-                    "time"     DESC;';
-        $stmt = $this->dbQueries->dbh->prepare($sql);
-
-        $user = new Zend_Session_Namespace('user');
-        $stmt->bindParam(':userid',       $user->userid, PDO::PARAM_STR);
-        $stmt->bindParam(':session_date', $session_date, PDO::PARAM_STR);
-        $stmt->bindParam(':climb_num',    $climb_num,    PDO::PARAM_INT);
-
-        $stmt->execute();
-
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $data;
-    }
 }
 
 ?>

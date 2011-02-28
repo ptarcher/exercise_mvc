@@ -11,9 +11,9 @@
 {block name=javascript}
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript">var session_date="{$session_date}";var climb_num="{$climb_num}";var min_time="{$climb.bottom}";var max_time="{$climb.top}";</script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.metadata.js"></script>
+    <script type="text/javascript">var session_date="{$session_date}";var climb_num="{$climb_num}";var min_time="{$climb.bottom}";var max_time="{$climb.top}";</script>
 
     <!-- BEGIN: jqplot -->
     <!--[if IE]><script src="libraries/javascript/jqplot/excanvas.min.js"></script><![endif]-->
