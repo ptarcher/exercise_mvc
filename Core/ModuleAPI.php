@@ -21,14 +21,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('libraries/database/dbQueries.php');
-
 class Core_ModuleAPI {
-    var $dbh;
-
     function __construct() {
-        global $dbQueries;
-        $this->dbQueries = $dbQueries;
     }
 
     function __destruct() {
