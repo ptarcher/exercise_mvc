@@ -1,13 +1,13 @@
 <?php
 /**
- * Piwik - Open source web analytics
+ * Core - Open source web analytics
  * 
  * @link http://piwik.org
  * @license http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
  * @version $Id: Cookie.php 3613 2011-01-04 15:43:27Z vipsoft $
  * 
- * @category Piwik
- * @package Piwik
+ * @category Core
+ * @package Core
  */
 
 /**
@@ -16,7 +16,7 @@
  * - edit an existing cookie and save it
  * - create a new cookie, set values, expiration date, etc. and save it
  * 
- * @package Piwik
+ * @package Core
  */
 class Core_Cookie
 {
@@ -174,8 +174,8 @@ class Core_Cookie
 		{
 			// If the cookie was going to be too large, instead, delete existing cookie and start afresh
 			// This will result in slightly less accuracy in the case 
-			// where someone visits more than dozen websites tracked by the same Piwik
-			// This will usually be the Piwik super user itself checking all his websites regularly
+			// where someone visits more than dozen websites tracked by the same Core
+			// This will usually be the Core super user itself checking all his websites regularly
 			$this->delete();
 			return;
 		}
