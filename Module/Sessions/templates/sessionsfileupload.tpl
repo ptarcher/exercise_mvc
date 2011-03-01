@@ -29,7 +29,7 @@
 {/if}
 
 {if $UploadErrorString}
-<div id="upload_error"><strong>${UploadStatus}</strong>: {$UploadErrorString}<br /></div>
+<div id="upload_error"><strong>{$UploadStatus}</strong>: {$UploadErrorString}<br /></div>
 {/if}
 
 <form {$form_data.attributes}>
