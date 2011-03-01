@@ -29,6 +29,8 @@ class Core_Common
 	const REFERER_TYPE_WEBSITE			= 3;
 	const REFERER_TYPE_CAMPAIGN			= 6;
 
+    const CLASSES_PREFIX = 'Core_';
+
 	/**
 	 * Flag used with htmlspecialchar
 	 * See php.net/htmlspecialchars
@@ -437,6 +439,26 @@ class Core_Common
 		return md5(uniqid(rand(), true));
 	}
 
+    /**
+     * Get salt from [superuser] section
+     *
+     * @return string
+     */
+    static public function getSalt()
+    {
+        static $salt = null;
+        if(is_null($salt))
+        {
+            $config = Zend_Registry::get('config');
+            if($config !== false)
+            {
+                $salt = @$config->superuser->salt;
+            }
+        }
+        return $salt;
+    }
+
+
 	/**
 	 * Generate random string
 	 *
@@ -461,6 +483,45 @@ class Core_Common
 		return str_shuffle($str);
 	}
 
+/*
+ * Prefix/unprefix class name
+ */
+    /**
+     * Prefix class name (if needed)
+     *
+     * @param string $class
+     * @return string
+     */
+    static public function prefixClass( $class )
+    {
+        if(!strncmp($class, Core_Common::CLASSES_PREFIX, 
+                    strlen(Core_Common::CLASSES_PREFIX)))
+        {
+            return $class;
+        }
+        return Core_Common::CLASSES_PREFIX.$class;
+    }
+
+    /**
+     * Unprefix class name (if needed)
+     *
+     * @param string $class
+     * @return string
+     */
+    static public function unprefixClass( $class )
+    {
+        $lenPrefix = strlen(Core_Common::CLASSES_PREFIX);
+        if(!strncmp($class, Core_Common::CLASSES_PREFIX, $lenPrefix))
+        {
+            return substr($class, $lenPrefix);
+        }
+        return $class;
+    }
+
+
+/*
+ * System environment
+ */
 	/**
 	 * Returns true if PHP was invoked from command-line interface (shell)
 	 *
@@ -472,4 +533,15 @@ class Core_Common
 		return	PHP_SAPI == 'cli' ||
 				(substr(PHP_SAPI, 0, 3) == 'cgi' && @$_SERVER['REMOTE_ADDR'] == '');
 	}
+
+    /**
+     * Returns true if running on a Windows operating system
+     *
+     * @since added in 0.6.5
+     * @return bool true if PHP detects it is running on Windows; else false
+     */
+    static public function isWindows()
+    {
+        return DIRECTORY_SEPARATOR == '\\';
+    }
 }
