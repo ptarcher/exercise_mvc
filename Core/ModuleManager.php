@@ -16,12 +16,12 @@
  * @see Core/ModulesFunctions/WidgetsList.php
  * @see Core/ModulesFunctions/Sql.php
  */
- /*
-require_once CORE_INCLUDE_PATH . '/Core/ModulesFunctions/Menu.php';
-require_once CORE_INCLUDE_PATH . '/Core/ModulesFunctions/AdminMenu.php';
-require_once CORE_INCLUDE_PATH . '/Core/ModulesFunctions/WidgetsList.php';
-require_once CORE_INCLUDE_PATH . '/Core/ModulesFunctions/Sql.php';
-*/
+
+require_once ('Core/Menu/Abstract.php');
+require_once ('Core/Menu/Main.php');
+require_once ('Core/Menu/Admin.php');
+require_once ('Core/Menu/Top.php');
+
 require_once ('libraries/Event/Dispatcher.php');
 require_once ('libraries/Event/Notification.php');
 
@@ -43,7 +43,7 @@ class Core_ModuleManager
 	protected $loadedModules = array();
 	
 	protected $doLoadAlwaysActivatedModules = true;
-	protected $moduleToAlwaysActivate = array( 'Core_Home', 'Core_Updater', 'Core_AdminHome', 'Core_ModulesAdmin' );
+	protected $moduleToAlwaysActivate = array( 'APIAccess', 'Login',  'Plans',  'SessionGraphs', 'Sessions', 'UserManagement' );
 
 	static private $instance = null;
 	
@@ -90,7 +90,7 @@ class Core_ModuleManager
 	 */
 	public function readModulesDirectory()
 	{
-		$modulesName = glob( INCLUDE_PATH . '/modules/*', GLOB_ONLYDIR);
+		$modulesName = glob( INCLUDE_PATH . '/Module/*', GLOB_ONLYDIR);
 		$modulesName = $modulesName === false ? array() : array_map('basename', $modulesName);
 		return $modulesName;
 	}
@@ -215,15 +215,15 @@ class Core_ModuleManager
 		{
 			return $this->loadedModules[$moduleName];
 		}
-		$moduleFileName = $moduleName . '/' . $moduleName . '.php';
-		$moduleClassName = $moduleName;
+		$moduleFileName = $moduleName . '/Module.php';
+		$moduleClassName = 'Module_'. $moduleName .'_Module';
 		
-		if( !Common::isValidFilename($moduleName))
+		if( !Core_Common::isValidFilename($moduleName))
 		{
 			throw new Exception("The module filename '$moduleFileName' is not a valid filename");
 		}
 		
-		$path = INCLUDE_PATH . '/modules/' . $moduleFileName;
+		$path = INCLUDE_PATH . '/Module/' . $moduleFileName;
 
 		if(!file_exists($path))
 		{
@@ -232,7 +232,7 @@ class Core_ModuleManager
 		}
 
 		// Don't remove this.
-		// Our autoloader can't find modules/ModuleName/ModuleName.php
+		// Our autoloader can't find Module/ModuleName/Module.php
 		require_once $path; // prefixed by CORE_INCLUDE_PATH
 		
 		if(!class_exists($moduleClassName, false))
@@ -449,7 +449,7 @@ class Core_ModuleManager_ModuleException extends Exception
 /**
  * Post an event to the dispatcher which will notice the observers
  */
-function PostEvent( $eventName,  &$object = null, $info = array() )
+function Core_PostEvent( $eventName,  &$object = null, $info = array() )
 {
 	$notification = new Event_Notification($object, $eventName, $info);
 	Core_ModuleManager::getInstance()->dispatcher->postNotification( $notification, true, false );
@@ -458,7 +458,7 @@ function PostEvent( $eventName,  &$object = null, $info = array() )
 /**
  * Register an action to execute for a given event
  */
-function AddAction( $hookName, $function )
+function Core_AddAction( $hookName, $function )
 {
 	Core_ModuleManager::getInstance()->dispatcher->addObserver( $function, $hookName );
 }
