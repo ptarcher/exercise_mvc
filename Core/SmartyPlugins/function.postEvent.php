@@ -39,6 +39,6 @@ function smarty_function_postEvent($params, &$smarty)
 	$eventName = $params['name'];
 	
 	$str = '';
-	PostEvent($eventName, $str);
+	Core_PostEvent($eventName, $str);
 	return $str;
 }
