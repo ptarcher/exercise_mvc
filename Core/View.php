@@ -63,13 +63,7 @@ class Core_View implements Core_iView
 			$this->smarty->load_filter('output', 'ajaxcdn');
 			$this->smarty->load_filter('output', 'trimwhitespace');
 		}
-
-		// global value accessible to all templates: the Core base URL for the current request
-		$this->Core_Url = Url::getCurrentUrlWithoutFileName();
         */
-
-        /* The navigation menu */
-        $this->Core_NavigationMenu = Core_Navigator::getInstance()->getMenu();
 	}
 	
 	/**
@@ -103,7 +97,7 @@ class Core_View implements Core_iView
 			//$this->currentPluginName = Core_Helper::getCurrentPlugin()->getName();
 			//$this->userLogin = Core_Helper::getCurrentUserLogin();
 			
-			//$this->url = Core_Url::getCurrentUrl();
+			$this->url = Core_Url::getCurrentUrl();
 			//$this->token_auth = Core_Core::getCurrentUserTokenAuth();
 			//$this->userHasSomeAdminAccess = Core_Core::isUserHasSomeAdminAccess();
 			//$this->userIsSuperUser = Core_Core::isUserIsSuperUser();
@@ -111,6 +105,15 @@ class Core_View implements Core_iView
 			//$this->latest_version_available = UpdateCheck::isNewestVersionAvailable();
 
 			//$this->loginModule = Zend_Registry::get('auth')->getName();
+
+
+            // global value accessible to all templates: the 
+            // Core base URL for the current request
+            $this->Core_Url = Core_Url::getCurrentUrlWithoutFileName();
+
+            /* The navigation menu */
+            $this->Core_NavigationMenu = Core_Navigator::getInstance()->getMenu();
+
 		} catch(Exception $e) {
 			// can fail, for example at installation (no plugin loaded yet)		
 		}
@@ -118,7 +121,7 @@ class Core_View implements Core_iView
 		//$this->totalTimeGeneration = Zend_Registry::get('timer')->getTime();
         /*
 		try {
-			$this->totalNumberOfQueries = Core::getQueryCount();
+			$this->totalNumberOfQueries = Core_Common::getQueryCount();
 		}
 		catch(Exception $e){
 			$this->totalNumberOfQueries = 0;
