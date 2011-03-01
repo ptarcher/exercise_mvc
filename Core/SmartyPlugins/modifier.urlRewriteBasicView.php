@@ -20,6 +20,7 @@ function smarty_modifier_urlRewriteBasicView($parameters)
 {
 	// replace module=X by moduleToLoad=X
 	// replace action=Y by actionToLoad=Y
+    /*
 	$parameters['moduleToLoad'] = $parameters['module'];
 	unset($parameters['module']);
 
@@ -32,9 +33,10 @@ function smarty_modifier_urlRewriteBasicView($parameters)
 	{
 		$parameters['actionToLoad'] = null;
 	}
+    */
 	$url = Core_Url::getCurrentQueryStringWithParametersModified($parameters);
 
 	// add module=CoreHome&action=showInContext
-	$url = $url . '&amp;module=CoreHome&amp;action=showInContext';
+	//$url = $url . '&amp;module=CoreHome&amp;action=showInContext';
 	return htmlspecialchars($url);
 }
