@@ -45,6 +45,7 @@ class Core_Navigator
 	
     function __construct() 
     {
+        /*
         if (($dp = opendir("Module")) == false) {
             return;
         }
@@ -54,41 +55,37 @@ class Core_Navigator
                 continue;
             }
 
-            $module_dir  = "Module" . DIRECTORY_SEPARATOR . $ent;
-            $module_file = $module_dir . DIRECTORY_SEPARATOR . "Controller.php";
-            $class_name  = "Module_".$ent.'_Controller';
+            $class_name  = "Module_".$ent.'_Module';
 
             // Open up the module
-            if (is_dir($module_dir) && is_file($module_file)) {
-                require_once($module_file);
-                // Call the hook function 
-                if (!method_exists($class_name, "_getHooks")) {
-                    continue;
-                }
-                $hooks = call_user_func_array(array($class_name, "_getHooks"), array());
-                if (is_array($hooks)) {
-                    foreach ($hooks as $hook) {
-                        if ($hook["hook"]   == 'navigator') {
-                            $link["name"]   = $hook["name"];
-                            $link["module"] = $hook["module"];
-                            $link["action"] = $hook["action"];
+            // Call the hook function 
+            if (!method_exists($class_name, "_getHooks")) {
+                continue;
+            }
+            $hooks = call_user_func_array(array($class_name, "_getHooks"), array());
+            if (is_array($hooks)) {
+                foreach ($hooks as $hook) {
+                    if ($hook["hook"]   == 'navigator') {
+                        $link["name"]   = $hook["name"];
+                        $link["module"] = $hook["module"];
+                        $link["action"] = $hook["action"];
 
-                            $link["url"] = 'index.php?' . Core_Url::getQueryStringFromParameters(array('module' => $hook['module'], 
-                                       'action' => $hook['action']));
+                        $link["url"] = 'index.php?' . Core_Url::getQueryStringFromParameters(array('module' => $hook['module'], 
+                                    'action' => $hook['action']));
 
-                            $this->categories[$hook["category"]][] = $link;
-                        }
+                        $this->categories[$hook["category"]][] = $link;
                     }
                 }
             }
         }
 
         uksort($this->categories, 'strcasecmp');
+        */
     }
 
     function getMenu() 
     {
-        return $this->categories;
+        return Core_Menu_GetMenu();
     }
 }
 
