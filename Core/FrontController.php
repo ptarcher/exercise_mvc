@@ -42,22 +42,29 @@ class Core_FrontController
 
 	function init()
     {
+        /* Load the config */
         try {
             $config = new Core_Config();
         } catch(Exception $e) {
             throw $e;
         }
-
         Zend_Registry::set('config', $config);
         $config->init();
 
+        /* Load the database */
         try {
             $db = Core_Db::getInstance();
         } catch (Exception $e) {
             throw $e;
         }
-
         Zend_Registry::set('db', $db);
+
+        /* Load the plugins */
+        $moduleManager = Core_ModuleManager::getInstance();
+        $moduleManager->loadModules();
+
+        /* Load the events */
+        Core_PostEvent('FrontController.initAuthenticationObject');
     }
 
 	function dispatch( $module = null, $action = null, $parameters = null)
