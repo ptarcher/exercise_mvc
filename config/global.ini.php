@@ -32,8 +32,8 @@ adapter			= PDO_MYSQL
 host 			= localhost
 username 		= root
 password 		= 
-dbname			= piwik_tests
-tables_prefix	= piwiktests_
+dbname			= core_tests
+tables_prefix	= coretests_
 port			= 3306
 adapter 		= PDO_MYSQL
  
@@ -49,7 +49,7 @@ enable_sql_profiler = 0
 
 ; if set to 1, a Piwik tag will be included in the Piwik UI footer and will track visits, pages, etc. to idsite = 1
 ; this is useful for Piwik developers as an easy way to create data in their local Piwik
-track_visits_inside_piwik_ui = 0
+track_visits_inside_core_ui = 0
 
 ; if set to 1, javascript and css files will be included individually
 ; this option must be set to 1 when adding, removing or modifying javascript and css files
@@ -127,10 +127,10 @@ minimum_memory_limit = 128
 ; by default, Piwik uses relative URLs, so you can login using http:// or https://
 ; (the latter assumes you have a valid SSL certificate).
 ; If set to 1, Piwik redirects the login form to use a secure connection (i.e., https).
-force_ssl_login = 0
+force_ssl_login = 1
 
 ; login cookie name
-login_cookie_name = piwik_auth
+login_cookie_name = core_auth
 
 ; login cookie expiration (14 days)
 login_cookie_expire = 1209600
@@ -150,14 +150,14 @@ login_password_recovery_email_name = Piwik
 enable_framed_logins = 0
 
 ; language cookie name for session
-language_cookie_name = piwik_lang
+language_cookie_name = core_lang
 
 ; standard email address displayed when sending emails
 noreply_email_address = "noreply@{DOMAIN}"
 
 ; feedback email address;
 ; when testing, use your own email address or "nobody"
-feedback_email_address = "hello@piwik.org"
+feedback_email_address = "hello@core.org"
 
 ; during archiving, Piwik will limit the number of results recorded, for performance reasons
 ; maximum number of rows for any of the Referers tables (keywords, search engines, campaigns, etc.)
@@ -205,12 +205,12 @@ reverse_proxy = 0
 
 ; The release server is an essential part of the Piwik infrastructure/ecosystem
 ; to provide the latest software version.
-latest_version_url = http://piwik.org/latest.zip
+latest_version_url = http://core.org/latest.zip
 
 ; The API server is an essential part of the Piwik infrastructure/ecosystem to
 ; provide services to Piwik installations, e.g., getLatestVersion and
 ; subscribeNewsletter.
-api_service_url = http://api.piwik.org
+api_service_url = http://api.core.org
 
 [Tracker]
 ; set to 0 if you want to stop tracking the visitors. Useful if you need to stop all the connections on the DB.
@@ -245,7 +245,7 @@ enable_language_to_country_guess = 1
 scheduled_tasks_min_interval = 3600
 
 ; name of the cookie used to store the visitor information
-cookie_name	= piwik_visitor
+cookie_name	= core_visitor
 
 ; by default, the Piwik tracking cookie expires in 2 years
 cookie_expire = 63072000
@@ -255,15 +255,15 @@ cookie_expire = 63072000
 cookie_path = 
 
 ; name of the cookie to ignore visits
-ignore_visits_cookie_name = piwik_ignore 
+ignore_visits_cookie_name = core_ignore 
 
 ; variable name to track any campaign, for example CPC campaign
-; Example: If a visitor first visits 'index.php?piwik_campaign=Adwords-CPC' then it will be counted as a campaign referer named 'Adwords-CPC'
-campaign_var_name			= piwik_campaign
+; Example: If a visitor first visits 'index.php?core_campaign=Adwords-CPC' then it will be counted as a campaign referer named 'Adwords-CPC'
+campaign_var_name			= core_campaign
 
 ; variable name to track any campaign keyword
-; Example: If a visitor first visits 'index.php?piwik_campaign=Adwords-CPC&piwik_kwd=My killer keyword' then it will be counted as a campaign referer named 'Adwords-CPC' with the keyword 'My killer keyword'
-campaign_keyword_var_name	= piwik_kwd
+; Example: If a visitor first visits 'index.php?core_campaign=Adwords-CPC&core_kwd=My killer keyword' then it will be counted as a campaign referer named 'Adwords-CPC' with the keyword 'My killer keyword'
+campaign_keyword_var_name	= core_kwd
 
 ; maximum length of a Page Title or a Page URL recorded in the log_action.name table
 page_maximum_length = 1024;
@@ -290,7 +290,7 @@ logger_error[]			= screen
 logger_exception[]		= screen
 
 ; if configured to log in files, log files will be created in this path
-; eg. if the value is tmp/logs files will be created in /path/to/piwik/tmp/logs/
+; eg. if the value is tmp/logs files will be created in /path/to/core/tmp/logs/
 logger_file_path		= tmp/logs
 
 ; all calls to the API (method name, parameters, execution time, caller IP, etc.)
