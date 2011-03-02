@@ -57,6 +57,10 @@ class Module_Login_Controller extends Core_Controller
                               'index.php' . Core_Url::getCurrentQueryString();
         */
         $error_string = '';
+
+        self::checkForceSslLogin();
+
+        /* Keep reference to the url, so we can redirect there later */
         $currentUrl = 'index.php' . Core_Url::getCurrentQueryString();
         $urlToRedirect = Core_Common::getRequestVar('form_url', $currentUrl,   'string');
         $urlToRedirect = htmlspecialchars_decode($urlToRedirect);
@@ -108,6 +112,30 @@ class Module_Login_Controller extends Core_Controller
 
         Core_Helper::redirectToModule('Sessions');
     }
+
+    /**
+     * Check force_ssl_login and redirect if connection isn't secure and not    using a reverse proxy
+     *
+     * @param none
+     * @return void
+     */
+    protected function checkForceSslLogin()
+    {
+        $forceSslLogin = Zend_Registry::get('config')->General->force_ssl_login;
+        if($forceSslLogin)
+        {
+            $reverseProxy = Zend_Registry::get('config')->General->reverse_proxy;
+            if(!(Core_Url::getCurrentScheme() == 'https' || $reverseProxy))
+            {
+                $url = 'https://'
+                    . Core_Url::getCurrentHost()
+                    . Core_Url::getCurrentScriptName()
+                    . Core_Url::getCurrentQueryString();
+                Core_Url::redirectToUrl($url);
+            }
+        }
+    }
+
 }
 
 ?>
