@@ -43,7 +43,7 @@ class Core_ModuleManager
 	protected $loadedModules = array();
 	
 	protected $doLoadAlwaysActivatedModules = true;
-	protected $moduleToAlwaysActivate = array( 'APIAccess', 'Login',  'Plans',  'SessionGraphs', 'Sessions', 'UserManagement' );
+	protected $moduleToAlwaysActivate = array( 'APIAccess', 'Login',  'Plans',  'SessionGraphs', 'Sessions', 'UserManagement', 'DashBoard', );
 
 	static private $instance = null;
 	
