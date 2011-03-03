@@ -107,8 +107,8 @@ class Module_Plans_API extends Core_ModuleAPI {
                                    'duration',
                                    'focus',
                                    'comment'))
-                     ->where('userid = ? AND week_date = ?',
-                             Core_User::getUserId(), $week_date)
+                     ->where('userid    = ?', Core_User::getUserId())
+                     ->where('week_date = ?', $week_date)
                      ->order('timestamp DESC');
         $stmt = $db->query($select);
 
