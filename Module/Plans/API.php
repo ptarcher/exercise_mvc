@@ -91,7 +91,7 @@ class Module_Plans_API extends Core_ModuleAPI {
     }
 
     /* Daily functoins */
-    function getDailyPlans($week_date) 
+    function getDailyPlans($week_date, $order = 'DESC') 
     {
         $db = Zend_Registry::get('db');
 
@@ -100,6 +100,7 @@ class Module_Plans_API extends Core_ModuleAPI {
                              array('userid',
                                    'week_date',
                                    'timestamp',
+                                   '(extract(EPOCH from "timestamp")*1000) AS epoch',
                                    'category',
                                    'description',
                                    '(volume    * 100) AS volume',
@@ -109,7 +110,7 @@ class Module_Plans_API extends Core_ModuleAPI {
                                    'comment'))
                      ->where('userid    = ?', Core_User::getUserId())
                      ->where('week_date = ?', $week_date)
-                     ->order('timestamp DESC');
+                     ->order('timestamp '.$order);
         $stmt = $db->query($select);
 
         return $stmt->fetchAll();
