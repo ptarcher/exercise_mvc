@@ -75,7 +75,9 @@ class Module_Sessions_Controller extends Core_Controller
     }
 
     function view() {
-        $sessions = $this->api->getSessions();
+        $api = new Module_Sessions_API();
+
+        $sessions = $api->getSessions();
         $view = Core_View::factory('sessions');
         $view->sessions = $sessions;
         $view->coach    = $_SESSION['coach'];
@@ -84,7 +86,9 @@ class Module_Sessions_Controller extends Core_Controller
     }
 
     function viewClimbs() {
-        $climbs = $this->api->getClimbs();
+        $api = new Module_Sessions_API();
+
+        $climbs = $api->getClimbs();
         $view = Core_View::factory('climbs');
         $view->climbs = $climbs;
         $view->coach  = $_SESSION['coach'];
@@ -95,8 +99,10 @@ class Module_Sessions_Controller extends Core_Controller
     function viewUpload() {
         $form = new SessionUploadForm();
 
-        $UploadErrorString = "";
-        $UploadStatus      = "Error";
+        $UploadStatusMsg = "";
+        $UploadStatus    = "Error";
+
+        $view = Core_View::factory('sessionsfileupload');
 
         if ($form->validate()) {
             $timer = new Benchmark_Timer();
@@ -119,8 +125,10 @@ class Module_Sessions_Controller extends Core_Controller
             $db->beginTransaction();
 
             try {
+                $api = new Module_Sessions_API();
+
                 /* Insert the session data into the database */
-                $this->api->createSessionFull($session->start_time,
+                $api->createSessionFull($session->start_time,
                                               'E1',
                                               'Untitled',
                                               $session->total_timer_time,
@@ -177,7 +185,7 @@ class Module_Sessions_Controller extends Core_Controller
                 foreach($records as $record) {
                     /* Skip duplicates, they will cause issues in graphs */
                     if (!isset($record->power)) {
-                        $record->power = $this->api->getPower($record->gradient,
+                        $record->power = $api->getPower($record->gradient,
                                                               $record->temperature,
                                                               $record->altitude,
                                                               $record->speed,
@@ -192,13 +200,13 @@ class Module_Sessions_Controller extends Core_Controller
                 unset($UserAPI);
 
                 $timer->setMarker('Record insertion - start');
-                $this->api->insertAllSessionData($session_timestamp, $records);
+                $api->insertAllSessionData($session_timestamp, $records);
 
                 /* Insert all the data */
                 $timer->setMarker('Record insertion - end');
 
                 /* Calculate the climbs */
-                $climbs = $this->api->getClimbCategories();
+                $climbs = $api->getClimbCategories();
 
                 $timer->setMarker('Climb - Start');
                 $min_climb = $climbs[0];
@@ -276,7 +284,7 @@ class Module_Sessions_Controller extends Core_Controller
 
                             if ($cat != -1) {
                                 /* Store it into the database */
-                                $this->api->insertClimb($session_timestamp,       $climb_num++,
+                                $api->insertClimb($session_timestamp,       $climb_num++,
                                                         $climb['bottom'],         $climb['top'],
                                                         $climb['gradient_avg'],   $climb['gradient_max'],
                                                         $climb['total_distance'], $climb['total_climbed'],
@@ -337,7 +345,7 @@ class Module_Sessions_Controller extends Core_Controller
                                           $ftime['tm_year'] + 1900);
 
                     $lap_start    = $start_epoch    - $session_epoch;
-                    $this->api->insertLap($session_timestamp,
+                    $api->insertLap($session_timestamp,
                                           $lap_num,
                                           $lap_start,
                                           $lap->start_position_lat,
@@ -357,17 +365,22 @@ class Module_Sessions_Controller extends Core_Controller
                 //$timer->display();
 
                 $db->commit();
-                $UploadErrorString = "Session can be view here";
+
+                $plans = Module_Plans_API::getInstance();
+                $view->planned = $plans->getClosestPlan($session_timestamp);
+                $view->session_timestamp = $session_timestamp;
+
+                $UploadStatusMsg   = "Session can be view here";
+                $UploadStatusMsg   = "Is this session the planned exercise session on at ere";
                 $UploadStatus      = "Success";
             } catch (Exception $e) {
                 $db->rollback();
-                $UploadErrorString = "Failed to upload";
+                $UploadStatusMsg   = "Failed to upload";
                 $e->getMessage();
             }
             //$timer->display();
         }
 
-        $view = Core_View::factory('sessionsfileupload');
         $view->addForm($form);
         $view->UploadErrorString = $UploadErrorString;
         $view->subTemplate = 'genericForm.tpl';
