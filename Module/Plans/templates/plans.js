@@ -10,7 +10,7 @@ function getAddPlanAJAX( row )
     parameters.week_date   = $(row).find('input#plan_date').val();
     parameters.period      = $(row).find('input#plan_period').val();
     parameters.description = $(row).find('input#plan_description').val();
-    parameters.comment     = $(row).find('textarea#plan_comment').val();
+    //parameters.comment     = $(row).find('textarea#plan_comment').val();
 
 	ajaxRequest.data = parameters;
  	
@@ -47,7 +47,7 @@ function getUpdatePlanAJAX( row )
     parameters.week_date   = $(row).find('input#plan_date').val();
     parameters.period      = $(row).find('input#plan_period').val();
     parameters.description = $(row).find('input#plan_description').val();
-    parameters.comment     = $(row).find('textarea#plan_comment').val();
+    //parameters.comment     = $(row).find('textarea#plan_comment').val();
 
 	ajaxRequest.data = parameters;
 	
@@ -70,7 +70,7 @@ $(document).ready( function() {
             '<td><input id="plan_period"        value="Period"      size=25></td>'+
             '<td><input id="plan_description"   value="Description" size=25></td>'+
             '<td><textarea cols=20 rows=3 id="plan_comment">Comments</textarea>'+
-            '<td><img src="themes/default/images/ok.png"     class="addplan" href="#"></td>'+
+            '<td><a href="#"><img src="themes/default/images/ok.png" class="addplan"></a></td>'+
             '<td><img src="themes/default/images/remove.png" class="cancel"></td>'+
             '</tr>')
         .appendTo('#plans');
@@ -78,13 +78,14 @@ $(document).ready( function() {
         /* Add callbacks */
         $('#'+newRowId).keypress( submitSessionOnEnter );
         $('.addplan').click( function() { 
-            $.ajax( getAddPlanAJAX($('tr#'+  newRowId)) ); }
-        );
+            $.ajax( getAddPlanAJAX($('tr#'+  newRowId)) );
+            $('.addPlan').toggle();
+        });
         $('.cancel').click(function() { 
             coreHelper.ajaxHideError(); 
             $(this).parents('tr').remove();
-            $('.addPlan').toggle(); }
-            );
+            $('.addPlan').toggle();
+        });
     } );
 
 	$('.deletePlan').click( function() {
