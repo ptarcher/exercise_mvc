@@ -287,3 +287,4 @@ ALTER TABLE t_exercise_laps ADD COLUMN total_duration interval;
 UPDATE t_exercise_laps SET total_duration = duration;
 
 ALTER TABLE t_users ADD COLUMN dob date;
+ALTER TABLE t_users ADD COLUMN token character varying(64) NOT NULL DEFAULT 'abc';
