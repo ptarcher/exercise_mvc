@@ -67,8 +67,10 @@ class Module_UserManagement_Controller extends Core_Controller
     }
     
     function view() {
+        $api = new Module_UserManagement_API();
+
         /* TODO: Check if administrator */
-        $users = $this->api->getUsers();
+        $users = $api->getUsers();
 
         $view = Core_View::factory('users');
         $view->users = $users;
@@ -76,7 +78,9 @@ class Module_UserManagement_Controller extends Core_Controller
     }
 
     function create() {
-        $user_types = $this->api->getExerciseTypes();
+        $api = new Module_UserManagement_API();
+
+        $user_types = $api->getExerciseTypes();
 
         $form = new AddUserForm();
         if ($form->validate()) {
@@ -86,7 +90,7 @@ class Module_UserManagement_Controller extends Core_Controller
             $athlete  = $form->getSubmitValue('adduserform_athlete');
             $usertype = $form->getSubmitValue('adduserform_usertype');
 
-            $success = $this->api->createUser($userid, $password, $coach, $athlete, $usertype);
+            $success = $api->createUser($userid, $password, $coach, $athlete, $usertype);
             if ($success) {
                 /* We have sucessfully logged in, now lets 
                  * display the next page */
@@ -124,9 +128,10 @@ class Module_UserManagement_Controller extends Core_Controller
     }
 
     function settings() {
+        $api = new Module_UserManagement_API();
         $view = Core_View::factory('usersettings');
 
-        $user = $this->api->getUser();
+        $user = $api->getUser();
 
         $settings   = array();
         $settings[] = array("name"     => 'UserID',
