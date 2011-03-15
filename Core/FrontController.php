@@ -65,12 +65,21 @@ class Core_FrontController
 
         /* Load the events */
         Core_PostEvent('FrontController.initAuthenticationObject');
+        try {
+            $authAdapter = Zend_Registry::get('auth');
+        } catch(Exception $e){
+            throw new Exception("Authentication object cannot be found in the Registry. Maybe the Login plugin is not activated?
+                    <br />You can activate the plugin by adding:<br />
+                    <code>Plugins[] = Login</code><br />
+                    under the <code>[Plugins]</code> section in your config/config.inc.php");
+        }
+
     }
 
 	function dispatch( $module = null, $action = null, $parameters = null)
     {
 		if(is_null($module)) {
-			$defaultModule = 'Sessions';
+			$defaultModule = 'DashBoard';
 			$module = Core_Common::getRequestVar('module', $defaultModule, 'string');
         }
 
@@ -91,18 +100,9 @@ class Core_FrontController
 
         $controllerClassName = "Module_" . $module . "_Controller";
 
-        if (!class_exists($controllerClassName)) {
-            $module_file = "Module".DIRECTORY_SEPARATOR.
-                $module.DIRECTORY_SEPARATOR.
-                "Controller.php";
-
-            /* Include the module */
-            if (!file_exists($module_file)) {
-                throw new Exception("Module controller '$controllerClassName' not found!");
-                return;
-            }
-
-            require_once($module_file);
+        /* Check if the plugin has been activated */
+        if (! Core_ModuleManager::getInstance()->isModuleActivated($module)) {
+            throw new Core_FrontController_PluginDeactivatedException($module);
         }
 
         // Dynamically create the class
@@ -118,6 +118,8 @@ class Core_FrontController
 
         try {
             return call_user_func_array(array($controller, $action), $parameters);
+        } catch (Core_Access_NoAccessException $e) {
+            Core_PostEvent('FrontController.NoAccessException');
         } catch (Exception $e) {
             echo 'Error: ' . $e;
             return null;
@@ -139,5 +141,20 @@ class Core_FrontController
         $this->module = null;
     }
 }
+
+/**
+ * Exception thrown when the requested plugin is not activated in the config    file
+ *
+ * @package Piwik
+ * @subpackage Piwik_FrontController
+ */
+class Core_FrontController_PluginDeactivatedException extends Exception
+{
+    function __construct($module)
+    {
+        parent::__construct("The module '$module' is not activated. You can     activate the plugin on the 'Plugins admin' page.");
+    }
+}
+
 
 ?>
