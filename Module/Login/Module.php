@@ -36,8 +36,8 @@ class Module_Login_Module extends Core_Module
     function getListHooksRegistered()
     {
         $hooks = array(
-                //'FrontController.initAuthenticationObject'  => 'initAuthenticationObject',
-                //'FrontController.NoAccessException'         => 'noAccess',
+                'FrontController.initAuthenticationObject'  => 'initAuthenticationObject',
+                'FrontController.NoAccessException'         => 'noAccess',
                 //'API.Request.authenticate'                  => 'ApiRequestAuthenticate',
                 //'Login.initSession'                         => 'initSession',
                 'Menu.add' => 'addMenu',
@@ -50,6 +50,44 @@ class Module_Login_Module extends Core_Module
         Core_Menu_AddMenu('User', 'Logout', 
                 array('module' => 'Login', 
                       'action' => 'logout'));
+    }
+
+    function initAuthenticationObject($notification)
+    {
+		$auth = new Module_Login_Auth();
+		Zend_Registry::set('auth', $auth);
+
+		$action = Core_Helper::getAction();
+		if(Core_Helper::getModule() === 'API'
+			&& (empty($action) || $action == 'index'))
+		{
+			return;
+		}
+
+        /* Create the cookie */
+		$authCookieName = Zend_Registry::get('config')->General->login_cookie_name;
+		$authCookieExpiry = 0;
+		$authCookiePath   = Zend_Registry::get('config')->General->login_cookie_path;
+		$authCookie       = new Core_Cookie($authCookieName, $authCookieExpiry, $authCookiePath);
+
+		$defaultLogin     = 'anonymous';
+		$defaultTokenAuth = 'anonymous';
+		if($authCookie->isCookieFound())
+		{
+			$defaultLogin     = $authCookie->get('login');
+			$defaultTokenAuth = $authCookie->get('token_auth');
+		}
+		$auth->setLogin($defaultLogin);
+		$auth->setTokenAuth($defaultTokenAuth);
+	}
+
+    function noAccess($notification) 
+    {
+        $exception = $notification->getNotificationObject();
+        $exceptionMessage = $exception->getMessage();
+
+        $controller = new Module_Login_Controller();
+        $controller->doLogin($exceptionMessage);
     }
 }
 
