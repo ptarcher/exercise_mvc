@@ -48,17 +48,14 @@ class Module_Login_Controller extends Core_Controller
         $this->doLogin();
     }
     
-    function doLogin() {
-        global $allocator;
-
+    function doLogin($error_string = null) {
         /*
         $currentUrl = Helper::getModule() == 'Login' ? 
                               Core_Url::getReferer() : 
                               'index.php' . Core_Url::getCurrentQueryString();
         */
-        $error_string = '';
 
-        self::checkForceSslLogin();
+        //self::checkForceSslLogin();
 
         /* Keep reference to the url, so we can redirect there later */
         $currentUrl = 'index.php' . Core_Url::getCurrentQueryString();
@@ -67,18 +64,20 @@ class Module_Login_Controller extends Core_Controller
 
         $form = new LoginForm();
         if ($form->validate()) {
+            $api = new Module_Login_API();
             $userid   = $form->getSubmitValue('form_login');
             $password = $form->getSubmitValue('form_password');
 
-            $success = $this->api->checkLogin($userid, $password);
+            $success = $api->checkLogin($userid, $password);
             if ($success) {
-                $user_credentials = $this->api->getUser($userid);
+                $user_credentials = $api->getUser($userid);
 
                 $user = new Zend_Session_Namespace('user');
                 $user->userid    = $user_credentials['userid'];
                 $user->coach     = $user_credentials['coach']     == 't';
                 $user->athlete   = $user_credentials['athlete']   == 't';
                 $user->superuser = $user_credentials['superuser'] == 't';
+                $user->token     = $user_credentials['token'];
 
                 $_SESSION['userid']    = $user_credentials['userid'];
                 $_SESSION['coach']     = $user_credentials['coach']     == 't';
@@ -88,7 +87,7 @@ class Module_Login_Controller extends Core_Controller
                 /* We have sucessfully logged in, now lets 
                  * display the next page */
                 if (!isset($redirect_module) || !isset($redirect_action)) {
-                    $redirect_module = 'Sessions';
+                    $redirect_module = 'DashBoard';
                 }
 
                 Core_Url::redirectToUrl($urlToRedirect);
@@ -106,11 +105,25 @@ class Module_Login_Controller extends Core_Controller
         echo $view->render();
     }
 
-    function logout() {
-        session_unset();
-        session_destroy();
+    /**
+     * Clear the session information
+     */
+    static public function clearSession()
+    {
+        $authCookieName = Zend_Registry::get('config')->General->login_cookie_name;
+        $cookie = new Core_Cookie($authCookieName);
+        $cookie->delete();
 
-        Core_Helper::redirectToModule('Sessions');
+        Zend_Session::expireSessionCookie();
+        Zend_Session::regenerateId();
+    }
+
+    /**
+     * Logout the current user
+     */
+    function logout() {
+        self::clearSession();
+        Core_Helper::redirectToModule('DashBoard');
     }
 
     /**
