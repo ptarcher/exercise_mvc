@@ -61,10 +61,10 @@ class Core_User {
         return $me->user->superuser;
     }
 
-	/**
-     */
-    function __destruct() {
-        unset($this->user);
+    static public function getUserToken()
+    {
+        $me = self::getInstance();
+        return $me->user->token;
     }
 }
 
