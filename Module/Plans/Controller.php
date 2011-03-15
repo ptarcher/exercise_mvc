@@ -47,7 +47,8 @@ class Module_Plans_Controller extends Core_Controller
     }
     
     function view() {
-        $weekly_plans = $this->api->getWeeklyPlans();
+        $api = new Module_Plans_API();
+        $weekly_plans = $api->getWeeklyPlans();
         $view = Core_View::factory('plans');
         $view->plans = $weekly_plans;
         $view->coach = $_SESSION['coach'];
@@ -56,9 +57,10 @@ class Module_Plans_Controller extends Core_Controller
     }
 
     function viewDaily() {
-        $week_date   = Core_Common::getRequestVar('week_date', null, 'string');
+        $api = new Module_Plans_API();
 
-        $daily_plans = $this->api->getDailyPlans($week_date);
+        $week_date   = Core_Common::getRequestVar('week_date', null, 'string');
+        $daily_plans = $api->getDailyPlans($week_date);
 
         $view = Core_View::factory('daily');
         $view->plans     = $daily_plans;
