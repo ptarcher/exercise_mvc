@@ -22,42 +22,22 @@
  */
 
 class Core_Controller {
-    var $api;
-
-    var $module_description = array();
-
-    function __construct() {
-        $parts = preg_split('/Module_/', get_class($this));
-        $controller  = $parts[1];
-        $parts = preg_split('/_Controller/', $controller);
-        $module_name = $parts[0];
-
-        $api_file  = 'Module/'.$module_name.'/API.php';
-
-        /* API */
-        if (file_exists($api_file)) {
-            require_once($api_file);
-            $api_class  = 'Module_' . $module_name . '_API';
-
-            if (class_exists($api_class)) {
-                $this->api  = new $api_class;
-            } else {
-                echo "Warning, ".$api_file." exists, but no class is avaliable.";
-            }
-        }
-    }
-
-    static function _hook() {
-        $hooks = array();
-        return $hooks;
-    }
-
-    function getDefaultAction() {
+    function getDefaultAction() 
+    {
         return 'index';
     }
 
-    function __destruct() {
-        $this->api  = null;
+    /**
+     * Checks that the specified token matches the current logged in user token
+     * Protection against CSRF
+     * 
+     * @return throws exception if token doesn't match
+     */
+    protected function checkTokenInUrl()
+    {
+        if(Core_Common::getRequestVar('token_auth', false) != Core_User::getCurrentUserToken()) {
+            throw new Core_Access_NoAccessException('Invalid Auth Token');
+        }
     }
 }
 
