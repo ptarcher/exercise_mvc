@@ -35,12 +35,14 @@ class Module_SessionGraphs_Controller extends Core_Controller
     }
 
     function view() {
+        $api = new Module_SessionGraphs_API();
+
         $session_date = Core_Common::getRequestVar('session_date', null, 'string');
 
-        $session = $this->api->getSession($session_date);
-        $laps    = $this->api->getLaps($session_date);
-        $zones   = $this->api->getZones($session_date);
-        $climbs  = $this->api->getClimbs($session_date);
+        $session = $api->getSession($session_date);
+        $laps    = $api->getLaps($session_date);
+        $zones   = $api->getZones($session_date);
+        $climbs  = $api->getClimbs($session_date);
 
         $view = Core_View::factory('sessiongraphs');
         $view->session_date = $session_date;
@@ -104,6 +106,8 @@ class Module_SessionGraphs_Controller extends Core_Controller
 
     function viewClimbs() 
     {
+        $api = new Module_SessionGraphs_API();
+
         $session_date = Core_Common::getRequestVar('session_date', null, 'string');
         $climb_num    = Core_Common::getRequestVar('climb_num',    null, 'string');
 
@@ -112,13 +116,13 @@ class Module_SessionGraphs_Controller extends Core_Controller
         $view->session_date = $session_date;
         $view->climb_num    = $climb_num;
 
-        $climb   = $this->api->getClimb($session_date, $climb_num);
+        $climb   = $api->getClimb($session_date, $climb_num);
 
-        $session = $this->api->getSession($session_date);
-        $zones   = $this->api->getZones($session_date, 
+        $session = $api->getSession($session_date);
+        $zones   = $api->getZones($session_date, 
                                         $climb['bottom'], 
                                         $climb['top']);
-        $climbs  = $this->api->getClimbs($session_date);
+        $climbs  = $api->getClimbs($session_date);
 
         $view->zones        = $zones;
         $view->climbs       = $climbs;
@@ -179,6 +183,8 @@ class Module_SessionGraphs_Controller extends Core_Controller
     }
 
     function viewLaps() {
+        $api = new Module_SessionGraphs_API();
+
         $session_date = Core_Common::getRequestVar('session_date', null, 'string');
         $lap_num      = Core_Common::getRequestVar('lap_num',      null, 'string');
 
@@ -188,10 +194,10 @@ class Module_SessionGraphs_Controller extends Core_Controller
         $view->lap_num      = $lap_num;
 
 
-        $session = $this->api->getSession($session_date);
-        $laps    = $this->api->getLaps($session_date);
+        $session = $api->getSession($session_date);
+        $laps    = $api->getLaps($session_date);
         $lap     = $laps[$lap_num-1];
-        $zones   = $this->api->getZones($session_date, 
+        $zones   = $api->getZones($session_date, 
                                         $lap['start_time'], 
                                         $lap['end_time']);
 
