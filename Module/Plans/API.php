@@ -48,8 +48,7 @@ class Module_Plans_API extends Core_ModuleAPI {
                              array('userid',
                                  'week_date',
                                  'period',
-                                 'description',
-                                 'comment'))
+                                 'description'))
                      ->where('userid = ?', Core_User::getUserId())
                      ->order('week_date DESC');
         $stmt = $db->query($select);
@@ -57,7 +56,7 @@ class Module_Plans_API extends Core_ModuleAPI {
         return $stmt->fetchAll();
     }
 
-    function createWeeklyPlan($week_date, $period, $description, $comment) 
+    function createWeeklyPlan($week_date, $period, $description, $comment = "") 
     {
         $db = Zend_Registry::get('db');
 
@@ -65,11 +64,10 @@ class Module_Plans_API extends Core_ModuleAPI {
                 array('userid'      => Core_User::getUserId(),
                       'week_date'   => $week_date,
                       'period'      => $period,
-                      'description' => $description,
-                      '"comment"'   => $comment));
+                      'description' => $description));
     }
 
-    function updateWeeklyPlan($week_date, $period, $description, $comment) 
+    function updateWeeklyPlan($week_date, $period, $description, $comment = "") 
     {
         $db = Zend_Registry::get('db');
 
@@ -107,9 +105,40 @@ class Module_Plans_API extends Core_ModuleAPI {
                                    '(intensity * 100) AS intensity',
                                    'duration',
                                    'focus',
-                                   'comment'))
+                                   'comment',
+                                   'session_timestamp'))
                      ->where('userid    = ?', Core_User::getUserId())
                      ->where('week_date = ?', $week_date)
+                     ->order('timestamp '.$order);
+        $stmt = $db->query($select);
+
+        return $stmt->fetchAll();
+    }
+
+    function getDailyPlansDetails($week_date, $order = 'DESC') 
+    {
+        $db = Zend_Registry::get('db');
+
+        $select = $db->select()
+                     ->from(array('daily' => 't_exercise_plans_daily'),
+                            array('userid',
+                                  'week_date',
+                                  'timestamp',
+                                  '(extract(EPOCH from "timestamp")*1000) AS epoch',
+                                  'category',
+                                  'description',
+                                  '(volume    * 100) AS volume',
+                                  '(intensity * 100) AS intensity',
+                                  'duration',
+                                  'focus',
+                                  'comment',
+                                  '(extract(EPOCH from session_timestamp)*1000) AS session_epoch'))
+                     ->where('daily.userid    = ?', Core_User::getUserId())
+                     ->where('daily.week_date = ?', $week_date)
+                     ->joinLeft(array('totals' => 't_exercise_totals'),
+                             'daily.userid            = totals.userid AND
+                              daily.session_timestamp = totals.session_date',
+                              array('duration AS session_duration'))
                      ->order('timestamp '.$order);
         $stmt = $db->query($select);
 
@@ -135,6 +164,44 @@ class Module_Plans_API extends Core_ModuleAPI {
                       'duration'    => $duration,
                       'focus'       => $focus,
                       'comment'     => $comment));
+    }
+
+    /**
+     *
+     */
+    function getClosestPlan($date) 
+    {
+        $db = Zend_Registry::get('db');
+
+        $select = $db->select()
+                     ->from('t_exercise_plans_daily',
+                             array('@((extract(EPOCH from timestamp)) - extract(EPOCH from TIMESTAMP WITH TIME ZONE \''.$date.'\')) AS interval',
+                                   'userid',
+                                   'timestamp',
+                                   'category',
+                                   'description',
+                                   'volume',
+                                   'intensity',
+                                   'duration',
+                                   'focus',
+                                   'comment',
+                                   'week_date'))
+                     ->where('userid = ?', Core_User::getUserId())
+                     ->order('interval ASC')
+                     ->limit('1');
+        $stmt = $db->query($select);
+
+        return $stmt->fetch();
+    }
+
+    function updatePlanSession($plan_date, $session_date) 
+    {
+        $db = Zend_Registry::get('db');
+
+        $db->update('t_exercise_plans_daily',
+                array('session_timestamp' => $session_date),
+                array('userid    = \''.Core_User::getUserId().'\'',
+                      'timestamp = \''.$plan_date.'\''));
     }
 }
 
