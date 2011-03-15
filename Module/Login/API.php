@@ -32,7 +32,8 @@ class Module_Login_API extends Core_ModuleAPI {
                                    'password_salt',
                                    'athlete',
                                    'coach',
-                                   'superuser'))
+                                   'superuser',
+                                   'token'))
                      ->where('userid = ?', $userid);
         $stmt = $db->query($select);
         $result = $stmt->fetchAll();
