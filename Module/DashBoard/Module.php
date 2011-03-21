@@ -43,7 +43,7 @@ class Module_DashBoard_Module extends Core_Module
 
     function addMenu()
     {
-        Core_Menu_AddMenu('DashBoard', 'View DashBoard', 
+        Core_Menu_AddMenu('DashBoard', 'DashBoard', 
                 array('module' => 'DashBoard', 
                       'action' => 'view'));
     }
