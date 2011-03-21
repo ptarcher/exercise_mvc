@@ -252,8 +252,8 @@ function updatePlans(d)
 }
 
 $(document).ready( function() {
-    //var d = Date.parse('monday');
-    var d = Date.parse('2010-06-14');
+    var d = Date.parse('monday');
+    //var d = Date.parse('2010-06-14');
     //var d = Date.parse('2010-12-27');
 
     updatePlans(d);
