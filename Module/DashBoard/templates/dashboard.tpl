@@ -6,6 +6,18 @@
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/jqueryui/themes/base/jquery-ui.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="Module/DashBoard/templates/dashboard.css" media="screen" />
+<style type="text/css">
+#header {
+    background-image:url(../images/headers/about.jpg);
+}
+
+/*
+#main-nav li#dashboard,
+#main-nav li#dashboard a {
+    background-position: 0 -100px;
+}*/
+
+</style>
 {/block}
 
 {block name=javascript}
@@ -32,18 +44,16 @@
 {/block}
 
 {block name=body}
-<center>
-<h1>Dash Board</h1>
-</center>
+<h2><img src="" alt="Dashboard"></h2>
 
-<center>
-<div class="jqplot" style="margin:20px;width:800px;height:240px;"  id="graphs_plans"></div>
+<div class="jqplot" style="margin:20px;width:620px;height:240px;"  id="graphs_plans"></div>
 
 <span class="plans_back">back</span>
 <span class="plans_forward">forward</span>
-<div style="margin:20px;width:800px;height:240px;" id="details_plans"></div>
-
-</center>
+<div style="margin:20px;width:620px;height:240px;" id="details_plans"></div>
 
 {/block}
 
+{block name=sidebar}
+Hi there, I am in the sidebar
+{/block}

@@ -8,6 +8,10 @@ body {
 	font: 12px "Lucida Grande", "Lucida Sans Unicode", Tahoma, Verdana, sans-serif;
 }
 
+.hidden {
+    display: none;
+}
+
 form {
 	margin-left: 8px;
 	padding: 16px 16px 40px 16px;
@@ -34,6 +38,106 @@ a {
 	text-decoration: none;
 }
 
+/* Start of the default theme */
+#page-container {
+    width: 960px;
+    margin: auto;
+}
+
+/* Navigation */
+#main-nav {
+    height: 50px;
+    padding-left: 11px;
+}
+
+#main-nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+#main-nav li {
+    float: left;
+}
+
+#main-nav li a {
+    display: block;
+    height: 0px !important;
+    padding: 50px 0 0 0;
+    overflow: hidden;
+    background-repeat: no-repeat;
+}
+
+#main-nav li a:hover {
+    background-position: 0 -50px;
+}
+
+#main-nav li#dashboard,
+#main-nav li#dashboard a {
+    width: 120px;
+    background-image: url(images/menu/dashboard.png);
+}
+
+/* Header */
+#header {
+    height: 150px;
+    background: #2dc3de
+                url(../images/headers/about.jpg);
+}
+
+#header h1 {
+    float: right;
+    margin-top: 57px;
+    padding-right: 31px;
+}
+
+/* Side bar */
+#sidebar {
+    float: right;
+    width: 260px;
+    line-height: 18px;
+}
+
+#sidebar .padding {
+    padding: 25px;
+}
+
+/* Content */
+#content {
+    margin: auto;
+    margin-right: 260px;
+    line-height: 18px;
+}
+
+#content .padding {
+    padding: 25px;
+}
+
+/* Footer */
+#footer {
+    clear: both;
+    height: 66px;
+    font-size: 10px;
+    color: #c9c9c9;
+    border-top: 1px solid #efefef;
+    padding: 13px 25px;
+    line-height: 18px;
+}
+
+#footer a {
+    color: #c9c9c9;
+}
+
+#footer a:hover {
+    color: #2dc3de;
+}
+
+#footer #altnav {
+    width: 350px;
+    float: right;
+    text-align: right;
+}
+
+/* Old stuff */
 .sessiongraphs td {
 /*    background:     #e9e7e7;*/
     vertical-align: top;

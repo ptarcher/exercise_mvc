@@ -14,4 +14,23 @@
     </li>
 {/foreach}
 </ul>
+
+<!-- The new menu -->
+<div id="main-nav">
+<ul>
+    <li id="dashboard"><a href="#">DashBoard</a>
+        <!--ul>
+            <li>View<li>
+        </ul-->
+    </li>
+    <li><a href="#">Sessions</a>
+        <!--ul>
+            <li>View<li>
+        </ul-->
+    </li>
+
+</ul>
+
+
+</div> <!-- main-nav -->
 <!-- End Navigator -->
