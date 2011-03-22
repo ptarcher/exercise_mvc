@@ -11,9 +11,38 @@
 </head>
 
 <body>
+<div id="page-container">
 {include file="default/templates/menu.tpl"}
 
-{block name=body}{/block}
+    <div id="header">
+        <h1><img src="" alt="Bike"></h1>
+    </div> <!-- header -->
+
+    <div id="sidebar">
+        <div class="padding">
+            {block name=sidebar}{/block}
+        </div> <!-- padding -->
+    </div> <!-- sidebar -->
+
+    <div id="content">
+        <div class="padding">
+            {block name=body}{/block}
+        </div> <!-- padding -->
+    </div> <!--content -->
+
+    <div id="footer">
+        <div id="altnav">
+            <a href="#">a link</a> - 
+            <a href="#">a link</a>
+        </div> <!-- altnav -->
+        Copyright Bike - Your bike management system<br>
+
+        Bike is an open source project the code can be found on <a href="http://www.github.com">GitHub</a><br>
+
+        Bike is a deriative of <a href="http://www.piwik.org">Piwik</a>
+    </div> <!-- footer -->
+
+</div> <!-- page-container -->
 
 <!-- Begin Footer -->
 </body>
