@@ -24,9 +24,10 @@
 		<label>Password:<br />
 		<input type="password" name="form_password" id="form_password" class="input" value="" size="20" tabindex="20" /></label>
 	</p>
-	{*
-		<p class="forgetmenot"><label><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="90" /> Remember Me</label></p>
-	*}
+	<p class="forgetmenot">
+        <label>Remember Me
+        <input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="90" /> </label>
+    </p>
 	<input name="form_url" type="hidden" value="{$urlToRedirect}" />
 	<p class="submit">
 		<input type="submit" value="Login" tabindex="100" />
