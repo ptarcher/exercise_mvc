@@ -11,6 +11,7 @@
 {block name=javascript}
     <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="themes/menu_new.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/jqueryui/jquery-ui-1.8.1.min.js"></script>
     <script type="text/javascript" src="Module/Sessions/templates/session_upload.js"></script>
     <script type="text/javascript">
@@ -20,12 +21,10 @@
 {/block}
 
 {block name=body}
-<center>
-<h1>Upload Exercise Sessions</h1>
-</center>
+<h2>Upload Exercise Sessions</h2>
 
 <!-- upload file -->
-<div id="session_upload">
+<div class="form">
 {if $form_data.errors}
 <div id="upload_error">	
 	{foreach from=$form_data.errors item=data}
@@ -46,11 +45,10 @@ Is this session ({$session_timestamp})the planned exercise session for {$planned
 </div> <!-- upload_question -->
 {/if}
 
-
 <form {$form_data.attributes}>
 	<p>
 		<label>File:<br />
-		<input type="file" name="form_upload" id="file" class="input" value="" size="20" tabindex="1" /></label>
+		<input type="file" name="form_upload" id="form_upload" class="input" value="" size="20" tabindex="1" /></label>
 	</p>
 
 	<p class="submit">
@@ -58,5 +56,5 @@ Is this session ({$session_timestamp})the planned exercise session for {$planned
 	</p>
 </form>
 
-</div> <!-- session_upload -->
+</div> <!-- form -->
 {/block}
