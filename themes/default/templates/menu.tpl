@@ -18,17 +18,18 @@
 <!-- The new menu -->
 <div id="main-nav">
 <ul>
-    <li id="dashboard"><a href="#">DashBoard</a>
-        <!--ul>
-            <li>View<li>
-        </ul-->
+{foreach from=$Core_NavigationMenu key=mainMenu item=subMenu name=menu}
+    <li id="{$mainMenu}" class="level1">
+        <a href="#">{$mainMenu}</a>
+        <ul>
+        {foreach from=$subMenu key=name item=urlParams name=subMenu}
+            {if strpos($name, '_') !== 0}
+                <li class="level2 hidden"><a href="{$urlParams._url|@urlRewriteBasicView}">{$name}</a></li>
+            {/if}
+        {/foreach}
+        </ul>
     </li>
-    <li><a href="#">Sessions</a>
-        <!--ul>
-            <li>View<li>
-        </ul-->
-    </li>
-
+{/foreach}
 </ul>
 
 
