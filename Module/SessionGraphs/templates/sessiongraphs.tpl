@@ -42,21 +42,15 @@
 {/block}
 
 {block name=body}
-<center>
-<h1>Exercise data</h1>
+<h2>Exercise data</h2>
 
-<table class="sessiongraphs">
-<tr>
-    <td>
-        {include file="SessionGraphs/templates/table_session.tpl"}
-        {include file="SessionGraphs/templates/table_zones.tpl"}
-        {include file="SessionGraphs/templates/table_laps.tpl"}
-        {include file="SessionGraphs/templates/table_climbs.tpl"}
-    </td>
-    <td>
-        {include file="SessionGraphs/templates/table_graphs.tpl"}
-    </td>
-</tr>
+{include file="SessionGraphs/templates/table_graphs.tpl"}
 
-</center>
+{/block}
+
+{block name=sidebar}
+{include file="SessionGraphs/templates/table_session.tpl"}
+{include file="SessionGraphs/templates/table_zones.tpl"}
+{include file="SessionGraphs/templates/table_laps.tpl"}
+{include file="SessionGraphs/templates/table_climbs.tpl"}
 {/block}
