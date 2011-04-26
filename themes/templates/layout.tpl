@@ -5,8 +5,20 @@
 <head>
     <title>Bike &rsaquo; {block name=title}{/block}</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <!-- CSS -->
+	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/jqueryui/themes/base/jquery-ui.css" media="screen" />
     {block name=css}{/block}
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="libraries/javascript/jquery/plugins/jqueryui/jquery-ui-1.8.1.min.js"></script>
+    <script type="text/javascript" src="themes/common.js"></script>
+    <script type="text/javascript" src="themes/menu.js"></script>
     {block name=javascript}{/block}
+
+    <!-- Head -->
     {block name=head}{/block}
 </head>
 
