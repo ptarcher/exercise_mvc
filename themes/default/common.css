@@ -50,11 +50,16 @@ form {
     border-color: #328ab2;
 }
 
+form .submit {
+    float: right;
+}
+
 form p {
 	margin-bottom: 24px;
 }
 
-input {
+.form input {
+    border: 1px solid #cecece;
     font-family: tahoma, verdana, sans-serif;
     font-size: 15px;
     margin-left: 5px;
@@ -62,9 +67,15 @@ input {
     padding-right: 3px;
 }
 
-form .submit {
-    float: right;
+table input, table textarea, table select {
+    border: 1px solid #cecece;
+    font-family: tahoma, verdana, sans-serif;
+    font-size: 12px;
+    margin-left: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
+
 
 a {
 	text-decoration: none;
@@ -94,42 +105,39 @@ a {
 }
 
 #main-nav .level2 {
-    float: left;
+    /*float: left;*/
+    position: absolute;
     list-style: none;
     background-repeat: no-repeat;
 }
 
-#main-nav .level1 a {
+#main-nav .level1 > a {
     display: block;
     height: 0px !important;
     padding: 50px 0 0 0;
     overflow: hidden;
 }
 
-#main-nav .level1 a:hover {
+#main-nav .level1 > a:hover {
     background-position: 0 -50px;
 }
 
-#main-nav .level1#DashBoard,
-#main-nav .level1#DashBoard a {
+#main-nav .level1#DashBoard > a {
     width: 120px;
     background-image: url(images/menu/dashboard.png);
 }
 
-#main-nav .level1#Sessions,
-#main-nav .level1#Sessions a {
+#main-nav .level1#Sessions > a {
     width: 100px;
     background-image: url(images/menu/sessions.png);
 }
 
-#main-nav .level1#Plans,
-#main-nav .level1#Plans a {
+#main-nav .level1#Plans > a {
     width: 70px;
     background-image: url(images/menu/plans.png);
 }
 
-#main-nav .level1#UserManagement,
-#main-nav .level1#UserManagement a {
+#main-nav .level1#UserManagement > a {
     width: 200px;
     background-image: url(images/menu/user_management.png);
 }
