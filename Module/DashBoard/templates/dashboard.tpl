@@ -3,28 +3,21 @@
 {block name=title}Dash Board{/block}
 
 {block name=css}
-	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
-	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/jqueryui/themes/base/jquery-ui.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="Module/DashBoard/templates/dashboard.css" media="screen" />
+
 <style type="text/css">
 #header {
     background-image:url(../images/headers/about.jpg);
 }
 
-/*
-#main-nav li#dashboard,
-#main-nav li#dashboard a {
+#main-nav li#DashBoard > a {
     background-position: 0 -100px;
-}*/
-
+}
 </style>
 {/block}
 
 {block name=javascript}
-    <script type="text/javascript" src="themes/common.js"></script>
     <script type="text/javascript" src="libraries/javascript/date.js"></script>
-    <script type="text/javascript" src="libraries/javascript/jquery/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" src="libraries/javascript/jquery/plugins/jqueryui/jquery-ui-1.8.1.min.js"></script>
 
     <!-- BEGIN: jqplot -->
     <!--[if IE]><script src="libraries/javascript/jqplot/excanvas.min.js"></script><![endif]-->
