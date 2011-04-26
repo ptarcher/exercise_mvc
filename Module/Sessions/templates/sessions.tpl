@@ -5,9 +5,7 @@
 {block name=css}
     <link rel="stylesheet" type="text/css" href="Module/Sessions/templates/sessions.css" />
 	<link rel="stylesheet" type="text/css" href="themes/default/common.css" media="screen" />
-	<link rel="stylesheet" type="text/css" href="themes/default/menu.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/tablesorter/themes/blue/style.css" media="screen" />
-	<link rel="stylesheet" type="text/css" href="libraries/javascript/superfish/css/superfish.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/dateplustimepicker/themes/default/jquery-dateplustimepicker.min.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/jqueryui/themes/base/jquery-ui.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="libraries/javascript/jquery/plugins/tablesorter/addons/pager/jquery.tablesorter.pager.css" media="screen" />
@@ -23,8 +21,7 @@
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/jquery.metadata.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/tablesorter/addons/pager/jquery.tablesorter.pager.js"></script>
     <script type="text/javascript" src="libraries/javascript/jquery/plugins/dateplustimepicker/jquery-dateplustimepicker.js"></script>
-    <script type="text/javascript" src="libraries/javascript/superfish/js/superfish.js"></script>
-    <script type="text/javascript" src="themes/menu.js"></script>
+    <!--script type="text/javascript" src="themes/menu.js"></script-->
     <script type="text/javascript" src="Module/Sessions/templates/sessions.js"></script>
 {/block}
 
