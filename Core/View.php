@@ -94,7 +94,6 @@ class Core_View implements Core_iView
 	{
 		try {
 			$this->currentModule = Core_Helper::getModule();
-			//$this->currentPluginName = Core_Helper::getCurrentPlugin()->getName();
 			//$this->userLogin = Core_Helper::getCurrentUserLogin();
 			
 			$this->url = Core_Url::getCurrentUrl();
