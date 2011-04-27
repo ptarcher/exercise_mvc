@@ -136,11 +136,11 @@ class Module_UserManagement_API extends Core_ModuleAPI
     {
         $db = Zend_Registry::get('db');
 
-        $db->select()
-           ->from('t_training_types',
-                   array('type_short',
-                         'type'))
-           ->order('type_short');
+        $select = $db->select()
+                     ->from('t_training_types',
+                             array('type_short',
+                                   'type'))
+                     ->order('type_short');
         $stmt = $db->query($select);
 
         $types = $stmt->fetchAll();
