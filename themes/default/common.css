@@ -12,6 +12,7 @@ body {
     display: none;
 }
 
+/* Forms */
 form {
 	margin-left: 8px;
 	padding: 16px 16px 40px 16px;
@@ -22,18 +23,75 @@ form {
 	border-radius: 5px;
 }
 
-.form {
-    width: 350px;
-    margin-top: 20px;
+div .form form,
+div .form input,
+div .form select,
+div .form textarea
+{
+    margin: 0;
+    padding: 0;
+    color: #000000;
 }
 
-.form form input {
-    color: #555;
+div .form select {
+    border: 1px solid #cecece;
 }
 
-.form form .submit input {
+div .form {
+    margin: 0 auto;
+    width: 620px;
+    background: #e1e9eb;
+    /*position: relative;*/
+    top: 50px;
+    border: 1px solid #262626;
+    /*width: 350px;
+    margin-top: 20px;*/
+}
+
+div .form h1 {
+    color: #2dc3de;
+    font-size: 18px;
+    text-transform: uppercase;
+    padding: 5px 0 5px 5px;
+    /*border-bottom: 1px solid #161712;
+    border-top: 1px solid #161712;*/
+}
+
+div .form label {
+    width: 100%;
+    display: block;
+    background: #e1e9eb;
+    /*border-top: 1px solid #262626;
+    border-bottom: 1px solid #161712;*/
+    padding: 10px 0 10px 0;
+}
+
+div .form label span {
+    display: block;
+    font-size: 12px;
+    float: left;
+    width: 150px;
+    text-align: right;
+    padding: 5px 20px 0 0;
+}
+
+div .form label label {
+    display: inline;
+}
+
+div .form input {
+    padding: 10px 10px;
+    width: 300px;
+    background: #ffffff;
+    border-bottom: 1px double #171717;
+    border-top:    1px double #171717;
+    border-left:   1px double #333333;
+    border-right:  1px double #333333;
+}
+
+div .form form .submit input {
     background-color: #e5e5e5;
-    color: #246;
+    color: #000246;
     border-color: #80b5d0;
     padding: 3px 5px;
     border: none;
@@ -43,6 +101,15 @@ form {
     -khtml-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
+}
+
+#login_error {
+    margin: 0 0 16px 8px;
+    background-color: #ffffe0;
+    border-color: #e6db55;
+    border-width: 1px;
+    border-style: solid;
+    padding: 12px;
 }
 
 .form form .submit input:hover {
@@ -104,13 +171,6 @@ a {
     background-repeat: no-repeat;
 }
 
-#main-nav .level2 {
-    /*float: left;*/
-    position: absolute;
-    list-style: none;
-    background-repeat: no-repeat;
-}
-
 #main-nav .level1 > a {
     display: block;
     height: 0px !important;
@@ -140,6 +200,38 @@ a {
 #main-nav .level1#UserManagement > a {
     width: 200px;
     background-image: url(images/menu/user_management.png);
+}
+
+#main-nav .level1#User > a {
+    width: 60px;
+    background-image: url(images/menu/user.png);
+}
+
+#main-nav li .selected > a {
+    background-position: 0 -100px;
+}
+
+#main-nav .level2 {
+    position: absolute;
+    top: 50px;
+    left: 35px;
+    background-repeat: no-repeat;
+}
+
+#main-nav .level2 ul {
+    list-style: none;
+}
+
+#main-nav .level2 ul li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+    min-width: 200px;
+    width: 200px;
+}
+
+#main-nav .level2 ul li a:hover {
+    color: #ffffff;
 }
 
 /* Header */
