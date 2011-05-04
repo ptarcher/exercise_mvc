@@ -49,7 +49,7 @@
         </div> <!-- altnav -->
         Copyright Bike - Your bike management system<br>
 
-        Bike is an open source project the code can be found on <a href="http://www.github.com">GitHub</a><br>
+        Bike is an open source project the code can be found on <a href="https://github.com/ptarcher/exercise_mvc">GitHub</a><br>
 
         Bike is a deriative of <a href="http://www.piwik.org">Piwik</a>
     </div> <!-- footer -->
