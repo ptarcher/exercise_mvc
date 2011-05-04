@@ -9,10 +9,6 @@
 #header {
     background-image:url(../images/headers/about.jpg);
 }
-
-#main-nav li#DashBoard > a {
-    background-position: 0 -100px;
-}
 </style>
 {/block}
 
