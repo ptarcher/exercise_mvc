@@ -85,7 +85,18 @@ class Core_Navigator
 
     function getMenu() 
     {
-        return Core_Menu_GetMenu();
+        $menu = Core_Menu_GetMenu();
+
+        /* Sort the categories */
+        uksort($menu, 'strcasecmp');
+
+        /* Sort inside the categories */
+        /*
+        foreach ($menu as &$entry) {
+            uksort($entry, 'strcasecmp');
+        }*/
+
+        return $menu;
     }
 }
 
