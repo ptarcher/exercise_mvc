@@ -290,3 +290,16 @@ ALTER TABLE t_users ADD COLUMN dob date;
 ALTER TABLE t_users ADD COLUMN token character varying(64) NOT NULL DEFAULT 'abc';
 ALTER TABLE t_exercise_plans_daily ADD COLUMN session_timestamp timestamp with time zone;
 ALTER TABLE t_exercise_plans_daily ADD CONSTRAINT t_users_zones_fk_sessions FOREIGN KEY (status) REFERENCES t_exercise_totals (session_date,userid) ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+CREATE OR REPLACE VIEW v_exercise_totals
+AS
+    SELECT 
+        t_exercise_totals.*,
+        ROUND(t_exercise_totals.avg_heartrate / t_users.max_heartrate * 100, 1) AS avg_heartrate_percent, 
+        ROUND(t_exercise_totals.max_heartrate / t_users.max_heartrate * 100, 1) AS max_heartrate_percent
+    FROM 
+        t_users, 
+        t_exercise_totals 
+    WHERE 
+        t_users.userid = t_exercise_totals.userid;
+

@@ -84,11 +84,11 @@ class Module_UserManagement_Controller extends Core_Controller
 
         $form = new AddUserForm();
         if ($form->validate()) {
-            $userid   = $form->getSubmitValue('adduserform_login');
-            $password = $form->getSubmitValue('adduserform_password');
-            $coach    = $form->getSubmitValue('adduserform_coach');
-            $athlete  = $form->getSubmitValue('adduserform_athlete');
-            $usertype = $form->getSubmitValue('adduserform_usertype');
+            $userid   = $form->getSubmitValue('login');
+            $password = $form->getSubmitValue('password');
+            $coach    = $form->getSubmitValue('coach');
+            $athlete  = $form->getSubmitValue('athlete');
+            $usertype = $form->getSubmitValue('usertype');
 
             $success = $api->createUser($userid, $password, $coach, $athlete, $usertype);
             if ($success) {

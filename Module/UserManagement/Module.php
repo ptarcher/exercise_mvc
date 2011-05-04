@@ -43,13 +43,13 @@ class Module_UserManagement_Module extends Core_Module
 
     function addMenu()
     {
-        Core_Menu_AddMenu('UserManagement', 'Settings', 
-                array('module' => 'UserManagement', 
-                      'action' => 'settings'));
-
-        Core_Menu_AddMenu('UserManagement', 'Bikes', 
+        Core_Menu_AddMenu('User', 'Bikes', 
                 array('module' => 'UserManagement', 
                       'action' => 'bikes'));
+
+        Core_Menu_AddMenu('User', 'Settings', 
+                array('module' => 'UserManagement', 
+                      'action' => 'settings'));
 
         if (isset($_SESSION['superuser']) && $_SESSION['superuser']) {
             Core_Menu_AddMenu('UserManagement', 'View Users', 

@@ -382,7 +382,7 @@ class Module_Sessions_Controller extends Core_Controller
         }
 
         $view->addForm($form);
-        $view->UploadErrorString = $UploadErrorString;
+        $view->UploadStatusMsg = $UploadStatusMsg;
         $view->subTemplate = 'genericForm.tpl';
         echo $view->render();
     }

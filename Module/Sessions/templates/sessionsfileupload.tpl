@@ -39,12 +39,6 @@
 </div> <!-- upload_status -->
 {/if}
 
-{if $planned}
-<div id="upload_question">
-Is this session ({$session_timestamp})the planned exercise session for {$planned.timestamp}? <a href="#" id="planned_yes">Yes</a><br />
-</div> <!-- upload_question -->
-{/if}
-
 <form {$form_data.attributes}>
 	<p>
 		<label>File:<br />
