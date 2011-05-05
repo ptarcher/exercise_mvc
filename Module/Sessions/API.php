@@ -56,42 +56,17 @@ class Module_Sessions_API extends Core_ModuleAPI
         return $result;
     }
 
-    function updateSession($session_date = "", $type_short = "", $description     = "",
-                           $duration     = "", $distance   = "",   $avg_heartrate = "",
-                           $avg_speed    = "", $comment    = "") 
+    function updateSession($session_date = "", $type_short = "",
+                           $description  = "", $comment    = "") 
     {
         $db = Zend_Registry::get('db');
 
         $db->update('t_exercise_totals',
                 array('type_short'    => $type_short,
                       'description'   => $description,
-                      'duration'      => $duration,
-                      'distance'      => $distance,
-                      'avg_heartrate' => $avg_heartrate,
-                      'avg_speed'     => $avg_speed,
                       'comment'       => $comment),
                 array('session_date = \''.$session_date.'\'',
                       'userid       = \''.Core_User::getUserId().'\'',));
-    }
-
-
-    function createSession($session_date, $type_short, 
-                           $description,  $duration, 
-                           $distance,     $avg_heartrate, 
-                           $avg_speed,    $comment) 
-    {
-        $db = Zend_Registry::get('db');
-
-        $db->insert('t_exercise_totals',
-                array('session_date'  => $session_date,
-                      'type_short'    => $type_short,
-                      'description'   => $description,
-                      'duration'      => $duration,
-                      'distance'      => $distance,
-                      'avg_heartrate' => $avg_heartrate,
-                      'avg_speed'     => $avg_speed,
-                      'comment'       => $comment,
-                      'userid'        => Core_User::getUserId()));
     }
 
     function createSessionFull($session_date,  $type_short, 

@@ -60,10 +60,10 @@
         <td id="date"><input type="hidden" id="session_date" value="{$session.session_date}" /><a href="{url module=SessionGraphs session_date=$session.session_date|escape:url}">{$session.session_date}</a></td>
         <td id="type"        class="editable">{$session.type_short}</td>
         <td id="description" class="editable">{$session.description}</td>       
-        <td id="duration"    class="editable">{$session.duration}</td>       
-        <td id="distance"    class="editable">{$session.distance}</td>       
-        <td id="avg_speed"   class="editable">{$session.avg_speed}</td>       
-        <td id="avg_heartrate" class="editable">{$session.avg_heartrate}</td>       
+        <td id="duration">{$session.duration}</td>       
+        <td id="distance">{$session.distance}</td>       
+        <td id="avg_speed">{$session.avg_speed}</td>       
+        <td id="avg_heartrate">{$session.avg_heartrate}</td>       
         <td id="comment" class="editable">{$session.comment}</td>       
         <td><center><img src='themes/default/images/edit.png' class="editSession" id="row{$i}" alt="" /></center></td>
         <td><center><img src='themes/default/images/remove.png' class="deleteSession" id="row{$i}" alt="" /></center></td>
