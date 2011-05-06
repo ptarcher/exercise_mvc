@@ -14,7 +14,7 @@
  *
  * @package Core_Login
  */
-class LoginForm extends Core_Form
+class Module_Login_LoginForm extends Core_Form
 {
 	function __construct()
 	{
