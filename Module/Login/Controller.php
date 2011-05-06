@@ -21,34 +21,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('Module/Login/LoginForm.php');
-
 class Module_Login_Controller extends Core_Controller 
 {
-    var $module_description = array(
-        'name'        => 'login',
-        'description' => 'Performs login and logout operations',
-        'version'     => '0.1',
-        'author'      => 'Paul Archer',
-    );
-
-    static function _getHooks() {
-        $hooks = array(
-            array("hook"     => "navigator",
-                  "category" => "User", 
-                  "name"     => "Logout", 
-                  "module"   => "Login", 
-                  "action"   => "logout"),
-        );
-
-        return $hooks;
-    }
-
-    function index() {
+    function index() 
+    {
         $this->doLogin();
     }
     
-    function doLogin($error_string = null) {
+    function doLogin($error_string = null) 
+    {
         /*
         $currentUrl = Helper::getModule() == 'Login' ? 
                               Core_Url::getReferer() : 
@@ -62,7 +43,7 @@ class Module_Login_Controller extends Core_Controller
         $urlToRedirect = Core_Common::getRequestVar('form_url', $currentUrl,   'string');
         $urlToRedirect = htmlspecialchars_decode($urlToRedirect);
 
-        $form = new LoginForm();
+        $form = new Module_Login_LoginForm();
         if ($form->validate()) {
             $api = new Module_Login_API();
             $userid   = $form->getSubmitValue('form_login');
@@ -119,9 +100,62 @@ class Module_Login_Controller extends Core_Controller
     }
 
     /**
+     * Create a new user
+     */
+    function signup() 
+    {
+        $form = new Module_Login_SignUpForm();
+        $view = Core_View::factory('signup');
+        $view->errorMessage = "";
+
+        if ($form->validate()) {
+            $api      = new Module_Login_API();
+            $user_api = new Module_UserManagement_API();
+
+            $userid    = $form->getSubmitValue('form_login');
+            $password  = $form->getSubmitValue('form_password');
+            $password2 = $form->getSubmitValue('form_passwordconfirm');
+            $email     = $form->getSubmitValue('form_email');
+
+            /* Check the passwords match */
+            try {
+                /* Check if the username exists */
+                if ($api->getUser($userid)) {
+                    throw new Exception('The username is already taken');
+                }
+
+                /* Check the passwords */
+                if ($password !== $password2) {
+                    throw new Exception('The passwords do not match');
+                }
+
+                $user_api->createUser($userid, $password, $email);
+
+                Core_Url::redirectToUrl('index.php');
+
+            } catch (Exception $e) {
+                $view->errorMessage = $e->getMessage();
+            }
+        }
+
+        $view->addForm($form);
+        $view->subTemplate = 'genericForm.tpl';
+        echo $view->render();
+    }
+
+    /**
+     * Lost Password
+     */
+    function lostPassword() 
+    {
+    }
+
+
+    /**
      * Logout the current user
      */
-    function logout() {
+    function logout() 
+    {
         self::clearSession();
         Core_Helper::redirectToModule('DashBoard');
     }
