@@ -35,7 +35,7 @@
 </form>
 
 <p id="nav">
-<a href="index.php?module=Login&amp;action=lostPassword&amp;form_url={$urlToRedirect|escape:url}" title="Lost Your Password">Lost Your Password</a>
+<a href="index.php?module=Login&amp;action=lostPassword&amp;form_url={$urlToRedirect|escape:url}" title="Lost Your Password">Lost Your Password</a> | <a href="index.php?module=Login&amp;action=signup&amp;form_url={$urlToRedirect|escape:url}" title="Sign-up">Sign-up</a>
 </p>
 
 </div>
