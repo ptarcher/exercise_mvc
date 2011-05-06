@@ -112,20 +112,22 @@ class Module_UserManagement_API extends Core_ModuleAPI
         return $stmt->fetchAll();
     }
 
-    function createUser($userid, $password, $coach, $athlete, $usertype) 
+    function createUser($userid, $password, $email, $coach = 'f', $athlete = 't', $superuser = 'f') 
     {
         $password_salt = Core_Common::getRandomString(64);
         $password_hash = sha1($password . $password_salt);
         $db = Zend_Registry::get('db');
 
+        /*
         if (!Core_User::isSuperUser()) {
-            throw exception('You need to be super user to perform this action');
-        }
+            throw new Exception('You need to be super user to perform this action');
+        }*/
 
         $db->insert('t_users',
                 array('userid'        => $userid,
                       'password_hash' => $password_hash,
                       'password_salt' => $password_salt,
+                      'email'         => $email,
                       'coach'         => $coach,
                       'athlete'       => $athlete,
                       'superuser'     => $superuser));
