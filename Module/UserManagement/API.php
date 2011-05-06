@@ -118,10 +118,10 @@ class Module_UserManagement_API extends Core_ModuleAPI
         $password_hash = sha1($password . $password_salt);
         $db = Zend_Registry::get('db');
 
-        /*
         if (!Core_User::isSuperUser()) {
-            throw new Exception('You need to be super user to perform this action');
-        }*/
+            //throw new Exception('You need to be super user to perform this action');
+            $superuser = 'f';
+        }
 
         $db->insert('t_users',
                 array('userid'        => $userid,
