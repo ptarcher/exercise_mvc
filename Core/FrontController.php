@@ -130,7 +130,8 @@ class Core_FrontController
 
     private function checkLogin(&$requested_module, &$requested_action) 
     {
-        if (!isset($_SESSION['userid'])) {
+        if (!($requested_module === 'Login' && $requested_action === 'signup') 
+                && !isset($_SESSION['userid'])) {
             $requested_module = 'Login';
             $requested_action = 'doLogin';
         }
