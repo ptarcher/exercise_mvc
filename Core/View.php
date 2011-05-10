@@ -12,7 +12,6 @@
 
 require_once('Core/iView.php');
 require_once('libraries/Smarty/Smarty.class.php');
-require_once('libraries/HTML/QuickForm/Renderer/ArraySmarty.php');
 
 /**
  * View class to render the user interface
@@ -135,15 +134,26 @@ class Core_View implements Core_iView
 	
 	public function addForm( $form )
 	{
-		// Create the renderer object	
-		$renderer = new HTML_QuickForm_Renderer_ArraySmarty($this->smarty, false, false);
-		
-		// build the HTML for the form
-		$form->accept($renderer);
-		
-		// assign array with form data
-		$this->smarty->assign('form_data', $renderer->toArray());
-		$this->smarty->assign('element_list', $form->getElementList());
+        if ($form instanceof Core_Form) 
+        {
+            static $registered = false;
+            if(!$registered)
+            {
+                HTML_QuickForm2_Renderer::register('smarty',                    'HTML_QuickForm2_Renderer_Smarty');
+                $registered = true;
+            }
+
+            // Create the renderer object   
+            $renderer = HTML_QuickForm2_Renderer::factory('smarty');
+            $renderer->setOption('group_errors', true);
+
+            // build the HTML for the form
+            $form->render($renderer);
+
+            // assign array with form data
+            $this->smarty->assign('form_data', $renderer->toArray());
+            $this->smarty->assign('element_list', $form->getElementList());
+        }
 	}
 	
 	public function assign($var, $value=null)
