@@ -10,8 +10,6 @@
  * @package Core
  */
 
-require_once('libraries/HTML/QuickForm.php');
-
 /**
  * Parent class for forms to be included in Smarty
  * 
@@ -21,73 +19,63 @@ require_once('libraries/HTML/QuickForm.php');
  * @see HTML_QuickForm, libs/HTML/QuickForm.php
  * @link http://pear.php.net/package/HTML_QuickForm/
  */
-abstract class Core_Form extends HTML_QuickForm
+abstract class Core_Form extends HTML_QuickForm2
 {
 	protected $a_formElements = array();
 	
-	function __construct( $action = '' )
+	function __construct( $id, $method = 'post', $attributes = null, $trackSubmit = false)
 	{
-		if(empty($action))
+		if(!isset($attributes['action']))
 		{
-			$action = Core_Url::getCurrentQueryString();
+			$attributes['action'] = Core_Url::getCurrentQueryString();
 		}
-		parent::HTML_QuickForm('form', 'POST', $action);
-		
-		$this->registerRule( 'checkEmail', 'function', 'Core_Form_isValidEmailString');
-		$this->registerRule( 'fieldHaveSameValue', 'function', 'Core_Form_fieldHaveSameValue');
-	
+		if(!isset($attributes['name']))
+		{
+			$attributes['name'] = $id;
+		}
+		parent::__construct($id,  $method, $attributes, $trackSubmit);
+
 		$this->init();
 	}
-	
+
+	/**
+	 * Class specific initialization
+	 */
 	abstract function init();
-	
-	function getElementList()
+
+	/**
+	 * The elements in this form
+	 *
+	 * @return array Element names
+	 */
+	public function getElementList()
 	{
-		$listElements=array();
-		foreach($this->a_formElements as $title =>  $a_parameters)
-		{
-			foreach($a_parameters as $parameters)
-			{
-				if($parameters[1] != 'headertext' 
-					&& $parameters[1] != 'submit')
-				{					
-					// case radio : there are two labels but only record once, unique name
-					if( !isset($listElements[$title]) 
-					|| !in_array($parameters[1], $listElements[$title]))
-					{
-						$listElements[$title][] = $parameters[1];
-					}
-				}
-			}
-		}
-		return $listElements;
-	}
-	
-	function addElements( $a_formElements, $sectionTitle = '' )
-	{
-		foreach($a_formElements as $parameters)
-		{
-			call_user_func_array(array(&$this , "addElement"), $parameters );
-		}
-		
-		$this->a_formElements = 
-					array_merge(
-							$this->a_formElements, 
-							array( 
-								$sectionTitle =>  $a_formElements
-								)
-						);
-	}
-	
-	function addRules( $a_formRules)
-	{
-		foreach($a_formRules as $parameters)
-		{
-			call_user_func_array(array(&$this , "addRule"), $parameters );
-		}
-		
+		return $this->a_formElements;
 	}
 
+	/**
+	 * Wrapper around HTML_QuickForm2_Container's addElement()
+	 *
+	 * @param    string|HTML_QuickForm2_Node  Either type name (treated
+	 *               case-insensitively) or an element instance
+	 * @param    mixed   Element name
+	 * @param    mixed   Element attributes
+	 * @param    array   Element-specific data
+	 * @return   HTML_QuickForm2_Node     Added element
+	 * @throws   HTML_QuickForm2_InvalidArgumentException
+	 * @throws   HTML_QuickForm2_NotFoundException
+	 */
+    public function addElement($elementOrType, $name = null, $attributes = null,
+                               array $data = array())
+	{
+		if($name != 'submit')
+		{
+			$this->a_formElements[] = $name;
+		}
+
+		return parent::addElement($elementOrType, $name, $attributes, $data);
+	}
+	
 	function setChecked( $nameElement )
 	{
 		foreach( $this->_elements as $key => $value)
@@ -97,6 +85,28 @@ abstract class Core_Form extends HTML_QuickForm
 				$this->_elements[$key]->_attributes['checked'] = 'checked';
 			}
 		}
+	}
+	function setSelected( $nameElement, $value )
+	{
+		foreach( $this->_elements as $key => $value)
+		{
+			if($value->_attributes['name'] == $nameElement)
+			{
+				$this->_elements[$key]->_attributes['selected'] = 'selected';
+			}
+		}
+	}
+
+	/**
+	 * Ported from HTML_QuickForm to minimize changes to Controllers
+	 *
+	 * @param string $elementName
+	 * @return mixed
+	 */
+	function getSubmitValue($elementName)
+	{
+		$value = $this->getValue();
+		return isset($value[$elementName]) ? $value[$elementName] : null;
 	}
 }
 
