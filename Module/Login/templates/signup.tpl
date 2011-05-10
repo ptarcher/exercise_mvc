@@ -14,7 +14,7 @@
 <div id="error"><strong>Error</strong>: {$errorMessage}<br /></div>
 {/if}
 
-<form {$form_data.attributes}>
+<!--form {$form_data.attributes}>
 	<p>
 		<label>Username:<br />
 		<input type="text" name="form_login" id="form_login" class="input" value="" size="20" tabindex="10" required /></label>
@@ -31,13 +31,30 @@
 	</p>
 	<p>
 		<label>Confirm Password:<br />
-		<input type="password" name="form_passwordconfirm" id="form_password" class="input" value="" size="20" tabindex="40" required /></label>
+		<input type="password" name="form_passwordconfirm" id="form_passwordconfirm" class="input" value="" size="20" tabindex="40" required /></label>
 	</p>
+
+	<p>
+		<label>Sex:<br />
+		<input type="password" name="form_sex" id="form_sex" class="input" value="" size="20" tabindex="40" required /></label>
+	</p>
+
+	<p>
+		<label>Date of Birth:<br />
+		<input type="password" name="form_dob" id="form_dob" class="input" value="" size="20" tabindex="40" required /></label>
+	</p>
+
+
+
 
 	<p class="submit">
 		<input type="submit" value="Sign-Up" tabindex="100" />
 	</p>
-</form>
+</form-->
+
+{if isset($form_data)}
+    {include file="default/templates/genericForm.tpl"}
+{/if}
 
 </div>
 
