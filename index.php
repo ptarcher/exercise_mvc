@@ -43,6 +43,8 @@ require_once(INCLUDE_PATH.'/libraries/Zend/Loader/Autoloader.php');
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->registerNamespace('Core_');
 $autoloader->registerNamespace('Module_');
+$autoloader->registerNamespace('HTML_');
+$autoloader->registerNamespace('PEAR_');
 
 /* Zend Session */
 Zend_Session::start();
