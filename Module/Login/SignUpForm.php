@@ -16,34 +16,38 @@
  */
 class Module_Login_SignUpForm extends Core_Form
 {
-	function __construct()
+	function __construct( $id = 'signupform', $method = 'post', $attributes = null, $trackSubmit = false)
 	{
-		parent::__construct();
-		// reset
-		$this->updateAttributes('id="signupform" name="signupform"');
+		parent::__construct($id, $method, $attributes = array('autocomplete' => 'off'), $trackSubmit);
 	}
 
 	function init()
 	{
-		$formElements = array(
-			array('text',     'form_login'),
-			array('email',    'form_email'),
-			array('password', 'form_password'),
-			array('password', 'form_passwordconfirm'),
-		);
-		$this->addElements( $formElements );
+        $login = $this->addElement('text',      'form_login');
+        $login->setLabel('Login');
+        $login->addRule('required',     'The Login is requried');
+        //$login->addRule('alphanumeric', 'The username must be alpha numeric');
 
-		$formRules = array(
-			array('form_login',    sprintf('The %s is required', 'Login'), 'required'),
-			array('form_login',    sprintf('The username must be alpha numeric'), 'alphanumeric'),
-			array('form_email',    sprintf('The %s is required', 'Email'), 'required'),
-			array('form_email',    sprintf('Must be a valid email address', ''), 'email'),
-			array('form_password', sprintf('The %s is required', 'Password'), 'required'),
-			array('form_passwordconfirm', sprintf('The %s is required', 'Confirmation Password'), 'required'),
-		);
-		$this->addRules( $formRules );
+        $email = $this->addElement('text',      'form_email');
+        $email->setLabel('Email');
+        $email->addRule('required', 'The Email is requried');
+        //$email->addRule('email',  'Must use a valid email address');
 
-		$this->addElement('submit', 'submit');
+        $pw = $this->addElement('password', 'form_password');
+        $pw->setLabel('Password');
+        $pw->addRule('required', 'The Password is requried');
+
+        $pwconf = $this->addElement('password', 'form_passwordconfirm');
+        $pwconf->setLabel('Confirm Password');
+        $pwconf->addRule('required', 'The Password confirmation is requried');
+
+        $sex = $this->addElement('select', 'form_sex');
+        $sex->setLabel('Sex');
+        $sex->loadOptions(array('Male','Female'));
+
+		$this->addElement('submit', 'submit', 
+                array('value' => 'Submit',
+                      'class' => 'submit'));
 	}
 }
 
