@@ -28,7 +28,7 @@ class Module_Login_SignUpForm extends Core_Form
         $login->addRule('required',     'The Login is requried');
         //$login->addRule('alphanumeric', 'The username must be alpha numeric');
 
-        $email = $this->addElement('text',      'form_email');
+        $email = $this->addElement('email',      'form_email');
         $email->setLabel('Email');
         $email->addRule('required', 'The Email is requried');
         //$email->addRule('email',  'Must use a valid email address');
