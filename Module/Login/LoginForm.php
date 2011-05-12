@@ -16,26 +16,18 @@
  */
 class Module_Login_LoginForm extends Core_Form
 {
-	function __construct()
+	function __construct( $id = 'loginform', $method = 'post', $attributes = null, $trackSubmit = false)
 	{
-		parent::__construct();
-		// reset
-		$this->updateAttributes('id="loginform" name="loginform"');
+		parent::__construct($id, $method, $attributes, $trackSubmit);
 	}
 
 	function init()
 	{
-		$formElements = array(
-			array('text',     'form_login'),
-			array('password', 'form_password'),
-		);
-		$this->addElements( $formElements );
+        $login = $this->addElement('text',     'form_login');
+        $login->addRule('required', 'The login is required');
 
-		$formRules = array(
-			array('form_login',    sprintf('The %s is required', 'Login'), 'required'),
-			array('form_password', sprintf('The %s is required', 'Password'), 'required'),
-		);
-		$this->addRules( $formRules );
+        $pw    = $this->addElement('password', 'form_password');
+        $pw->addRule('required', 'The password is required');
 
 		$this->addElement('submit', 'submit');
 	}
