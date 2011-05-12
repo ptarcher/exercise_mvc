@@ -23,25 +23,29 @@ class Module_Login_SignUpForm extends Core_Form
 
 	function init()
 	{
-        $login = $this->addElement('text',      'form_login');
+        $login = $this->addElement('text',     'form_login', array('required' => 'required'));
         $login->setLabel('Login');
         $login->addRule('required',     'The Login is requried');
         //$login->addRule('alphanumeric', 'The username must be alpha numeric');
 
-        $email = $this->addElement('email',      'form_email');
+        $email = $this->addElement('email',      'form_email', array('required' => 'required'));
         $email->setLabel('Email');
         $email->addRule('required', 'The Email is requried');
         //$email->addRule('email',  'Must use a valid email address');
 
-        $pw = $this->addElement('password', 'form_password');
+        $pw = $this->addElement('password', 'form_password', array('required' => 'required'));
         $pw->setLabel('Password');
         $pw->addRule('required', 'The Password is requried');
 
-        $pwconf = $this->addElement('password', 'form_passwordconfirm');
+        $pwconf = $this->addElement('password', 'form_passwordconfirm', array('required' => 'required'));
         $pwconf->setLabel('Confirm Password');
         $pwconf->addRule('required', 'The Password confirmation is requried');
 
-        $sex = $this->addElement('select', 'form_sex');
+        $dob = $this->addElement('text', 'form_dob', array('required' => 'required'));
+        $dob->setLabel('Date of Birth');
+        $dob->addRule('required', 'The Date of Birth is required');
+
+        $sex = $this->addElement('select', 'form_sex', array('required' => 'required'));
         $sex->setLabel('Sex');
         $sex->loadOptions(array('Male','Female'));
 
