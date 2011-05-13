@@ -29,6 +29,9 @@ class Module_Login_LoginForm extends Core_Form
         $pw    = $this->addElement('password', 'form_password');
         $pw->addRule('required', 'The password is required');
 
+        $remember = $this->addElement('checkbox', 'rememberme');
+        $url      = $this->addElement('hidden',   'form_url');
+
 		$this->addElement('submit', 'submit');
 	}
 }
