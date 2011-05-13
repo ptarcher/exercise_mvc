@@ -21,10 +21,9 @@
 {/block}
 
 {block name=body}
-<h2>Upload Exercise Sessions</h2>
-
 <!-- upload file -->
 <div class="form">
+<h1>Upload Exercise Sessions</h1>
 {if $form_data.errors}
 <div id="upload_error">	
 	{foreach from=$form_data.errors item=data}
@@ -40,14 +39,12 @@
 {/if}
 
 <form {$form_data.attributes}>
-	<p>
-		<label>File:<br />
-		<input type="file" name="form_upload" id="form_upload" class="input" value="" size="20" tabindex="1" /></label>
-	</p>
+    <label>
+        <span>File</span>
+        <input type="file" name="form_upload" id="form_upload" class="input" value="" size="20" tabindex="1" />
+    </label>
 
-	<p class="submit">
-		<input type="submit" value="Upload" tabindex="2" />
-	</p>
+    <input type="submit" value="Upload" tabindex="2" />
 </form>
 
 </div> <!-- form -->
