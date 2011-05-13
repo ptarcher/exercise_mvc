@@ -18,24 +18,16 @@ require_once('Core/Translate.php');
  */
 class SessionUploadForm extends Core_Form
 {
-	function __construct()
+	function __construct( $id = 'uploadform', $method = 'post', $attributes = null, $trackSubmit = false)
 	{
-		parent::__construct();
-		// reset
-		$this->updateAttributes('id="uploadform" name="uploadform"');
+		parent::__construct($id, $method, $attributes = array('autocomplete' => 'off'), $trackSubmit);
 	}
 
 	function init()
 	{
-		$formElements = array(
-			array('file',     'form_upload'),
-		);
-		$this->addElements( $formElements );
-
-		$formRules = array(
-			array('form_upload',    sprintf(Translate('General_Required'), Translate('Sessions_Upload')), 'required'),
-		);
-		$this->addRules( $formRules );
+        $file = $this->addElement('file',     'form_upload', array('required' => 'required'));
+        //$file->addLabel('Session File');
+        $file->addRule('required', 'The upload file is required');
 
 		$this->addElement('submit', 'submit');
 	}
