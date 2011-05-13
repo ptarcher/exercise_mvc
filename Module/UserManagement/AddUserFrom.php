@@ -8,30 +8,24 @@
  */
 class AddUserForm extends Core_Form
 {
-	function __construct()
+	function __construct( $id = 'adduserform', $method = 'post', $attributes = null, $trackSubmit = false)
 	{
-		parent::__construct();
-		// reset
-		$this->updateAttributes('id="adduserform" name="adduserform"');
+		parent::__construct($id, $method, $attributes, $trackSubmit);
 	}
 
 	function init()
 	{
-		$formElements = array(
-			array('text',     'login'),
-			array('password', 'password'),
-			array('radio',    'coach'),
-			array('radio',    'athlete'),
-		);
-		$this->addElements( $formElements );
+        $login   = $this->addElement('text',     'login');
+        $login->addRule('required', 'Login Required');
 
-		$formRules = array(
-			array('login',    'Login Required',           'required'),
-			array('password', 'Password Required',        'required'),
-			array('coach',    'Select a coach setting',   'required'),
-			array('athlete',  'Select a athlete setting', 'required'),
-		);
-		$this->addRules( $formRules );
+        $pw      = $this->addElement('password', 'password');
+        $pw->addRule('required', 'Password Required');
+
+        $coach   = $this->addElement('radio',    'coach');
+        $coach->addRule('required', 'Select a coach setting');
+
+        $athlete = $this->addElement('radio',    'athlete');
+        $athlete->addRule('required', 'Select an athlete setting');
 
 		$this->addElement('submit', 'submit');
 	}
