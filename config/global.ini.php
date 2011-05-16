@@ -122,7 +122,7 @@ minimum_mysql_version = 4.1
 minimum_pgsql_version = 8.3
 
 ; Minimum adviced memory limit in php.ini file (see memory_limit value)
-minimum_memory_limit = 128
+minimum_memory_limit = 256
 
 ; by default, Piwik uses relative URLs, so you can login using http:// or https://
 ; (the latter assumes you have a valid SSL certificate).
