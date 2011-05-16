@@ -10,8 +10,6 @@
  * @package Core_Sessions
  */
 
-require_once('Core/Translate.php');
-
 /**
  *
  * @package Core_Login
@@ -20,7 +18,7 @@ class SessionUploadForm extends Core_Form
 {
 	function __construct( $id = 'uploadform', $method = 'post', $attributes = null, $trackSubmit = false)
 	{
-		parent::__construct($id, $method, $attributes = array('autocomplete' => 'off'), $trackSubmit);
+		parent::__construct($id, $method, $attributes = array('autocomplete' => 'off', 'enctype' => 'multipart/form-data'), $trackSubmit);
 	}
 
 	function init()
