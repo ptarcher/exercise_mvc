@@ -51,6 +51,8 @@ class Core_FrontController
         Zend_Registry::set('config', $config);
         $config->init();
 
+        Core_Common::raiseMemoryLimitIfNecessary();
+
         /* Load the database */
         try {
             $db = Core_Db::getInstance();
