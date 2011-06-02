@@ -312,3 +312,173 @@ AS
     WHERE 
         t_users.userid = t_exercise_totals.userid;
 
+CREATE TABLE t_users_bikes_types
+(
+   "type" character varying(32) NOT NULL, 
+   "description" text, 
+   CONSTRAINT t_users_bikes_types_pk PRIMARY KEY ("type")
+)
+WITH (
+  OIDS = FALSE
+)
+;
+
+INSERT INTO t_users_bikes_types (type, "description") VALUES('Road', 'Road Bike');
+INSERT INTO t_users_bikes_types (type, "description") VALUES('Time-Trial', 'Time Trial Bike');
+INSERT INTO t_users_bikes_types (type, "description") VALUES('Mountain', 'Mountain Bike');
+INSERT INTO t_users_bikes_types (type, "description") VALUES('Downhill', 'Downhill Bike');
+INSERT INTO t_users_bikes_types (type, "description") VALUES('Track', 'Track Bike');
+INSERT INTO t_users_bikes_types (type, "description") VALUES('Commuter', 'Commuter Bike');
+INSERT INTO t_users_bikes_types (type, "description") VALUES('BMX', 'BMX Bike');
+
+CREATE SEQUENCE t_users_bikes_seq START 10000;
+
+CREATE TABLE t_users_bikes
+(
+   userid character varying(32) NOT NULL, 
+   "id" integer DEFAULT NEXTVAL('t_users_bikes_seq') NOT NULL,
+   "name" text, 
+   "type" character varying(32) NOT NULL, 
+   "description" text, 
+   "created" timestamp DEFAULT now(), 
+
+   CONSTRAINT t_users_bikes_pk PRIMARY KEY (userid, "id"),
+
+   CONSTRAINT t_users_bikes_fk_users FOREIGN KEY (userid) REFERENCES t_users (userid) ON UPDATE NO ACTION ON DELETE NO ACTION, 
+   CONSTRAINT t_users_bikes_fk_types FOREIGN KEY (type) REFERENCES t_users_bikes_types (type) ON UPDATE NO ACTION ON DELETE NO ACTION 
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+
+CREATE TABLE t_users_bikes_parts_categories
+(
+   "category"       character varying(32) NOT NULL, 
+   "description"    text, 
+
+   CONSTRAINT t_users_bikes_parts_categories_pk PRIMARY KEY ("category")
+)
+WITH (
+  OIDS = FALSE
+)
+;
+
+INSERT INTO 
+    t_users_bikes_parts_categories (category, description) 
+VALUES 
+    ('Front Wheel', 'Front Wheel'),
+    ('Rear Wheel',  'Rear Wheel'),
+    ('Frame',  'Frame'),
+    ('Drive Chain', 'Drive Chain'),
+    ('Lights',      'Lights'),
+    ('Other',       'Other');
+
+
+CREATE TABLE t_users_bikes_parts_types
+(
+   "part"           character varying(32) NOT NULL, 
+   "category"       character varying(32) NOT NULL, 
+   "description"    text, 
+
+   CONSTRAINT t_users_bikes_parts_types_pk PRIMARY KEY ("part", "category"),
+   CONSTRAINT t_users_bikes_parts_types_fk_category FOREIGN KEY (category) REFERENCES t_users_bikes_parts_categories (category) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS = FALSE
+)
+;
+
+INSERT INTO 
+    t_users_bikes_parts_types (part, category, description) 
+VALUES 
+    /* Front Wheel */
+    ('Front Tyre',                 'Front Wheel', 'Front Tyre'),
+    ('Front Wheel',                'Front Wheel', 'Front Wheel'),
+    ('Front Tube',                 'Front Wheel', 'Front Inner Tube'),
+    ('Front Skewer',               'Front Wheel', 'Front Wheel Skewer'),
+    ('Front Brakes',               'Front Wheel', 'Front Brakes'),
+    ('Front Brake-pads',           'Front Wheel', 'Front Brake-pads'),
+    ('Front Cables',               'Front Wheel', 'Front Brake Cable'),
+    ('Front Brake Lever',          'Front Wheel', 'Front Brake Lever'),
+    ('Front Wheel Bearing',        'Front Wheel', 'Front Wheel Bearing'),
+
+    /* Rear Wheel */
+    ('Rear Tyre',                  'Rear Wheel', 'Rear Tyre'),
+    ('Rear Wheel',                 'Rear Wheel', 'Rear Wheel'),
+    ('Rear Tube',                  'Rear Wheel', 'Rear Inner Tube'),
+    ('Rear Skewer',                'Rear Wheel', 'Rear Wheel Skewer'),
+    ('Rear Brakes',                'Rear Wheel', 'Rear Brakes'),
+    ('Rear Brake-pads',            'Rear Wheel', 'Rear Brake-pads'),
+    ('Rear Brake Cables',          'Rear Wheel', 'Rear Brake Cables'),
+    ('Rear Brake Lever',           'Rear Wheel', 'Rear Brake Lever'),
+    ('Rear Free-Wheel',            'Rear Wheel', 'Rear Free-Wheel'),
+    ('Rear Wheel Bearing',         'Rear Wheel', 'Rear Wheel Bearing'),
+
+    /* Drive Chain */
+    ('Chain',                      'Drive Chain', 'Chain'),
+    ('Cassette',                   'Drive Chain', 'Rear Cassette'),
+    ('Small Chain-Ring',           'Drive Chain', 'Small Front Chain-Ring'),
+    ('Middle Chain-Ring',          'Drive Chain', 'Middle Front Chain-Ring'),
+    ('Large Chain-Ring',           'Drive Chain', 'Large Front Chain-Ring'),
+    ('Bottom Bracket',             'Drive Chain', 'Bottom Bracket'),
+
+    ('Front De-railer',            'Drive Chain', 'Front De-railer'),
+    ('Front De-railer Cables',     'Drive Chain', 'Front De-railer Cables'),
+    ('Rear De-railer',             'Drive Chain', 'Rear De-railer'),
+    ('Rear De-railer Cables',      'Drive Chain', 'Rear De-railer Cables'),
+
+    ('Left Peddle',                'Drive Chain', 'Left-Hand-Side Peddle'),
+    ('Right Peddle',               'Drive Chain', 'Right-Hand-Side Peddle'),
+
+    /* Frame */
+    ('Bar Tape',                   'Frame', 'Handle Bar Tape'),
+    ('Handle Bars',                'Frame', 'Handle Bars'),
+    ('Front Stem',                 'Frame', 'Front Stem'),
+    ('Seat',                       'Frame', 'Seat'),
+    ('Seat Tube',                  'Frame', 'Seat Tube'),
+    ('Bike Frame',                 'Frame', 'Bike Frame'),
+    ('TT Bars',                    'Frame', 'Clip-On Time-Trial Bars'),
+    ('Bottle-Holder',              'Frame', 'Bottle-Holder'),
+
+    /* Lights */
+    ('Front Headlight',            'Lights', 'Front Headlight'),
+    ('Front Headlight Batteries',  'Lights', 'Front Headlight Batteries'),
+    ('Read Tail-light',            'Lights', 'Rear Tailight'),
+    ('Rear Tail-light Batteries',  'Lights', 'Rear Tail-light Batteries'),
+
+    /* Other */
+    ('Bicycle Computer',           'Other', 'Bicycle Computer'),
+    ('Other',                      'Other', 'Other parts not listed');
+
+
+CREATE SEQUENCE t_users_bikes_parts_seq START 10000;
+
+
+CREATE TABLE t_users_bikes_parts
+(
+   userid                   character varying(32) NOT NULL, 
+   "bike_id"                integer NOT NULL,
+   "id"                     integer NOT NULL DEFAULT NEXTVAL('t_users_bikes_parts_seq'),
+   "category"               character varying(32) NOT NULL, 
+   "part"                   character varying(32) NOT NULL, 
+   "description"            text, 
+   "inspection_peiod_date"  interval, 
+   "inspection_period_km"   integer, 
+   "inspected_date"         timestamp, 
+   "inspected_km"           integer, 
+   "replaced_date"          timestamp, 
+   "replaced_km"            integer, 
+   "withdrawn_date"         timestamp, 
+   "withdrawn_km"           integer, 
+
+   CONSTRAINT t_users_bikes_parts_pk PRIMARY KEY (userid, "id"),
+
+   CONSTRAINT t_users_bikes_parts_fk_users FOREIGN KEY (userid) REFERENCES t_users (userid) ON UPDATE NO ACTION ON DELETE NO ACTION, 
+   CONSTRAINT t_users_bikes_parts_fk_parts FOREIGN KEY (part, category) REFERENCES t_users_bikes_parts_types (part, category) ON UPDATE NO ACTION ON DELETE NO ACTION
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+
