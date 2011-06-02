@@ -544,4 +544,264 @@ class Core_Common
     {
         return DIRECTORY_SEPARATOR == '\\';
     }
+
+    /*
+     * HTTP headers
+     */
+    /**
+     * Returns true if this appears to be a secure HTTPS connection
+     *
+     * @return bool
+     */
+    static public function isHttps()
+    {
+        return Core_Url::getCurrentScheme() === 'https' || Zend_Registry::     get('config')->General->assume_secure_protocol;
+    }
+
+/*
+ * Access
+ */
+    /**
+     * Create access object
+     */
+    static public function createAccessObject()
+    {
+        Zend_Registry::set('access', new Core_Access());
+    }
+
+
+	/**
+	 * Get current user email address
+	 *
+	 * @return string
+	 */
+	static public function getCurrentUserEmail()
+	{
+		if(!Core_Common::isUserIsSuperUser())
+		{
+			$user = Module_UserManagement_API::getInstance()->getUser(Core_Common::getCurrentUserLogin());
+			return $user['email'];
+		}
+		$superuser = Zend_Registry::get('config')->superuser;
+		return $superuser->email;
+	}
+
+	/**
+	 * Get current user login
+	 *
+	 * @return string login ID
+	 */
+	static public function getCurrentUserLogin()
+	{
+		return Zend_Registry::get('access')->getLogin();
+	}
+
+	/**
+	 * Get current user's token auth
+	 *
+	 * @return string Token auth
+	 */
+	static public function getCurrentUserTokenAuth()
+	{
+		return Zend_Registry::get('access')->getTokenAuth();
+	}
+
+	/**
+	 * Returns true if the current user is either the super user, or the user $theUser
+	 * Used when modifying user preference: this usually requires super user or being the user itself.
+	 *
+	 * @param string $theUser
+	 * @return bool
+	 */
+	static public function isUserIsSuperUserOrTheUser( $theUser )
+	{
+		try{
+			self::checkUserIsSuperUserOrTheUser( $theUser );
+			return true;
+		} catch( Exception $e){
+			return false;
+		}
+	}
+
+	/**
+	 * Check that current user is either the specified user or the superuser
+	 *
+	 * @param string $theUser
+	 * @throws exception if the user is neither the super user nor the user $theUser
+	 */
+	static public function checkUserIsSuperUserOrTheUser( $theUser )
+	{
+		try{
+			if( Core_Common::getCurrentUserLogin() !== $theUser)
+			{
+				// or to the super user
+				Core_Common::checkUserIsSuperUser();
+			}
+		} catch( Core_Access_NoAccessException $e){
+			throw new Core_Common_Access_NoAccessException("The user has to be either the Super User or the user '$theUser' itself.");
+		}
+	}
+
+	/**
+	 * Returns true if the current user is the Super User
+	 *
+	 * @return bool
+	 */
+	static public function isUserIsSuperUser()
+	{
+		try{
+			self::checkUserIsSuperUser();
+			return true;
+		} catch( Exception $e){
+			return false;
+		}
+	}
+
+	/**
+	 * Is user the anonymous user?
+	 *
+	 * @return bool True if anonymouse; false otherwise
+	 */
+	static public function isUserIsAnonymous()
+	{
+		return Core_Common::getCurrentUserLogin() == 'anonymous';
+	}
+
+	/**
+	 * Checks if user is not the anonymous user.
+	 *
+	 * @throws Exception if user is anonymous.
+	 */
+	static public function checkUserIsNotAnonymous()
+	{
+		if(self::isUserIsAnonymous())
+		{
+			throw new Exception('General_YouMustBeLoggedIn');
+		}
+	}
+
+	/**
+	 * Helper method user to set the current as Super User.
+	 * This should be used with great care as this gives the user all permissions.
+	 *
+	 * @param bool True to set current user as super user
+	 */
+	static public function setUserIsSuperUser( $bool = true )
+	{
+		Zend_Registry::get('access')->setSuperUser($bool);
+	}
+
+	/**
+	 * Check that user is the superuser
+	 *
+	 * @throws Exception if not the superuser
+	 */
+	static public function checkUserIsSuperUser()
+	{
+		Zend_Registry::get('access')->checkUserIsSuperUser();
+	}
+
+	/**
+	 * Returns true if the user has admin access to the sites
+	 *
+	 * @param mixed $idSites
+	 * @return bool
+	 */
+	static public function isUserHasAdminAccess( $idSites )
+	{
+		try{
+			self::checkUserHasAdminAccess( $idSites );
+			return true;
+		} catch( Exception $e){
+			return false;
+		}
+	}
+
+	/**
+	 * Check user has admin access to the sites
+	 *
+	 * @param mixed $idSites
+	 * @throws Exception if user doesn't have admin access to the sites
+	 */
+	static public function checkUserHasAdminAccess( $idSites )
+	{
+		Zend_Registry::get('access')->checkUserHasAdminAccess( $idSites );
+	}
+
+	/**
+	 * Returns true if the user has admin access to any sites
+	 *
+	 * @return bool
+	 */
+	static public function isUserHasSomeAdminAccess()
+	{
+		try{
+			self::checkUserHasSomeAdminAccess();
+			return true;
+		} catch( Exception $e){
+			return false;
+		}
+	}
+
+	/**
+	 * Check user has admin access to any sites
+	 *
+	 * @throws Exception if user doesn't have admin access to any sites
+	 */
+	static public function checkUserHasSomeAdminAccess()
+	{
+		Zend_Registry::get('access')->checkUserHasSomeAdminAccess();
+	}
+
+	/**
+	 * Returns true if the user has view access to the sites
+	 *
+	 * @param mixed $idSites
+	 * @return bool
+	 */
+	static public function isUserHasViewAccess( $idSites )
+	{
+		try{
+			self::checkUserHasViewAccess( $idSites );
+			return true;
+		} catch( Exception $e){
+			return false;
+		}
+	}
+
+	/**
+	 * Check user has view access to the sites
+	 *
+	 * @param mixed $idSites
+	 * @throws Exception if user doesn't have view access to sites
+	 */
+	static public function checkUserHasViewAccess( $idSites )
+	{
+		Zend_Registry::get('access')->checkUserHasViewAccess( $idSites );
+	}
+
+	/**
+	 * Returns true if the user has view access to any sites
+	 *
+	 * @return bool
+	 */
+	static public function isUserHasSomeViewAccess()
+	{
+		try{
+			self::checkUserHasSomeViewAccess();
+			return true;
+		} catch( Exception $e){
+			return false;
+		}
+	}
+
+	/**
+	 * Check user has view access to any sites
+	 *
+	 * @throws Exception if user doesn't have view access to any sites
+	 */
+	static public function checkUserHasSomeViewAccess()
+	{
+		Zend_Registry::get('access')->checkUserHasSomeViewAccess();
+	}
 }
