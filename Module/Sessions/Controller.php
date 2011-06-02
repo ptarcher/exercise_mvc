@@ -99,10 +99,9 @@ class Module_Sessions_Controller extends Core_Controller
     function viewUpload() {
         $form = new SessionUploadForm();
 
-        $UploadStatusMsg = "";
-        $UploadStatus    = "Error";
-
         $view = Core_View::factory('sessionsfileupload');
+        $view->UploadStatusMsg = "";
+        $view->UploadStatus    = "Error";
 
         if ($form->validate()) {
             $timer = new Benchmark_Timer();
@@ -110,11 +109,11 @@ class Module_Sessions_Controller extends Core_Controller
             $upload = $form->getSubmitValue('form_upload');
 
             $timer->setMarker('Decode Sessions - Start');
-            exec('/usr/bin/fitdecode -s '.$upload['tmp_name'], $xml_session);
+            exec('/usr/local/bin/fitdecode -s '.$upload['tmp_name'], $xml_session);
             $xml_session = implode("\n", $xml_session);
             $sessions    = parseSessions($xml_session);
             $timer->setMarker('Decode Sessions - End');
-    
+
             /* There should only be one session */
             if (is_array($sessions)) {
                 $session = $sessions[0];
@@ -157,7 +156,7 @@ class Module_Sessions_Controller extends Core_Controller
                 unset($sessions);
 
                 $timer->setMarker('Decode Records - Start');
-                exec('/usr/bin/fitdecode -r '.$upload['tmp_name'], $xml_records);
+                exec('/usr/local/bin/fitdecode -r '.$upload['tmp_name'], $xml_records);
                 $xml_records = implode("\n", $xml_records);
                 $records_input = parseRecords($xml_records, $session_epoch);
                 $timer->setMarker('Decode Records - End');
@@ -329,7 +328,7 @@ class Module_Sessions_Controller extends Core_Controller
                 unset($records);
 
                 $timer->setMarker('Laps - Start');
-                exec('/usr/bin/fitdecode -l '.$upload['tmp_name'], $xml_laps);
+                exec('/usr/local/bin/fitdecode -l '.$upload['tmp_name'], $xml_laps);
                 $xml_laps = implode("\n", $xml_laps);
                 $laps     = parseLaps($xml_laps);
                 $timer->setMarker('Laps - End');
@@ -370,19 +369,18 @@ class Module_Sessions_Controller extends Core_Controller
                 $view->planned = $plans->getClosestPlan($session_timestamp);
                 $view->session_timestamp = $session_timestamp;
 
-                $UploadStatusMsg   = "Session can be view here";
-                $UploadStatusMsg   = "Is this session the planned exercise session on at ere";
-                $UploadStatus      = "Success";
+                $view->UploadStatusMsg   = "Is this session the planned exercise session on at ere";
+                $view->UploadStatus      = "Success";
             } catch (Exception $e) {
                 $db->rollback();
-                $UploadStatusMsg   = "Failed to upload";
+                $view->UploadStatusMsg   = "Failed to upload";
+                $view->UploadStatus      = "Error";
                 $e->getMessage();
             }
             //$timer->display();
         }
 
         $view->addForm($form);
-        $view->UploadStatusMsg = $UploadStatusMsg;
         $view->subTemplate = 'genericForm.tpl';
         echo $view->render();
     }
