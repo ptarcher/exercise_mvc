@@ -63,6 +63,8 @@ class Core_FrontController
         $moduleManager = Core_ModuleManager::getInstance();
         $moduleManager->loadModules();
 
+        Core_Common::createAccessObject();
+
         /* Load the events */
         Core_PostEvent('FrontController.initAuthenticationObject');
         try {
@@ -74,12 +76,15 @@ class Core_FrontController
                     under the <code>[Plugins]</code> section in your config/config.inc.php");
         }
 
+        Zend_Registry::get('access')->reloadAccess($authAdapter);
+
+        $moduleManager->postLoadModules();
     }
 
 	function dispatch( $module = null, $action = null, $parameters = null)
     {
 		if(is_null($module)) {
-			$defaultModule = 'DashBoard';
+			$defaultModule = Core_Helper::getDefaultModuleName();
 			$module = Core_Common::getRequestVar('module', $defaultModule, 'string');
         }
 
@@ -90,8 +95,6 @@ class Core_FrontController
 		if(is_null($parameters)) {
 			$parameters = array();
 		}
-
-        $this->checkLogin($module, $action);
 
 		if(!ctype_alnum($module))
 		{
@@ -117,6 +120,7 @@ class Core_FrontController
         }
 
         try {
+            $controller->preDispatch();
             return call_user_func_array(array($controller, $action), $parameters);
         } catch (Core_Access_NoAccessException $e) {
             Core_PostEvent('FrontController.NoAccessException');
@@ -124,22 +128,6 @@ class Core_FrontController
             echo 'Error: ' . $e;
             return null;
         }
-
-	
-    }
-
-    private function checkLogin(&$requested_module, &$requested_action) 
-    {
-        if (!($requested_module === 'Login' && $requested_action === 'signup') 
-                && !isset($_SESSION['userid'])) {
-            $requested_module = 'Login';
-            $requested_action = 'doLogin';
-        }
-    }
-
-    function __destruct() 
-    {
-        $this->module = null;
     }
 }
 
