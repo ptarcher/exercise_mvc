@@ -31,7 +31,7 @@ class Module_Login_Controller extends Core_Controller
     function doLogin($error_string = null) 
     {
         /*
-        $currentUrl = Helper::getModule() == 'Login' ? 
+        $currentUrl = Core_Helper::getModule() == 'Login' ? 
                               Core_Url::getReferer() : 
                               'index.php' . Core_Url::getCurrentQueryString();
         */
@@ -45,36 +45,14 @@ class Module_Login_Controller extends Core_Controller
 
         $form = new Module_Login_LoginForm();
         if ($form->validate()) {
-            $api = new Module_Login_API();
-            $userid   = $form->getSubmitValue('form_login');
-            $password = $form->getSubmitValue('form_password');
+            $login      = $form->getSubmitValue('form_login');
+            $password   = $form->getSubmitValue('form_password');
+            $rememberme = $form->getSubmitValue('form_rememberme');
 
-            $success = $api->checkLogin($userid, $password);
-            if ($success) {
-                $user_credentials = $api->getUser($userid);
-
-                $user = new Zend_Session_Namespace('user');
-                $user->userid    = $user_credentials['userid'];
-                $user->coach     = $user_credentials['coach']     == 't';
-                $user->athlete   = $user_credentials['athlete']   == 't';
-                $user->superuser = $user_credentials['superuser'] == 't';
-                $user->token     = $user_credentials['token'];
-
-                $_SESSION['userid']    = $user_credentials['userid'];
-                $_SESSION['coach']     = $user_credentials['coach']     == 't';
-                $_SESSION['athlete']   = $user_credentials['athlete']   == 't';
-                $_SESSION['superuser'] = $user_credentials['superuser'] == 't';
-
-                /* We have sucessfully logged in, now lets 
-                 * display the next page */
-                if (!isset($redirect_module) || !isset($redirect_action)) {
-                    $redirect_module = 'DashBoard';
-                }
-
-                Core_Url::redirectToUrl($urlToRedirect);
-                return;
-            } else {
-                $error_string = 'Incorrect Login Details';
+            try {
+                $this->authenticateAndRedirect($login, $password, $rememberme);
+            } catch (Exception $e) {
+                $error_string = $e->getMessage();
             }
         }
 
@@ -85,6 +63,27 @@ class Module_Login_Controller extends Core_Controller
         $view->AccessErrorString = $error_string;
         echo $view->render();
     }
+
+	/**
+	 * Authenticate user and password.  Redirect if successful.
+	 *
+	 * @param string $login user name
+	 * @param string $md5Password md5 hash of password
+	 * @param bool $rememberMe Remember me?
+	 * @param string $urlToRedirect URL to redirect to, if successfully authenticated
+	 * @return string failure message if unable to authenticate
+	 */
+	protected function authenticateAndRedirect($login, $password, $rememberMe, $urlToRedirect = 'index.php')
+	{
+		$info = array(	'login'       => $login, 
+						'md5Password' => $password,
+						'rememberMe'  => $rememberMe,
+		);
+		//Piwik_Nonce::discardNonce('Piwik_Login.login');
+		Core_PostEvent('Login.initSession', $info);
+
+		Core_Url::redirectToUrl($urlToRedirect);
+	}
 
     /**
      * Clear the session information
@@ -112,7 +111,7 @@ class Module_Login_Controller extends Core_Controller
             $api      = new Module_Login_API();
             $user_api = new Module_UserManagement_API();
 
-            $userid    = $form->getSubmitValue('form_login');
+            $login    = $form->getSubmitValue('form_login');
             $password  = $form->getSubmitValue('form_password');
             $password2 = $form->getSubmitValue('form_passwordconfirm');
             $email     = $form->getSubmitValue('form_email');
@@ -120,7 +119,7 @@ class Module_Login_Controller extends Core_Controller
             /* Check the passwords match */
             try {
                 /* Check if the username exists */
-                if ($api->getUser($userid)) {
+                if ($api->getUser($login)) {
                     throw new Exception('The username is already taken');
                 }
 
@@ -129,7 +128,7 @@ class Module_Login_Controller extends Core_Controller
                     throw new Exception('The passwords do not match');
                 }
 
-                $user_api->createUser($userid, $password, $email);
+                $user_api->createUser($login, $password, $email);
 
                 Core_Url::redirectToUrl('index.php');
 
@@ -157,7 +156,7 @@ class Module_Login_Controller extends Core_Controller
     function logout() 
     {
         self::clearSession();
-        Core_Helper::redirectToModule('DashBoard');
+        Core_Helper::redirectToModule(Core_Helper::getDefaultModuleName());
     }
 
     /**

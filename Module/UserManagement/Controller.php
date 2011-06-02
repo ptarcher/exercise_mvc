@@ -184,8 +184,23 @@ class Module_UserManagement_Controller extends Core_Controller
         echo $view->render();
     }
 
-    function bikes() {
+    function bikes() 
+    {
+        $api = new Module_UserManagement_API();
+
         $view = Core_View::factory('bikes');
+        $view->bikes = $api->getBikes();
+
+        echo $view->render();
+    }
+
+    function viewBike() 
+    {
+        $api = new Module_UserManagement_API();
+        $id  = Core_Common::getRequestVar('id', null, 'int');
+
+        $view = Core_View::factory('viewBike');
+        $view->bike = $api->getBikeData($id);
 
         echo $view->render();
     }

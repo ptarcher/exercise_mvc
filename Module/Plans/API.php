@@ -49,7 +49,7 @@ class Module_Plans_API extends Core_ModuleAPI {
                                  'week_date',
                                  'period',
                                  'description'))
-                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('userid = ?', Core_Common::getCurrentUserLogin())
                      ->order('week_date DESC');
         $stmt = $db->query($select);
 
@@ -61,7 +61,7 @@ class Module_Plans_API extends Core_ModuleAPI {
         $db = Zend_Registry::get('db');
 
         $db->insert('t_exercise_plans_weekly',
-                array('userid'      => Core_User::getUserId(),
+                array('userid'      => Core_Common::getCurrentUserLogin(),
                       'week_date'   => $week_date,
                       'period'      => $period,
                       'description' => $description));
@@ -75,7 +75,7 @@ class Module_Plans_API extends Core_ModuleAPI {
                 array('period'      => $period,
                       'description' => $description,
                       '"comment"'   => $comment),
-                array('userid    = \''.Core_User::getUserId().'\'',
+                array('userid    = \''.Core_Common::getCurrentUserLogin().'\'',
                       'week_date = \''.$weel_date.'\''));
     }
 
@@ -84,7 +84,7 @@ class Module_Plans_API extends Core_ModuleAPI {
         $db = Zend_Registry::get('db');
 
         $db->delete('t_exercise_plans_weekly',
-                array('userid    = \''.Core_User::getUserId().'\'',
+                array('userid    = \''.Core_Common::getCurrentUserLogin().'\'',
                       'week_date = \''.$week_date.'\''));
     }
 
@@ -107,7 +107,7 @@ class Module_Plans_API extends Core_ModuleAPI {
                                    'focus',
                                    'comment',
                                    'session_timestamp'))
-                     ->where('userid    = ?', Core_User::getUserId())
+                     ->where('userid    = ?', Core_Common::getCurrentUserLogin())
                      ->where('week_date = ?', $week_date)
                      ->order('timestamp '.$order);
         $stmt = $db->query($select);
@@ -133,7 +133,7 @@ class Module_Plans_API extends Core_ModuleAPI {
                                   'focus',
                                   'comment',
                                   '(extract(EPOCH from session_timestamp)*1000) AS session_epoch'))
-                     ->where('daily.userid    = ?', Core_User::getUserId())
+                     ->where('daily.userid    = ?', Core_Common::getCurrentUserLogin())
                      ->where('daily.week_date = ?', $week_date)
                      ->joinLeft(array('totals' => 't_exercise_totals'),
                              'daily.userid            = totals.userid AND
@@ -154,7 +154,7 @@ class Module_Plans_API extends Core_ModuleAPI {
         $db = Zend_Registry::get('db');
 
         $db->insert('t_exercise_plans_daily',
-                array('userid'      => Core_User::getUserId(),
+                array('userid'      => Core_Common::getCurrentUserLogin(),
                       'week_date'   => $week_date,
                       'timestamp'   => $timestamp,
                       'category'    => $category,
@@ -186,7 +186,7 @@ class Module_Plans_API extends Core_ModuleAPI {
                                    'focus',
                                    'comment',
                                    'week_date'))
-                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('userid = ?', Core_Common::getCurrentUserLogin())
                      ->order('interval ASC')
                      ->limit('1');
         $stmt = $db->query($select);
@@ -200,7 +200,7 @@ class Module_Plans_API extends Core_ModuleAPI {
 
         $db->update('t_exercise_plans_daily',
                 array('session_timestamp' => $session_date),
-                array('userid    = \''.Core_User::getUserId().'\'',
+                array('userid    = \''.Core_Common::getCurrentUserLogin().'\'',
                       'timestamp = \''.$plan_date.'\''));
     }
 }

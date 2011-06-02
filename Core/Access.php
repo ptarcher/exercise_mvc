@@ -79,6 +79,55 @@ class Core_Access
 	function __construct() 
 	{
 	}
+
+	/**
+	 * Loads the access levels for the current user.
+	 *
+	 * Calls the authentication method to try to log the user in the system.
+	 * If the user credentials are not correct we don't load anything.
+	 * If the login/password is correct the user is either the SuperUser or a normal user.
+	 * We load the access levels for this user for all the websites.
+	 * 
+	 * @return true on success, false if reloading access failed (when auth object wasn't specified and user is not enforced to be Super User)
+	 */
+	public function reloadAccess(Core_Auth $auth = null)
+	{
+		if(!is_null($auth)) 
+		{
+			$this->auth = $auth;
+		}
+		
+		// if the Core_Auth wasn't set, we may be in the special case of setSuperUser(), otherwise we fail
+		if(is_null($this->auth)) 
+		{
+			if($this->isSuperUser())
+			{
+				return $this->reloadAccessSuperUser();
+			}
+			return false;
+		}
+		
+		// access = array ( idsite => accessIdSite, idsite2 => accessIdSite2)
+		$result = $this->auth->authenticate();
+
+		if(!$result->isValid())
+		{
+			return false;
+		}
+		$this->login      = $result->getIdentity();
+		$this->token_auth = $result->getTokenAuth();
+		
+		// case the superUser is logged in
+		if($result->getCode() == Core_Auth_Result::SUCCESS_SUPERUSER_AUTH_CODE)
+		{
+			return $this->reloadAccessSuperUser();
+		}
+		// case valid authentification (normal user logged in)
+		
+		return true;
+	}
+
+
 	
 	/**
 	 * We bypass the normal auth method and give the current user Super User rights.

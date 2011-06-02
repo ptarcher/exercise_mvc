@@ -52,3 +52,12 @@
 
 <!-- end the table -->
 {/block}
+
+{block name=sidebar}
+<h2>Bikes</h2>
+
+{foreach from=$bikes key=i item=bike}
+    <div><a href="{url module=UserManagement action=viewBike id=$bike.id|escape:url}">{$bike.type} - {$bike.name}</a></div>
+{/foreach}
+
+{/block}

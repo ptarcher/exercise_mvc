@@ -39,8 +39,12 @@ class Module_UserManagement_API extends Core_ModuleAPI
         return self::$instance;
     }
 
-    function getUser() 
+    function getUser($userid = "") 
     {
+        if ($userid === "") {
+            $userid = Core_Common::getCurrentUserLogin();
+        }
+
         $db = Zend_Registry::get('db');
         $select = $db->select()
                      ->from('t_users',
@@ -53,7 +57,7 @@ class Module_UserManagement_API extends Core_ModuleAPI
                                    'resting_heartrate',
                                    'rider_weight',
                                    'bike_weight'))
-                     ->where('userid = ?', Core_User::getUserId());
+                     ->where('userid = ?', $userid);
 
         $stmt = $db->query($select);
         $users = $stmt->fetchAll();
@@ -84,17 +88,17 @@ class Module_UserManagement_API extends Core_ModuleAPI
             $db->update('t_users',
                     array('password_hash' => $password_hash,
                           'password_salt' => $password_salt),
-                    'userid = \''.Core_User::getUserId().'\'');
+                    'userid = \''.Core_Common::getCurrentUserLogin().'\'');
         } else {
             $db->update('t_users',
                     array($id => $value),
-                    'userid = \''.Core_User::getUserId().'\'');
+                    'userid = \''.Core_Common::getCurrentUserLogin().'\'');
         }
     }
 
     function getUsers() 
     {
-        if (!Core_User::isSuperUser()) {
+        if (!Core_Access::isSuperUser()) {
             throw exception('You need to be super user to perform this action');
         }
 
@@ -116,9 +120,11 @@ class Module_UserManagement_API extends Core_ModuleAPI
     {
         $password_salt = Core_Common::getRandomString(64);
         $password_hash = sha1($password . $password_salt);
-        $db = Zend_Registry::get('db');
+        $db   = Zend_Registry::get('db');
+        $auth = Zend_Registry::get('auth');
+        $auth_token = $auth->getHashTokenAuth($userid, $password_hash);
 
-        if (!Core_User::isSuperUser()) {
+        if (!Core_Access::isSuperUser()) {
             //throw new Exception('You need to be super user to perform this action');
             $superuser = 'f';
         }
@@ -130,7 +136,8 @@ class Module_UserManagement_API extends Core_ModuleAPI
                       'email'         => $email,
                       'coach'         => $coach,
                       'athlete'       => $athlete,
-                      'superuser'     => $superuser));
+                      'superuser'     => $superuser,
+                      'token'         => $auth_token));
     }
 
     // TODO: Convert this into user groups
@@ -155,6 +162,58 @@ class Module_UserManagement_API extends Core_ModuleAPI
         }
 
         return $exercise_types;
+    }
+
+    public function getTokenAuth($login, $password)
+    {
+        $user = $this->getUser($login);
+        /* TODO: */
+        return $user['token'];
+    }
+
+    public function getBikes()
+    {
+        $userid = Core_Common::getCurrentUserLogin();
+        $db     = Zend_Registry::get('db');
+
+        $select = $db->select()
+                     ->from('t_users_bikes',
+                             array('userid',
+                                   'id',
+                                   'name',
+                                   'type',
+                                   'description',
+                                   'created'))
+                     ->where('userid = ?', $userid)
+                     ->order(array('type', 'name', 'description'));
+        $stmt = $db->query($select);
+        $bikes = $stmt->fetchAll();
+
+        return $bikes;
+    }
+
+    function getBikeData($bike_id)
+    {
+        $userid = Core_Common::getCurrentUserLogin();
+        $db     = Zend_Registry::get('db');
+
+        $select = $db->select()
+                     ->from('t_users_bikes_parts',
+                             array('userid',
+                                   'bike_id',
+                                   'id',
+                                   'part',
+                                   'description',
+                                   'replaced_km',
+                                   'replaced_date',
+                                   'withdrawn_km',
+                                   'withdrawn_date'))
+                     ->where('userid  = ?', $userid)
+                     ->where('bike_id = ?', $bike_id);
+        $stmt = $db->query($select);
+        $bike = $stmt->fetchAll();
+
+        return $bike;
     }
 }
 

@@ -54,7 +54,7 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                      ->from('t_exercise_data',
                              array('(extract(EPOCH from "time")*1000) AS time',
                                    $field))
-                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('userid = ?', Core_Common::getCurrentUserLogin())
                      ->where('session_date = ?', $session_date)
                      ->order('time DESC');
         if (!is_null($min_time)) {
@@ -84,7 +84,7 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                      ->from('t_exercise_data',
                              array('latitude as lat',
                                    'longitude as lon'))
-                     ->where('userid       = ?', Core_User::getUserId())
+                     ->where('userid       = ?', Core_Common::getCurrentUserLogin())
                      ->where('session_date = ?', $session_date)
                      ->order('time DESC');
 
@@ -121,7 +121,7 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                                    'total_ascent',
                                    'total_descent',
                                    'comment'))
-                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('userid = ?', Core_Common::getCurrentUserLogin())
                      ->where('session_date = ?', $session_date);
         $stmt = $db->query($select);
 
@@ -150,7 +150,7 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                                    'avg_speed',
                                    'max_speed',
                                    'total_ascent'))
-                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('userid = ?', Core_Common::getCurrentUserLogin())
                      ->where('session_date = ?', $session_date)
                      ->order('lap_num ASC');
         $stmt = $db->query($select);
@@ -167,7 +167,7 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                              array('userid',
                                    'zone',
                                    'SUM(length) AS length'))
-                     ->where('userid       = ?', Core_User::getUserId())
+                     ->where('userid       = ?', Core_Common::getCurrentUserLogin())
                      ->where('session_date = ?', $session_date)
                      ->group('zone')
                      ->group('userid')
@@ -201,7 +201,7 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                                    'gradient_max',
                                    'min_altitude',
                                    'max_altitude'))
-                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('userid = ?', Core_Common::getCurrentUserLogin())
                      ->where('session_date = ?', $session_date)
                      ->order('climb_num');
         $stmt = $db->query($select);
@@ -227,7 +227,7 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
                                    'gradient_max',
                                    'min_altitude',
                                    'max_altitude'))
-                     ->where('userid       = ?', Core_User::getUserId())
+                     ->where('userid       = ?', Core_Common::getCurrentUserLogin())
                      ->where('session_date = ?', $session_date)
                      ->where('climb_num    = ?', $climb_num);
         $stmt = $db->query($select);

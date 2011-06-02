@@ -23,6 +23,10 @@
 
 class Module_DashBoard_Controller extends Core_Controller 
 {
+    function getDefaultAction()
+    {
+        return 'index';
+    }
    
     function index() {
         $this->view();
@@ -33,6 +37,15 @@ class Module_DashBoard_Controller extends Core_Controller
 
         echo $view->render();
     }
+
+    /*
+    function redirectToDashBoardIndex()
+    {
+        $module='DashBoard';
+        $action='index';
+        
+        parent::redirectToIndex($module,$action);
+    }*/
 }
 
 ?>

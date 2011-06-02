@@ -804,4 +804,91 @@ class Core_Common
 	{
 		Zend_Registry::get('access')->checkUserHasSomeViewAccess();
 	}
+=======
+/*
+ * PHP environment settings
+ */
+
+    /**
+     * Set maximum script execution time.
+     *
+     * @param int max execution time in seconds (0 = no limit)
+     */
+    static public function setMaxExecutionTime($executionTime)
+    {
+        // in the event one or the other is disabled...
+        @ini_set('max_execution_time', $executionTime);
+        @set_time_limit($executionTime);
+    }
+
+    /**
+     * Get php memory_limit (in Megabytes)
+     *
+     * Prior to PHP 5.2.1, or on Windows, --enable-memory-limit is not a
+     * compile-time default, so ini_get('memory_limit') may return false.
+     *
+     * @see http://www.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
+     * @return int memory limit in megabytes
+     */
+    static public function getMemoryLimitValue()
+    {
+        if($memory = ini_get('memory_limit'))
+        {
+            // handle shorthand byte options (case-insensitive)
+            $shorthandByteOption = substr($memory, -1);
+            switch($shorthandByteOption)
+            {
+                case 'G':
+                case 'g':
+                    return substr($memory, 0, -1) * 1024;
+                case 'M':
+                case 'm':
+                    return substr($memory, 0, -1);
+                case 'K':
+                case 'k':
+                    return substr($memory, 0, -1) / 1024;
+            }
+            return $memory / 1048576;
+        }
+        return false;
+    }
+
+    /**
+     * Set PHP memory limit
+     *
+     * Note: system settings may prevent scripts from overriding the master value
+     *
+     * @param int $minimumMemoryLimit
+     * @return bool true if set; false otherwise
+     */
+    static public function setMemoryLimit($minimumMemoryLimit)
+    {
+        // in Megabytes
+        $currentValue = self::getMemoryLimitValue();
+        if( ($currentValue === false
+                    || $currentValue < $minimumMemoryLimit )
+                && @ini_set('memory_limit', $minimumMemoryLimit.'M'))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Raise PHP memory limit if below the minimum required
+     *
+     * @return bool true if set; false otherwise
+     */
+    static public function raiseMemoryLimitIfNecessary()
+    {
+        $minimumMemoryLimit = Zend_Registry::get('config')->General->minimum_memory_limit;
+        $memoryLimit = self::getMemoryLimitValue();
+        if($memoryLimit === false
+                || $memoryLimit < $minimumMemoryLimit)
+        {
+            return self::setMemoryLimit($minimumMemoryLimit);
+        }
+
+        return false;
+    }
 }

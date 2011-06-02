@@ -39,7 +39,7 @@ class Module_Login_Module extends Core_Module
                 'FrontController.initAuthenticationObject'  => 'initAuthenticationObject',
                 'FrontController.NoAccessException'         => 'noAccess',
                 //'API.Request.authenticate'                  => 'ApiRequestAuthenticate',
-                //'Login.initSession'                         => 'initSession',
+                'Login.initSession'                         => 'initSession',
                 'Menu.add' => 'addMenu',
         );
         return $hooks;
@@ -79,6 +79,46 @@ class Module_Login_Module extends Core_Module
 		}
 		$auth->setLogin($defaultLogin);
 		$auth->setTokenAuth($defaultTokenAuth);
+	}
+
+	/**
+	 * Authenticate user and initializes the session.
+	 * Listens to Login.initSession hook.
+	 *
+	 * @param Core_Event_Notification $notification
+	 */
+	function initSession($notification)
+	{
+		$info = $notification->getNotificationObject();
+		$login       = $info['login'];
+		$password    = $info['password'];
+		$rememberMe  = $info['rememberMe'];
+		
+		$tokenAuth = Module_UserManagement_API::getInstance()->getTokenAuth($login, $password);
+
+		$auth = Zend_Registry::get('auth');
+		$auth->setLogin($login);
+		$auth->setTokenAuth($tokenAuth);
+		$authResult = $auth->authenticate();
+
+		$authCookieName   = Zend_Registry::get('config')->General->login_cookie_name;
+		$authCookieExpiry = $rememberMe ? time() + Zend_Registry::get('config')->General->login_cookie_expire : 0;
+		$authCookiePath = Zend_Registry::get('config')->General->login_cookie_path;
+		$cookie = new Core_Cookie($authCookieName, $authCookieExpiry, $authCookiePath);
+		if(!$authResult->isValid())
+
+		{
+			$cookie->delete();
+			throw new Exception('Login_LoginPasswordNotCorrect');
+		}
+
+		$cookie->set('login', $login);
+		$cookie->set('token_auth', $auth->getHashTokenAuth($login, $authResult->getTokenAuth()));
+		$cookie->setSecure(Core_Common::isHttps());
+		$cookie->setHttpOnly(true);
+		$cookie->save();
+
+		Zend_Session::regenerateId();
 	}
 
     function noAccess($notification) 

@@ -41,6 +41,39 @@ class Core_Helper
     {
     }
 
+/*
+ * Current module, action, plugin
+ */
+
+	/**
+	 * Returns the name of the Login plugin currently being used.
+	 * Must be used since it is not allowed to hardcode 'Login' in URLs
+	 * in case another Login plugin is being used.
+	 *
+	 * @return string
+	 */
+	static public function getLoginModuleName()
+	{
+		return Zend_Registry::get('auth')->getName();
+	}
+
+	static public function getDefaultModuleName()
+	{
+		return 'DashBoard';
+	}
+
+	/**
+	 * Returns the plugin currently being used to display the page
+	 *
+	 * @return Core_Module
+	 */
+	static public function getCurrentModule()
+	{
+		return Core_ModuleManager::getInstance()->getLoadedModule(Core_Helper::getModule());
+	}
+
+
+
     /**
      * Returns the current module read from the URL (eg. 'API', 'UserSettings', etc.)
      *

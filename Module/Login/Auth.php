@@ -38,7 +38,7 @@ class Module_Login_Auth implements Core_Auth
 	{
 		$rootLogin    = Zend_Registry::get('config')->superuser->login;
 		$rootPassword = Zend_Registry::get('config')->superuser->password;
-		$rootToken    = Core_UsersManager_API::getInstance()->getTokenAuth($rootLogin, $rootPassword);
+		$rootToken    = Module_UserManagement_API::getInstance()->getTokenAuth($rootLogin, $rootPassword);
 
 		if(is_null($this->login))
 		{

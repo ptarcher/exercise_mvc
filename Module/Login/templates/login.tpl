@@ -17,12 +17,12 @@
 <form {$form_data.attributes}>
 	<p>
 		<label>Login:<br />
-		<input type="text" name="form_login" id="form_login" class="input" value="" size="20" tabindex="10" /></label>
+		<input type="text" name="form_login" id="form_login" class="input" value="" size="20" tabindex="10" required /></label>
 	</p>
 
 	<p>
 		<label>Password:<br />
-		<input type="password" name="form_password" id="form_password" class="input" value="" size="20" tabindex="20" /></label>
+		<input type="password" name="form_password" id="form_password" class="input" value="" size="20" tabindex="20" required /></label>
 	</p>
 	<p class="forgetmenot">
         <label>Remember Me

@@ -48,7 +48,7 @@ class Module_Sessions_API extends Core_ModuleAPI
                             array('userid','session_date','type_short',
                                   'description','duration','distance',
                                   'avg_heartrate','avg_speed','comment'))
-                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('userid = ?', Core_Common::getCurrentUserLogin())
                      ->order('session_date DESC');
         $stmt = $db->query($select);
         $result = $stmt->fetchAll();
@@ -66,7 +66,7 @@ class Module_Sessions_API extends Core_ModuleAPI
                       'description'   => $description,
                       'comment'       => $comment),
                 array('session_date = \''.$session_date.'\'',
-                      'userid       = \''.Core_User::getUserId().'\'',));
+                      'userid       = \''.Core_Common::getCurrentUserLogin().'\'',));
     }
 
     function createSessionFull($session_date,  $type_short, 
@@ -93,7 +93,7 @@ class Module_Sessions_API extends Core_ModuleAPI
                       'total_ascent'  => $total_ascent,
                       'total_descent' => $total_descent,
                       'comment'       => $comment,
-                      'userid'        => Core_User::getUserId()));
+                      'userid'        => Core_Common::getCurrentUserLogin()));
     }
 
     function insertLap($session_date,  $lap_num,
@@ -124,7 +124,7 @@ class Module_Sessions_API extends Core_ModuleAPI
                       'max_speed'       => $max_speed,
                       'total_ascent'    => $total_ascent,
                       'total_descent'   => $total_descent,
-                      'userid'          => Core_User::getUserId()));
+                      'userid'          => Core_Common::getCurrentUserLogin()));
     }
 
 
@@ -136,7 +136,7 @@ class Module_Sessions_API extends Core_ModuleAPI
 
         try {
             $where = array('session_date = \''.$session_date.'\'',
-                           'userid       = \''.Core_User::getUserId().'\'');
+                           'userid       = \''.Core_Common::getCurrentUserLogin().'\'');
 
             /* Delete all different data associated with the session */
             $db->delete('t_exercise_data',   $where);
@@ -214,7 +214,7 @@ class Module_Sessions_API extends Core_ModuleAPI
 
             /* Add the constant values for all rows */
             $values[':session_date'] = $session_date;
-            $values[':userid']       = Core_User::getUserId();
+            $values[':userid']       = Core_Common::getCurrentUserLogin();
 
             $stmt->execute($values);
         }
@@ -293,7 +293,7 @@ class Module_Sessions_API extends Core_ModuleAPI
                       'total_climbed'  => $total_climbed,
                       'min_altitude'   => $min_altitude,
                       'max_altitude'   => $max_altitude,
-                      'userid'         => Core_User::getUserId()));
+                      'userid'         => Core_Common::getCurrentUserLogin()));
     }
 
     function getClimbs() 
@@ -309,7 +309,7 @@ class Module_Sessions_API extends Core_ModuleAPI
                                    'description',
                                    'name AS duration',
                                    'name AS distance'))
-                     ->where('userid = ?', Core_User::getUserId())
+                     ->where('userid = ?', Core_Common::getCurrentUserLogin())
                      ->order('climb_num ASC');
         $stmt = $db->query($select);
 

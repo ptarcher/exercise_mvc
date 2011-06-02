@@ -35,10 +35,44 @@ class Core_Controller {
      */
     protected function checkTokenInUrl()
     {
-        if(Core_Common::getRequestVar('token_auth', false) != Core_User::getCurrentUserToken()) {
+        if(Core_Common::getRequestVar('token_auth', false) != Core_Common::getCurrentUserAuth()) {
             throw new Core_Access_NoAccessException('Invalid Auth Token');
         }
     }
+
+    /**
+     *
+     */
+    function preDispatch()
+    {
+        $currentLogin  = Core_Common::getCurrentUserLogin();
+        $currentModule = Core_Helper::getModule();
+        $loginModule   = Core_Helper::getLoginModuleName();
+
+
+        if($currentModule !== $loginModule && (empty($currentLogin) || $currentLogin === 'anonymous'))
+        {
+            Core_Helper::redirectToModule($loginModule);
+        }
+    }
+
+    /*
+    function redirectToIndex($moduleToRedirect, $actionToRedirect)
+    {
+        $currentLogin = Core_Common::getCurrentUserLogin();
+
+        if(!empty($currentLogin)
+                && $currentLogin != 'anonymous')
+        {
+            $errorMessage = sprintf('CoreHome_NoPrivileges %s',   $currentLogin);
+            $errorMessage .= "<br /><br />&nbsp;&nbsp;&nbsp;<b><a href='index.  php?module=". Zend_Registry::get('auth')->getName() ."&amp;                     action=logout'>&rsaquo; ". 'General_Logout'. "</a></b><br />";
+            //Piwik_ExitWithMessage($errorMessage, false, true);
+        }
+
+        Core_FrontController::getInstance()->dispatch(Core_Helper::getLoginModuleName(), false);
+
+        exit;
+    }*/
 }
 
 ?>

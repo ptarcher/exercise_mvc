@@ -114,7 +114,7 @@ class Core_API_Request
             $api_class = "Module_" . $module . "_API";
             if (!class_exists($api_class)) {
                 // Error
-                echo "Error: Unknown class " . $requested_module;
+                throw new Exception("Error: Unknown class " . $requested_module);
             }
 
             // Dynamically create the class
@@ -123,7 +123,7 @@ class Core_API_Request
             // Dynamically call the action
             if (!method_exists($this->api, $method)) {
                 // Error
-                echo "Error: Unknown method " . $method;
+                throw new Exception("Error: Unknown method " . $method);
                 return;
             }
 
