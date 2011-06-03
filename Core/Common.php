@@ -638,7 +638,7 @@ class Core_Common
 				Core_Common::checkUserIsSuperUser();
 			}
 		} catch( Core_Access_NoAccessException $e){
-			throw new Core_Common_Access_NoAccessException("The user has to be either the Super User or the user '$theUser' itself.");
+			throw new Core_Access_NoAccessException("The user has to be either the Super User or the user '$theUser' itself.");
 		}
 	}
 
