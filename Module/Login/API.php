@@ -21,25 +21,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class Module_Login_API extends Core_ModuleAPI {
-    function getUser($userid) 
-    {
-        $db = Zend_Registry::get('db');
-        $select = $db->select()
-                     ->from('t_users',
-                             array('userid',
-                                   'password_hash',
-                                   'password_salt',
-                                   'athlete',
-                                   'coach',
-                                   'superuser',
-                                   'token'))
-                     ->where('userid = ?', $userid);
-        $stmt = $db->query($select);
-        $result = $stmt->fetchAll();
-        return $result[0];
-    }
-
+class Module_Login_API extends Core_ModuleAPI 
+{
     function checkLogin($userid, $password) 
     {
         $user = $this->getUser($userid);
