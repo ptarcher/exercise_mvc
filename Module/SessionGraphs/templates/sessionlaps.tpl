@@ -33,7 +33,7 @@
     <!-- script src="Module/SessionGraphs/templates/openstreetmap.js"></script-->
 
     <!-- Google Maps -->
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAv9aTDwE6fauiAWoMtxkR-xRUnSFVdNCq8_C9uprN1AKVsiEqDBQ31BXtoxNUK3ETgRsjnDg0vbJzjg" type="text/javascript"></script>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAv9aTDwE6fauiAWoMtxkR-xQoOxTV2asWv1a0V0ChKTrtRJGD1xQTcMVrKXToSqugCGAfdT9Vz1YNPA" type="text/javascript"></script>
 
     <script src="Module/SessionGraphs/templates/loadgpx.4.js" type="text/javascript"></script>
     <script src="Module/SessionGraphs/templates/googlemaps.js" type="text/javascript"></script>
