@@ -106,7 +106,7 @@ class Module_Sessions_Controller extends Core_Controller
         if ($form->validate()) {
             $timer = new Benchmark_Timer();
             $timer->start();
-            $upload = $form->getSubmitValue('form_upload');
+            $upload = $form->getSubmitValue('upload');
 
             $timer->setMarker('Decode Sessions - Start');
             exec('/usr/local/bin/fitdecode -s '.$upload['tmp_name'], $xml_session);
