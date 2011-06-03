@@ -482,3 +482,28 @@ WITH (
 )
 ;
 
+CREATE TABLE t_wind_directions
+(
+   "direction" character varying(4) NOT NULL, 
+   "angle"     integer, 
+
+   CONSTRAINT t_wind_directions_pk PRIMARY KEY ("angle"),
+   CONSTRAINT t_wind_directions_uniq_direction UNIQUE ("direction")
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+
+INSERT INTO t_wind_directions 
+    (direction, angle)
+VALUES 
+    ('N',  0),
+    ('NE', 45),
+    ('E',  90),
+    ('SE', 135),
+    ('S',  180),
+    ('SW', 215),
+    ('W',  270),
+    ('NW', 315);
+
