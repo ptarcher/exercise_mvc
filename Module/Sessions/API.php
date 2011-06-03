@@ -316,6 +316,28 @@ class Module_Sessions_API extends Core_ModuleAPI
         return $stmt->fetchAll();
     }
 
+    function getWindDirections() 
+    {
+        $db = Zend_Registry::get('db');
+
+        $select = $db->select()
+                     ->from('t_wind_directions',
+                             array('direction',
+                                   'angle'))
+                     ->order('angle ASC');
+        $stmt = $db->query($select);
+        $directions = $stmt->fetchAll();
+
+        /* Convert into a nice display table */
+        $wind_directions = array();
+        foreach ($directions as $dir) {
+            $wind_directions[] = $dir['direction'];
+        }
+
+        return $wind_directions;
+    }
+
+
     function getPower($gradient,       $temperature, 
                       $altitude,       $velocity,
                       $velocity_delta, $time_delta,
