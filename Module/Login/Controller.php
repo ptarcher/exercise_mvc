@@ -76,7 +76,7 @@ class Module_Login_Controller extends Core_Controller
 	protected function authenticateAndRedirect($login, $password, $rememberMe, $urlToRedirect = 'index.php')
 	{
 		$info = array(	'login'       => $login, 
-						'md5Password' => $password,
+						'password'    => $password,
 						'rememberMe'  => $rememberMe,
 		);
 		//Piwik_Nonce::discardNonce('Piwik_Login.login');
