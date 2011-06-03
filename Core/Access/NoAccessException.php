@@ -6,7 +6,7 @@
  * @package Core
  * @subpackage Core_Access
  */
-class Core_FrontController_PluginDeactivatedException extends Exception
+class Core_Access_NoAccessException extends Exception
 {
 }
 
