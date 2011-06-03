@@ -112,6 +112,9 @@ class Core_View implements Core_iView
             /* The navigation menu */
             $this->Core_NavigationMenu = Core_Navigator::getInstance()->getMenu();
 
+            $this->InternetIsConnected = Zend_Registry::get('config')->General->internet_is_connected == 1;
+            $this->MapData = Zend_Registry::get('config')->General->map_data;
+
 		} catch(Exception $e) {
 			// can fail, for example at installation (no plugin loaded yet)		
 		}
