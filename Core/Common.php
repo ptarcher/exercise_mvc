@@ -804,7 +804,7 @@ class Core_Common
 	{
 		Zend_Registry::get('access')->checkUserHasSomeViewAccess();
 	}
-=======
+
 /*
  * PHP environment settings
  */
