@@ -44,6 +44,9 @@ class Module_UserManagement_API extends Core_ModuleAPI
         if ($userid === "") {
             $userid = Core_Common::getCurrentUserLogin();
         }
+        Core_Common::checkUserIsSuperUserOrTheUser($userid);
+
+        var_dump($userid);
 
         $db = Zend_Registry::get('db');
         $select = $db->select()
@@ -61,6 +64,11 @@ class Module_UserManagement_API extends Core_ModuleAPI
 
         $stmt = $db->query($select);
         $users = $stmt->fetchAll();
+
+        if (count($users) == 0) {
+            throw new Exception('Invalid username');
+        }
+
         return $users[0];
     }
 
@@ -164,11 +172,9 @@ class Module_UserManagement_API extends Core_ModuleAPI
         return $exercise_types;
     }
 
-    public function getTokenAuth($login, $password)
+    public function getTokenAuth($login, $password_hash)
     {
-        $user = $this->getUser($login);
-        /* TODO: */
-        return $user['token'];
+        return md5($login . $password_hash);
     }
 
     public function getBikes()
