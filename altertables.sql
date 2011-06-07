@@ -463,7 +463,7 @@ CREATE TABLE t_users_bikes_parts
    "category"               character varying(32) NOT NULL, 
    "part"                   character varying(32) NOT NULL, 
    "description"            text, 
-   "inspection_peiod_date"  interval, 
+   "inspection_period_date"  interval, 
    "inspection_period_km"   integer, 
    "inspected_date"         timestamp, 
    "inspected_km"           integer, 
