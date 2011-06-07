@@ -26,9 +26,14 @@
 <div id="page-container">
 {include file="default/templates/menu.tpl"}
 
+    <header>
     <div id="header">
         <h1><img src="" alt="Bike"></h1>
-    </div> <!-- header -->
+    </div> 
+    </header> <!-- header -->
+
+    <div id="alerts">
+    </div> 
 
     <div id="sidebar">
         <div class="padding">
@@ -42,6 +47,7 @@
         </div> <!-- padding -->
     </div> <!--content -->
 
+    <footer>
     <div id="footer">
         <div id="altnav">
             <a href="#">a link</a> - 
@@ -52,11 +58,11 @@
         Bike is an open source project the code can be found on <a href="https://github.com/ptarcher/exercise_mvc">GitHub</a><br>
 
         Bike is a deriative of <a href="http://www.piwik.org">Piwik</a>
-    </div> <!-- footer -->
+    </div> 
+    </footer> <!-- footer -->
 
 </div> <!-- page-container -->
 
-<!-- Begin Footer -->
 </body>
 </html>
 
