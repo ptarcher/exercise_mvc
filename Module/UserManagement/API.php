@@ -232,7 +232,7 @@ class Module_UserManagement_API extends Core_ModuleAPI
                       'description'            => $description,
                       'inspection_period_km'   => $inspection_period_km,
                       'inspection_period_date' => $inspection_period_date),
-                'userid' => $userid);
+                array('userid' => $userid));
     }
 
     function deleteBikeData($bike_id, $part_id)
@@ -243,7 +243,7 @@ class Module_UserManagement_API extends Core_ModuleAPI
         $db->delete('t_users_bikes_parts',
                     array('userid'  => $userid,
                           'bike_id' => $bike_id,
-                          'id'      => $part_id);
+                          'id'      => $part_id));
     }
 
     function getBikeData($bike_id)
