@@ -101,6 +101,38 @@ class Module_SessionGraphs_Controller extends Core_Controller
                                   "units" => 'm');
         $view->session = $session_labels;
 
+        $view->graphs = 
+            array('speed' => array(
+                        'name'        => 'Speed',
+                        'graph_types' => array('time'      => 'Time',
+                                               'histogram' => 'Histogram')), 
+                  'heartrate' => array(
+                        'name'        => 'Heart Rate',
+                        'graph_types' => array('time'      => 'Time',
+                                               'histogram' => 'Histogram')),
+                  /*
+                  'distance' => array(
+                        'name'        => 'Distance',
+                        'graph_types' => array('time'      => 'Time'),
+                  */
+                  'altitude' => array(
+                        'name'        => 'Altitude',
+                        'graph_types' => array('time'      => 'Time',
+                                               'histogram' => 'Histogram')),
+                  'gradient' => array(
+                        'name'        => 'Gradient',
+                        'graph_types' => array('time'      => 'Time',
+                                               'histogram' => 'Histogram')),
+                  'cadence' => array(
+                        'name'        => 'Cadence',
+                        'graph_types' => array('time'      => 'Time',
+                                               'histogram' => 'Histogram')),
+                  'power' => array(
+                        'name'        => 'Power',
+                        'graph_types' => array('time'      => 'Time',
+                                               'histogram' => 'Histogram')),
+                  );
+
         echo $view->render();
     }
 
@@ -258,9 +290,6 @@ class Module_SessionGraphs_Controller extends Core_Controller
 
         echo $view->render();
     }
-
-
-
 }
 
 ?>
