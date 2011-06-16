@@ -21,13 +21,7 @@ $(function () {
                 showLabel: true,
             },
         },
-        /*
-        series:[
-            {label:'Heart Rate', }, 
-            {label:'Speed', yaxis:'y2axis'}, 
-        ],*/
         axesDefaults:{
-            //tickOptions:{formatString:"%d"}, 
             autoscale:true, 
             useSeriesColor:true,
         },
@@ -41,11 +35,6 @@ $(function () {
             yaxis:{
                 labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
             },
-                  /*
-            y2axis:{
-                label:'Speed',
-                labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-            },*/
         },
         highlighter: {
             sizeAdjust: 10,
@@ -169,27 +158,6 @@ $(function () {
         },
     ];
 
-    /* Request all the AJAX data and draw the graphs */
-    for (var i in graphs) {
-        $.ajax({
-            url: "index.php?"+
-                            "module=APIAccess"+
-                            "&method=SessionGraphs.getSessionDataField"+
-                            "&session_date="+encodeURIComponent(session_date)+
-                            "&field="+graphs[i].field,
-            method: 'GET',
-            dataType: 'json',
-            graph : graphs[i],
-            success: function (series, textStatus, XMLHttpRequest) {
-                var options = jqplot_options;
-                options.title          = this.graph.title;
-                options.axes.yaxis     = this.graph.yaxis;
-                options.seriesDefaults = this.graph.seriesDefaults;
-                $.jqplot(this.graph.id, [series], options);
-            }
-        });
-    }
-    
     $(".expand h3").addClass("active");
     $(".expand h3").click(function(){
         $(this).next().toggle();
@@ -208,8 +176,74 @@ $(function () {
             widgets: ['zebra',],
     });
 
+    function getUrl(type, d, field) {
+        if (type == "histogram") {
+            return "index.php?"+
+                             "module=APIAccess"+
+                             "&method=SessionGraphs.getSessionDataHistogram"+
+                             "&session_date="+encodeURIComponent(d)+
+                             "&field="+field;
+        } else {
+            return "index.php?"+
+                             "module=APIAccess"+
+                             "&method=SessionGraphs.getSessionDataField"+
+                             "&session_date="+encodeURIComponent(d)+
+                             "&field="+field;
+        }
+    }
+
+    function getOptions(type, graph)
+    {
+        var options = jQuery.extend(true, [], jqplot_options);
+
+        options.title          = graph.title;
+        options.seriesDefaults = graph.seriesDefaults;
+
+        if (type == 'histogram') {
+            options.axes.xaxis = graph.yaxis;
+            options.axes.yaxis.label = 'Quantity';
+        } else {
+            options.axes.yaxis = graph.yaxis;
+        }
+
+        return options;
+    }
 
 
+
+    $("select").change(function () {
+        var id       = $(this).attr('id');
+        var graph_id = id.substring(7);
+
+        /* Request all the AJAX data and draw the graphs */
+        for (var i in graphs) {
+            if (graphs[i].id == graph_id) {
+                    
+                $.ajax({
+                    url: getUrl($(this).val(), session_date, graphs[i].field),
+                    method: 'GET',
+                    dataType: 'json',
+                    graph : graphs[i],
+                    graph_type : $(this).val(),
+                    success: function (series, textStatus, XMLHttpRequest) {
+                        var options = getOptions(this.graph_type, this.graph);
+                        $.jqplot(this.graph.id, [series], options).replot();
+                    }
+                });
+            }
+        }
+ 
+        /* Time      */
+        /* Distance  */
+        /* Histogram */
+
+        /* TODO: Use functions that are also called in the initialisation */
+
+        /* TODO: Update the graph to show a spinning ajax icon */
+
+        /* TODO: Grab the data via an ajax call */
+    }).trigger('change');
 
 });
+
 
