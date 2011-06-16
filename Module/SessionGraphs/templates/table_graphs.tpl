@@ -11,8 +11,8 @@
             <h3>{$graph.name}</h3>
             <form>
                 <select id="select_graph_{$id}">
-{foreach from=$graph.graph_types item=option key=val}
-                    <option value="{$val}">{$option}</option>
+{foreach from=$graph.graph_types item=option key=val name=options}
+                    <option value="{$val}"{if $smarty.foreach.options.first} selected{/if}>{$option}</option>
 {/foreach}
                 </select>
             </form>
