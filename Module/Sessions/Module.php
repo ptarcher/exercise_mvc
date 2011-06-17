@@ -50,11 +50,11 @@ class Module_Sessions_Module extends Core_Module
                 array('module' => 'Sessions', 
                       'action' => 'viewClimbs'));
 
-        if (isset($_SESSION['athlete']) && $_SESSION['athlete']) {
+        //if (isset($_SESSION['athlete']) && $_SESSION['athlete']) {
             Core_Menu_AddMenu('Sessions', 'File Upload', 
                     array('module' => 'Sessions', 
                           'action' => 'viewUpload'));
-        }
+        //}
     }
 }
 
