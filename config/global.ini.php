@@ -47,18 +47,9 @@ always_archive_data_day = 0;
 ; and a profiling summary will be printed at the end of the request
 enable_sql_profiler = 0
 
-; if set to 1, a Piwik tag will be included in the Piwik UI footer and will track visits, pages, etc. to idsite = 1
-; this is useful for Piwik developers as an easy way to create data in their local Piwik
-track_visits_inside_core_ui = 0
-
 ; if set to 1, javascript and css files will be included individually
 ; this option must be set to 1 when adding, removing or modifying javascript and css files
 disable_merged_assets = 0
-
-; If set to 1, Flash widgets require separate HTTP requests
-; (i.e., one request to load the JavaScript which instantiates Open Flash Chart; the other request is made by OFC to download the JSON data for the chart)
-; If set to 0, Piwik uses a single HTTP request per Flash widget to serve both the widget and data
-disable_merged_requests = 0
 
 [General]
 ; character used to automatically create categories in the Actions > Pages, Outlinks and Downloads reports
@@ -74,9 +65,6 @@ autocomplete_min_sites = 5
 
 ; maximum number of websites showed in search results in autocompleter
 site_selector_max_sites = 10
-
-; if set to 1, shows sparklines (evolution graph) in 'All Websites' report (MultiSites plugin)
-show_multisites_sparklines = 1
 
 ; this action name is used when the URL ends with a slash / 
 ; it is useful to have an actual string to write in the UI
@@ -96,12 +84,6 @@ datatable_default_limit = 10
 ; default number of rows returned in API responses
 API_datatable_default_limit = 50
 
-; This setting is overriden in the UI, under "User Settings". 
-; The date and period loaded by Piwik uses the defaults below. Possible values: yesterday, today.
-default_day = yesterday
-; Possible values: day, week, month, year.
-default_period = day
-
 ; This setting is overriden in the UI, under "General Settings". This is the default value used if the setting hasn't been overriden via the UI.
 ; Time in seconds after which an archive will be computed again. This setting is used only for today's statistics.
 ; Defaults to 10 seconds so that by default, Piwik provides real time reporting.
@@ -110,6 +92,12 @@ time_before_today_archive_considered_outdated = 10
 ; This setting is overriden in the UI, under "General Settings". The default value is to allow browsers
 ; to trigger the Piwik archiving process.
 enable_browser_archiving_triggering = 1
+
+; Display items that need to be connected to the internet for resources
+internet_is_connected = 1;
+
+; Display map data. google openstreetmap
+map_data = google;
 
 ; PHP minimum required version (minimum requirement known to date = ->newInstanceArgs)
 minimum_php_version = 5.1.3
@@ -143,7 +131,7 @@ login_cookie_path =
 ; if specified, {DOMAIN} will be replaced by the current Piwik domain
 login_password_recovery_email_address = "password-recovery@{DOMAIN}"
 ; name that appears as a Sender in the password recovery email
-login_password_recovery_email_name = Piwik
+login_password_recovery_email_name = iBike
 
 ; Set to 1 to disable the framebuster (a click-jacking countermeasure).
 ; Default is 0 (i.e., bust frames on the Login forms).
@@ -211,67 +199,6 @@ latest_version_url = http://core.org/latest.zip
 ; provide services to Piwik installations, e.g., getLatestVersion and
 ; subscribeNewsletter.
 api_service_url = http://api.core.org
-
-[Tracker]
-; set to 0 if you want to stop tracking the visitors. Useful if you need to stop all the connections on the DB.
-record_statistics			= 1
-
-; length of a visit in seconds. If a visitor comes back on the website visit_standard_length seconds after his last page view, it will be recorded as a new visit  
-visit_standard_length       = 1800
-
-; visitors that stay on the website and view only one page will be considered staying 0 second
-default_time_one_page_visit = 0
-
-; if set to 0, any goal conversion will be credited to the last more recent non empty referer. 
-; when set to 1, the first ever referer used to reach the website will be used
-use_first_referer_to_determine_goal_referer = 0
-
-; if set to 1, Piwik will try to match visitors without cookie to a previous visitor that has the same
-; configuration: OS, browser, resolution, IP, etc. This heuristic adds an extra SQL query for each page view without cookie. 
-; it is advised to set it to 1 for more accurate detection of unique visitors.
-; However when most users have the same IP, and the same configuration, it is advised to set it to 0
-enable_detect_unique_visitor_using_settings = 1
-
-; if set to 1, Piwik attempts a "best guess" at the visitor's country of
-; origin when the preferred language tag omits region information.
-; The mapping is defined in core/DataFiles/LanguageToCountry.php,
-enable_language_to_country_guess = 1
-
-; When the misc/cron/archive.sh cron hasn't been setup, we still need to regularly run some maintenance tasks.
-; Visits to the Tracker will try to trigger Scheduled Tasks (eg. scheduled PDF reports by email).
-; Scheduled tasks will only run if 'Enable Piwik Archiving from Browser' is enabled in the General Settings.
-; Tasks run once every hour maximum, they might not run every hour if traffic is low.
-; Set to 0 to disable Scheduled tasks completely.
-scheduled_tasks_min_interval = 3600
-
-; name of the cookie used to store the visitor information
-cookie_name	= core_visitor
-
-; by default, the Piwik tracking cookie expires in 2 years
-cookie_expire = 63072000
-
-; The path on the server in which the cookie will be available on. 
-; Defaults to empty. See spec in http://curl.haxx.se/rfc/cookie_spec.html
-cookie_path = 
-
-; name of the cookie to ignore visits
-ignore_visits_cookie_name = core_ignore 
-
-; variable name to track any campaign, for example CPC campaign
-; Example: If a visitor first visits 'index.php?core_campaign=Adwords-CPC' then it will be counted as a campaign referer named 'Adwords-CPC'
-campaign_var_name			= core_campaign
-
-; variable name to track any campaign keyword
-; Example: If a visitor first visits 'index.php?core_campaign=Adwords-CPC&core_kwd=My killer keyword' then it will be counted as a campaign referer named 'Adwords-CPC' with the keyword 'My killer keyword'
-campaign_keyword_var_name	= core_kwd
-
-; maximum length of a Page Title or a Page URL recorded in the log_action.name table
-page_maximum_length = 1024;
-
-; number of octets in IP address to mask, in order to anonymize a visitor's IP address
-; if the AnonymizeIP plugin is deactivated, this value is ignored
-; for IPv4 addresses, valid values are 0..4
-ip_address_mask_length = 1
 
 [mail]
 transport =							; smtp (using the configuration below) or empty (using built-in mail() function)
@@ -359,3 +286,4 @@ PluginsInstalled[] = Installation
 [Plugins_Tracker]
 Plugins_Tracker[] = Provider
 Plugins_Tracker[] = Goals
+

@@ -23,8 +23,22 @@ class SessionUploadForm extends Core_Form
 
 	function init()
 	{
-        $file = $this->addElement('file',     'form_upload', array('required' => 'required'));
-        //$file->addLabel('Session File');
+        $bikes           = Module_UserManagement_API::getInstance()->getBikes();
+        $wind_directions = Module_Sessions_API::getInstance()->getWindDirections();
+
+        $bike= $this->addElement('select', 'bike', array());
+        $bike->setLabel('Bike');
+        $bike->loadOptions($bikes);
+
+        $wind_direction = $this->addElement('select', 'wind_direction');
+        $wind_direction->setLabel('Wind Direction');
+        $wind_direction->loadOptions($wind_directions);
+
+        $wind_speed = $this->addElement('text', 'wind_speed');
+        $wind_speed->setLabel('Wind Speed');
+
+        $file = $this->addElement('file', 'upload', array('required' => 'required'));
+        $file->setLabel('Session File');
         $file->addRule('required', 'The upload file is required');
 
 		$this->addElement('submit', 'submit');

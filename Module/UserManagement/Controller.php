@@ -197,14 +197,14 @@ class Module_UserManagement_Controller extends Core_Controller
     function viewBike() 
     {
         $api = new Module_UserManagement_API();
-        $id  = Core_Common::getRequestVar('id', null, 'int');
+        $bike_id = Core_Common::getRequestVar('id', null, 'int');
 
         $view = Core_View::factory('viewBike');
-        $view->bike = $api->getBikeData($id);
+        $view->bikes = $api->getBikes();
+        $view->parts = $api->getBikeData($bike_id);
 
         echo $view->render();
     }
-
 }
 
 ?>

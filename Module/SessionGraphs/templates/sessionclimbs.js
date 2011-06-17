@@ -1,14 +1,17 @@
 $(function () {
-    // Call the Open Streetmap API
-    //OSM_Init();
-    // Call the googlemaps API
-    GoogleMaps_Init("index.php?module=APIAccess&"+
-                                "method=SessionGraphs.getGPXData&"+
-                                "format=gpx&"+
-                                "session_date="+encodeURIComponent(session_date)+"&"+
-                                "min_time="+encodeURIComponent(min_time)+"&"+
-                                "max_time="+encodeURIComponent(max_time)+"&"+
-                                "climb_num="+encodeURIComponent(climb_num));
+    if (MapData == 'openstreetmap') {
+        // Call the Open Streetmap API
+        OSM_Init();
+    } else if (MapData == 'google') {
+        // Call the googlemaps API
+        GoogleMaps_Init("index.php?module=APIAccess&"+
+                                  "method=SessionGraphs.getGPXData&"+
+                                  "format=gpx&"+
+                                  "session_date="+encodeURIComponent(session_date)+"&"+
+                                  "min_time="+encodeURIComponent(min_time)+"&"+
+                                  "max_time="+encodeURIComponent(max_time)+"&"+
+                                  "climb_num="+encodeURIComponent(climb_num));
+    }
 
     // jqplot
     var jqplot_options = {

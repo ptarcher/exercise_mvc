@@ -27,35 +27,33 @@
     <script type="text/javascript" src="libraries/javascript/jqplot/plugins/jqplot.cursor.js"></script>
     <!-- END: jqplot -->
 
+{if $InternetIsConnected && $MapData == 'openstreetmap'}
     <!-- Open street map -->
-    <!-- script src="http://www.openlayers.org/api/OpenLayers.js"></script-->
-    <!-- script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script-->
-    <!-- script src="Module/SessionGraphs/templates/openstreetmap.js"></script-->
-
+    <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+    <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+    <script src="Module/SessionGraphs/templates/openstreetmap.js"></script>
+{elseif $InternetIsConnected && $MapData == 'google'}
     <!-- Google Maps -->
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAv9aTDwE6fauiAWoMtxkR-xQoOxTV2asWv1a0V0ChKTrtRJGD1xQTcMVrKXToSqugCGAfdT9Vz1YNPA" type="text/javascript"></script>
 
     <script src="Module/SessionGraphs/templates/loadgpx.4.js" type="text/javascript"></script>
     <script src="Module/SessionGraphs/templates/googlemaps.js" type="text/javascript"></script>
+{else}
+    <script type="text/javascript">MapData = '';</script>
+{/if}
 
     <script type="text/javascript" src="Module/SessionGraphs/templates/sessionlaps.js"></script>
 {/block}
 
 {block name=body}
-<center>
-<h1>Exercise data</h1>
 
-<table class="sessiongraphs">
-<tr>
-    <td>
-        {include file="SessionGraphs/templates/table_session.tpl"}
-        {include file="SessionGraphs/templates/table_zones.tpl"}
-        {include file="SessionGraphs/templates/table_laps.tpl"}
-    </td>
-    <td>
-        {include file="SessionGraphs/templates/table_graphs.tpl"}
-    </td>
-</tr>
+<h2>Exercise data</h2>
+{include file="SessionGraphs/templates/table_graphs.tpl"}
 
-</center>
+{/block}
+
+{block name=sidebar}
+{include file="SessionGraphs/templates/table_session.tpl"}
+{include file="SessionGraphs/templates/table_zones.tpl"}
+{include file="SessionGraphs/templates/table_laps.tpl"}
 {/block}

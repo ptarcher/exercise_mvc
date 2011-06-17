@@ -76,6 +76,48 @@ class Module_SessionGraphs_API extends Core_ModuleAPI {
         return $rows;
     }
 
+    function getSessionDataHistogram($session_date, $field, $min_time = NULL, $max_time = NULL) 
+    {
+        $valid_fields = array('speed','heartrate',
+                              'altitude','power','temperature',
+                              'cadence', 'gradient');
+
+        // Make sure field is a valid field
+        if (!in_array($field, $valid_fields)) {
+            return;
+        }
+        $db = Zend_Registry::get('db');
+
+        $select = $db->select()
+                     ->from('t_exercise_data',
+                             array('COUNT(*) AS count',
+                                   'ROUND(CAST('.$field.' AS numeric), 0) AS rounded'))
+                     ->where('userid = ?', Core_Common::getCurrentUserLogin())
+                     ->where('session_date = ?', $session_date)
+                     ->group('rounded')
+                     ->order('rounded ASC');
+        if (!is_null($min_time)) {
+            $select->where('time >= ?', $min_time);
+        }
+        if (!is_null($max_time)) {
+            $select->where('time <= ?', $max_time);
+        }
+        $stmt = $db->query($select);
+
+        /* TODO: Do this in a more generic way */
+        $data = $stmt->fetchAll();
+        $rows = array();
+        foreach ($data as $row) {
+            $myrow[0] = doubleval($row['rounded']);
+            $myrow[1] = doubleval($row['count']);
+            $rows[] = $myrow;
+        }
+
+        return $rows;
+    }
+
+
+
     function getGPXData($session_date, $min_time = null, $max_time = null) 
     {
         $db = Zend_Registry::get('db');

@@ -198,6 +198,60 @@ class Module_UserManagement_API extends Core_ModuleAPI
         return $bikes;
     }
 
+    function insertBikeData($bike_id, $category, $part, $description, 
+                            $inspection_period_km, $inspection_period_date)
+    {
+        $db     = Zend_Registry::get('db');
+        $userid = Core_Common::getCurrentUserLogin();
+
+        $db->insert('t_users_bikes_parts',
+                array('userid'        => $userid,
+                      'bike_id'       => $bike_id,
+                      'category'      => $category,
+                      'part'          => $part,
+                      'description'   => $description,
+                      'inspection_period_km'   => $inspection_period_km,
+                      'inspection_period_date' => $inspection_period_date));
+    }
+
+    function updateBikeData($bike_id, $part_id, 
+                            $category, $part, $description, 
+                            $inspection_period_km, $inspection_period_date,
+                            $inspected, $withdrawn)
+    {
+        $userid = Core_Common::getCurrentUserLogin();
+        $db     = Zend_Registry::get('db');
+
+        /* TODO: Add the withdrawn       */
+        /* TODO: Add the last inspection */
+        if ($inspected) {
+        }
+
+        if ($withdrawn) {
+        }
+
+        $db->update('t_users',
+                array('bike_id'                => $bike_id,
+                      'id'                     => $part_id,
+                      'category'               => $category,
+                      'part'                   => $part,
+                      'description'            => $description,
+                      'inspection_period_km'   => $inspection_period_km,
+                      'inspection_period_date' => $inspection_period_date),
+                array('userid' => $userid));
+    }
+
+    function deleteBikeData($bike_id, $part_id)
+    {
+        $userid = Core_Common::getCurrentUserLogin();
+        $db     = Zend_Registry::get('db');
+
+        $db->delete('t_users_bikes_parts',
+                    array('userid'  => $userid,
+                          'bike_id' => $bike_id,
+                          'id'      => $part_id));
+    }
+
     function getBikeData($bike_id)
     {
         $userid = Core_Common::getCurrentUserLogin();
@@ -208,18 +262,27 @@ class Module_UserManagement_API extends Core_ModuleAPI
                              array('userid',
                                    'bike_id',
                                    'id',
+                                   'category',
                                    'part',
                                    'description',
+                                   'inspection_period_km',
+                                   'inspection_period_date',
+                                   'inspected_km',
+                                   'inspected_date',
                                    'replaced_km',
                                    'replaced_date',
                                    'withdrawn_km',
                                    'withdrawn_date'))
                      ->where('userid  = ?', $userid)
-                     ->where('bike_id = ?', $bike_id);
-        $stmt = $db->query($select);
-        $bike = $stmt->fetchAll();
+                     ->where('bike_id = ?', $bike_id)
+                     ->order('category')
+                     ->order('part')
+                     ->order('id');
 
-        return $bike;
+        $stmt  = $db->query($select);
+        $parts = $stmt->fetchAll();
+
+        return $parts;
     }
 }
 

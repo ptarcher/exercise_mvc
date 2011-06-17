@@ -38,14 +38,9 @@
 </div> <!-- upload_status -->
 {/if}
 
-<form {$form_data.attributes}>
-    <label>
-        <span>File</span>
-        <input type="file" name="form_upload" id="form_upload" class="input" value="" size="20" tabindex="1" />
-    </label>
+{if isset($form_data)}
+   {include file="default/templates/genericForm.tpl"}
+{/if}
 
-    <input type="submit" value="Upload" tabindex="2" />
-</form>
-
-</div> <!-- form -->
+</div> 
 {/block}
