@@ -1,29 +1,44 @@
 <?php
-/*
- *  Description: Display simple single digits of the current weather.
- *  Date:        02/06/2009
- *  
- *  Author:      Paul Archer <ptarcher@gmail.com>
+/**
+ * API Access functions for UserManagement.
  *
- * Copyright (C) 2009  Paul Archer
- * 
+ * PHP version 5
+ *
+ * @category  Bike
+ * @package   UserManagement
+ * @author    Paul Archer <ptarcher@gmail.com>
+ * @copyright 2009 Paul Archer
+ * @license   http://www.gnu.org/licenses/agpl-3.0.txt AGPL-3 .0
+ * @version   Release: 1.0
+ * @link      http://paul.archer.tw
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
-
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
-
+ *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-class Module_UserManagement_API extends Core_ModuleAPI 
+/**
+ * API Access functions for UserManagement.
+ *
+ * @category Bike
+ * @package  UserManagement
+ * @author   Paul Archer <ptarcher@gmail.com>
+ * @license  http://www.gnu.org/licenses/agpl-3.0.txt AGPL-3 .0
+ * @link     http://paul.archer.tw
+ */
+class Module_UserManagement_API extends Core_ModuleAPI
 {
-    static private $instance = null;
+    static private $_instance = null;
     /**
      * Returns the singleton ModuleUserManagementAPI
      *
@@ -31,14 +46,18 @@ class Module_UserManagement_API extends Core_ModuleAPI
      */
     static public function getInstance()
     {
-        if (self::$instance == null)
-        {
-            $c = __CLASS__;
-            self::$instance = new $c();
+        if (self::$_instance == null) {
+            $c               = __CLASS__;
+            self::$_instance = new $c();
         }
-        return self::$instance;
+        return self::$_instance;
     }
 
+    /**
+     * Get the given username configuration
+     *
+     * @return Array of the user fields
+     */
     function getUser($userid = "") 
     {
         if ($userid === "") {
@@ -48,7 +67,7 @@ class Module_UserManagement_API extends Core_ModuleAPI
 
         var_dump($userid);
 
-        $db = Zend_Registry::get('db');
+        $db     = Zend_Registry::get('db');
         $select = $db->select()
                      ->from('t_users',
                              array('userid',
@@ -62,7 +81,7 @@ class Module_UserManagement_API extends Core_ModuleAPI
                                    'bike_weight'))
                      ->where('userid = ?', $userid);
 
-        $stmt = $db->query($select);
+        $stmt  = $db->query($select);
         $users = $stmt->fetchAll();
 
         if (count($users) == 0) {
@@ -72,6 +91,11 @@ class Module_UserManagement_API extends Core_ModuleAPI
         return $users[0];
     }
 
+    /**
+     * Update a users setting
+     *
+     * @return null
+     */
     function updateSetting($id, $value)
     {
         $db = Zend_Registry::get('db');
@@ -104,14 +128,18 @@ class Module_UserManagement_API extends Core_ModuleAPI
         }
     }
 
+    /**
+     * Get the list of users
+     *
+     * @return Array of users
+     */
     function getUsers() 
     {
         if (!Core_Access::isSuperUser()) {
             throw exception('You need to be super user to perform this action');
         }
 
-        $db = Zend_Registry::get('db');
-
+        $db     = Zend_Registry::get('db');
         $select = $db->select()
                      ->from('t_users',
                              array('userid',
@@ -119,21 +147,28 @@ class Module_UserManagement_API extends Core_ModuleAPI
                                    'athlete',
                                    'superuser'))
                      ->order('userid DESC');
-        $stmt = $db->query($select);
+        $stmt   = $db->query($select);
 
         return $stmt->fetchAll();
     }
 
-    function createUser($userid, $password, $email, $coach = 'f', $athlete = 't', $superuser = 'f') 
+    /**
+     * Create a new user
+     *
+     * @return null
+     */
+    function createUser($userid, $password, $email, $coach = 'f', 
+                        $athlete = 't', $superuser = 'f') 
     {
         $password_salt = Core_Common::getRandomString(64);
         $password_hash = sha1($password . $password_salt);
+
         $db   = Zend_Registry::get('db');
         $auth = Zend_Registry::get('auth');
+
         $auth_token = $auth->getHashTokenAuth($userid, $password_hash);
 
         if (!Core_Access::isSuperUser()) {
-            //throw new Exception('You need to be super user to perform this action');
             $superuser = 'f';
         }
 
@@ -148,35 +183,49 @@ class Module_UserManagement_API extends Core_ModuleAPI
                       'token'         => $auth_token));
     }
 
-    // TODO: Convert this into user groups
+    /**
+     * Get the possible exercise types
+     *
+     * @return Array of exercise types
+     */
     function getExerciseTypes() 
     {
-        $db = Zend_Registry::get('db');
-
+        // TODO: Convert this into user groups
+        $db     = Zend_Registry::get('db');
         $select = $db->select()
                      ->from('t_training_types',
                              array('type_short',
                                    'type'))
                      ->order('type_short');
-        $stmt = $db->query($select);
-
-        $types = $stmt->fetchAll();
+        $stmt   = $db->query($select);
+        $types  = $stmt->fetchAll();
 
         /* Convert into a nice display table */
         $exercise_types = array();
         foreach ($types as $type) {
             $description = $type['type_short'] . ' - ' . $type['type'];
+
             $exercise_types[$type['type_short']] = $description;
         }
 
         return $exercise_types;
     }
 
+    /**
+     * Get the Authorisation Token
+     *
+     * @return token
+     */
     public function getTokenAuth($login, $password_hash)
     {
         return md5($login . $password_hash);
     }
 
+    /**
+     * Get the list of the users bikes
+     *
+     * @return Array of bikes
+     */
     public function getBikes()
     {
         $userid = Core_Common::getCurrentUserLogin();
@@ -192,12 +241,17 @@ class Module_UserManagement_API extends Core_ModuleAPI
                                    'created'))
                      ->where('userid = ?', $userid)
                      ->order(array('type', 'name', 'description'));
-        $stmt = $db->query($select);
-        $bikes = $stmt->fetchAll();
+        $stmt   = $db->query($select);
+        $bikes  = $stmt->fetchAll();
 
         return $bikes;
     }
 
+    /**
+     * Add a bike part to a given $bike_id
+     *
+     * @return null
+     */
     function insertBikeData($bike_id, $category, $part, $description, 
                             $inspection_period_km, $inspection_period_date)
     {
@@ -214,6 +268,11 @@ class Module_UserManagement_API extends Core_ModuleAPI
                       'inspection_period_date' => $inspection_period_date));
     }
 
+    /**
+     * Update a bike parts details
+     *
+     * @return null
+     */
     function updateBikeData($bike_id, $part_id, 
                             $category, $part, $description, 
                             $inspection_period_km, $inspection_period_date,
@@ -241,6 +300,11 @@ class Module_UserManagement_API extends Core_ModuleAPI
                 array('userid' => $userid));
     }
 
+    /**
+     * Delete a bike part from the system
+     *
+     * @return null
+     */
     function deleteBikeData($bike_id, $part_id)
     {
         $userid = Core_Common::getCurrentUserLogin();
@@ -252,6 +316,11 @@ class Module_UserManagement_API extends Core_ModuleAPI
                           'id'      => $part_id));
     }
 
+    /**
+     * Get the list of bike parts
+     *
+     * @return Array of bike parts
+     */
     function getBikeData($bike_id)
     {
         $userid = Core_Common::getCurrentUserLogin();
@@ -285,5 +354,3 @@ class Module_UserManagement_API extends Core_ModuleAPI
         return $parts;
     }
 }
-
-?>
