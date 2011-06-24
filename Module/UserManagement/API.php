@@ -40,7 +40,7 @@ class Module_UserManagement_API extends Core_ModuleAPI
 {
     static private $_instance = null;
     /**
-     * Returns the singleton ModuleUserManagementAPI
+     * Returns the singleton ModuleUserManagementAPI.
      *
      * @return ModuleUserManagementAPI
      */
@@ -54,9 +54,11 @@ class Module_UserManagement_API extends Core_ModuleAPI
     }
 
     /**
-     * Get the given username configuration
+     * Get the given username configuration.
      *
-     * @return Array of the user fields
+     * @param string $userid Either "" for the current user, or a user id.
+     *
+     * @return Array
      */
     function getUser($userid = "") 
     {
@@ -92,7 +94,10 @@ class Module_UserManagement_API extends Core_ModuleAPI
     }
 
     /**
-     * Update a users setting
+     * Update a users setting.
+     *
+     * @param string $id    The setting id.
+     * @param string $value The new value.
      *
      * @return null
      */
@@ -129,9 +134,9 @@ class Module_UserManagement_API extends Core_ModuleAPI
     }
 
     /**
-     * Get the list of users
+     * Get the list of users.
      *
-     * @return Array of users
+     * @return Array
      */
     function getUsers() 
     {
@@ -153,7 +158,14 @@ class Module_UserManagement_API extends Core_ModuleAPI
     }
 
     /**
-     * Create a new user
+     * Create a new user.
+     *
+     * @param string $userid    The new userid.
+     * @param string $password  The new plain text password.
+     * @param string $email     The new users email.
+     * @param string $coach     't' if the user is a coach.
+     * @param string $athlete   't' if the user is an athlete.
+     * @param string $superuser 't' if the user is a superuser.
      *
      * @return null
      */
@@ -184,9 +196,9 @@ class Module_UserManagement_API extends Core_ModuleAPI
     }
 
     /**
-     * Get the possible exercise types
+     * Get a list of the possible exercise types.
      *
-     * @return Array of exercise types
+     * @return Array
      */
     function getExerciseTypes() 
     {
@@ -214,7 +226,10 @@ class Module_UserManagement_API extends Core_ModuleAPI
     /**
      * Get the Authorisation Token
      *
-     * @return token
+     * @param string $login         The users login
+     * @param string $password_hash A hash of the users password
+     *
+     * @return string
      */
     public function getTokenAuth($login, $password_hash)
     {
@@ -250,6 +265,13 @@ class Module_UserManagement_API extends Core_ModuleAPI
     /**
      * Add a bike part to a given $bike_id
      *
+     * @param string $bike_id                The bicycle unique id
+     * @param string $category               The bicycle part category
+     * @param string $part                   The part name
+     * @param string $description            A short description
+     * @param string $inspection_period_km   How many kms between inspections
+     * @param string $inspection_period_date How many days between inspections
+     *
      * @return null
      */
     function insertBikeData($bike_id, $category, $part, $description, 
@@ -270,6 +292,16 @@ class Module_UserManagement_API extends Core_ModuleAPI
 
     /**
      * Update a bike parts details
+     *
+     * @param string $bike_id                The bicycle unique id
+     * @param string $part_id                The bicycle part unique id
+     * @param string $category               The bicycle part category
+     * @param string $part                   The part name
+     * @param string $description            A short description
+     * @param string $inspection_period_km   How many kms between inspections
+     * @param string $inspection_period_date How many days between inspections
+     * @param string $inspected              When last inspected
+     * @param string $withdrawn              When withdrawn
      *
      * @return null
      */
@@ -303,6 +335,9 @@ class Module_UserManagement_API extends Core_ModuleAPI
     /**
      * Delete a bike part from the system
      *
+     * @param string $bike_id The bicycle unique id
+     * @param string $part_id The bicycle part unique id
+     *
      * @return null
      */
     function deleteBikeData($bike_id, $part_id)
@@ -318,6 +353,8 @@ class Module_UserManagement_API extends Core_ModuleAPI
 
     /**
      * Get the list of bike parts
+     *
+     * @param string $bike_id The bicycle unique id
      *
      * @return Array of bike parts
      */
