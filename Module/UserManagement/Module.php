@@ -1,6 +1,6 @@
 <?php
 /**
- * API Access functions for UserManagement.
+ * Module description functions for UserManagement.
  *
  * PHP version 5
  *
@@ -28,7 +28,7 @@
  */
 
 /**
- * API Access functions for UserManagement.
+ * Module description functions for UserManagement.
  *
  * @category Bike
  * @package  UserManagement
