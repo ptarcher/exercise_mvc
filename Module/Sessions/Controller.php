@@ -31,45 +31,6 @@ require_once 'Benchmark/Timer.php';
 
 class Module_Sessions_Controller extends Core_Controller 
 {
-    var $module_description = array(
-        'name'        => 'Session',
-        'description' => 'View, create and edit exercise sessions',
-        'version'     => '0.1',
-        'author'      => 'Paul Archer',
-    );
-
-    static function _getHooks() {
-        $hooks   = array();
-        $hooks[] = array("hook"     => "navigator",
-                         "category" => "Sessions", 
-                         "name"     => "View Sessions", 
-                         "module"   => "Sessions", 
-                         "action"   => "view");
-        /*
-        $hooks[] = array("hook"     => "navigator",
-                         "category" => "Sessions", 
-                         "name"     => "New Session", 
-                         "module"   => "Sessions", 
-                         "action"   => "create");
-        */
-        $hooks[] = array("hook"     => "navigator",
-                         "category" => "Sessions", 
-                         "name"     => "Climbs", 
-                         "module"   => "Sessions", 
-                         "action"   => "viewClimbs");
-
-
-        if (isset($_SESSION['athlete']) && $_SESSION['athlete']) {
-            $hooks[] = array("hook"     => "navigator",
-                             "category" => "Sessions", 
-                             "name"     => "File Upload", 
-                             "module"   => "Sessions", 
-                             "action"   => "viewUpload");
-        }
-
-        return $hooks;
-    }
-    
     function index() {
         $this->view();
     }
@@ -375,9 +336,9 @@ class Module_Sessions_Controller extends Core_Controller
                 $db->rollback();
                 $view->UploadStatusMsg   = "Failed to upload";
                 $view->UploadStatus      = "Error";
-                $e->getMessage();
+                echo $e->getMessage();
             }
-            //$timer->display();
+            $timer->display();
         }
 
         $view->addForm($form);
