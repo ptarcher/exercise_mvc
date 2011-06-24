@@ -1,83 +1,80 @@
 <?php
-/*
- *  Description: Display simple single digits of the current weather.
- *  Date:        02/06/2009
- *  
- *  Author:      Paul Archer <ptarcher@gmail.com>
+/**
+ * Controller functions for UserManagement.
  *
- * Copyright (C) 2009  Paul Archer
- * 
+ * PHP version 5
+ *
+ * @category  Bike
+ * @package   UserManagement
+ * @author    Paul Archer <ptarcher@gmail.com>
+ * @copyright 2009 Paul Archer
+ * @license   http://www.gnu.org/licenses/agpl-3.0.txt AGPL-3 .0
+ * @version   Release: 1.0
+ * @link      http://paul.archer.tw
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
-
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
-
+ *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-require_once('Module/UserManagement/AddUserFrom.php');
+require_once 'Module/UserManagement/AddUserFrom.php';
 
-class Module_UserManagement_Controller extends Core_Controller 
+
+/**
+ * Controller functions for UserManagement.
+ *
+ * @category Bike
+ * @package  UserManagement
+ * @author   Paul Archer <ptarcher@gmail.com>
+ * @license  http://www.gnu.org/licenses/agpl-3.0.txt AGPL-3 .0
+ * @link     http://paul.archer.tw
+ */
+class Module_UserManagement_Controller extends Core_Controller
 {
-    var $module_description = array(
-        'name'        => 'Session',
-        'description' => 'View, create and edit exercise sessions',
-        'version'     => '0.1',
-        'author'      => 'Paul Archer',
-    );
-
-    static function _getHooks() {
-        $hooks   = array();
-
-        $hooks[] = array("hook"     => "navigator",
-                         "category" => "User", 
-                         "name"     => "Settings", 
-                         "module"   => "UserManagement", 
-                         "action"   => "settings");
-        $hooks[] = array("hook"     => "navigator",
-                         "category" => "User", 
-                         "name"     => "Bikes", 
-                         "module"   => "UserManagement", 
-                         "action"   => "bikes");
-
-        if (isset($_SESSION['superuser']) && $_SESSION['superuser']) {
-            $hooks[] = array("hook"     => "navigator",
-                             "category" => "UserManagement", 
-                             "name"     => "View Users", 
-                             "module"   => "UserManagement", 
-                             "action"   => "view");
-            $hooks[] = array("hook"     => "navigator",
-                             "category" => "UserManagement", 
-                             "name"     => "New User", 
-                             "module"   => "UserManagement", 
-                             "action"   => "create");
-        }
-
-        return $hooks;
-    }
-
-    function index() {
+    /**
+     * The default controller.
+     *
+     * @return The Webpage Text
+     */
+    function index() 
+    {
         return $this->view();
     }
     
-    function view() {
+    /**
+     * View the list of users.
+     *
+     * @return The Webpage Text
+     */
+    function view() 
+    {
         $api = new Module_UserManagement_API();
 
         /* TODO: Check if administrator */
         $users = $api->getUsers();
+        $view  = Core_View::factory('users');
 
-        $view = Core_View::factory('users');
         $view->users = $users;
         echo $view->render();
     }
 
-    function create() {
+    /**
+     * Create a new user form.
+     *
+     * @return The Webpage Text
+     */
+    function create() 
+    {
         $api = new Module_UserManagement_API();
 
         $user_types = $api->getExerciseTypes();
@@ -90,7 +87,8 @@ class Module_UserManagement_Controller extends Core_Controller
             $athlete  = $form->getSubmitValue('athlete');
             $usertype = $form->getSubmitValue('usertype');
 
-            $success = $api->createUser($userid, $password, $coach, $athlete, $usertype);
+            $success = $api->createUser($userid, $password, 
+                                        $coach, $athlete, $usertype);
             if ($success) {
                 /* We have sucessfully logged in, now lets 
                  * display the next page */
@@ -127,8 +125,14 @@ class Module_UserManagement_Controller extends Core_Controller
         echo $view->render();
     }
 
-    function settings() {
-        $api = new Module_UserManagement_API();
+    /**
+     * Update the current users settings.
+     *
+     * @return The Webpage Text
+     */
+    function settings() 
+    {
+        $api  = new Module_UserManagement_API();
         $view = Core_View::factory('usersettings');
 
         $user = $api->getUser();
@@ -184,27 +188,35 @@ class Module_UserManagement_Controller extends Core_Controller
         echo $view->render();
     }
 
+    /**
+     * Show the list of the users current bikes.
+     *
+     * @return The Webpage Text
+     */
     function bikes() 
     {
-        $api = new Module_UserManagement_API();
-
+        $api  = new Module_UserManagement_API();
         $view = Core_View::factory('bikes');
+
         $view->bikes = $api->getBikes();
 
         echo $view->render();
     }
 
+    /**
+     * View the parts on a bike.
+     *
+     * @return The Webpage Text
+     */
     function viewBike() 
     {
-        $api = new Module_UserManagement_API();
+        $api     = new Module_UserManagement_API();
         $bike_id = Core_Common::getRequestVar('id', null, 'int');
+        $view    = Core_View::factory('viewBike');
 
-        $view = Core_View::factory('viewBike');
         $view->bikes = $api->getBikes();
         $view->parts = $api->getBikeData($bike_id);
 
         echo $view->render();
     }
 }
-
-?>
