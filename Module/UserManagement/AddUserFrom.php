@@ -41,6 +41,11 @@ class AddUserForm extends Core_Form
     /**
      * Create a form for adding new users
      *
+     * @param string $id          id of the form
+     * @param string $method      method of submission
+     * @param array  $attributes  extra form attributes
+     * @param bool   $trackSubmit trackSubmit
+     *
      * @return Core_Form
      */
     function __construct($id = 'adduserform', $method = 'post', 
