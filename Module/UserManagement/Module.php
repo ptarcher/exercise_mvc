@@ -93,5 +93,3 @@ class Module_UserManagement_Module extends Core_Module
         }
     }
 }
-
-?>
