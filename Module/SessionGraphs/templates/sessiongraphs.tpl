@@ -29,11 +29,13 @@
 
 {if $InternetIsConnected && $MapData == 'openstreetmap'}
     <!-- Open street map -->
+    <script type="text/javascript">MapData = 'openstreetmap';</script>
     <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
     <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
     <script src="Module/SessionGraphs/templates/openstreetmap.js"></script>
 {elseif $InternetIsConnected && $MapData == 'google'}
     <!-- Google Maps -->
+    <script type="text/javascript">MapData = 'google';</script>
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAv9aTDwE6fauiAWoMtxkR-xQoOxTV2asWv1a0V0ChKTrtRJGD1xQTcMVrKXToSqugCGAfdT9Vz1YNPA" type="text/javascript"></script>
 
     <script src="Module/SessionGraphs/templates/loadgpx.4.js" type="text/javascript"></script>
