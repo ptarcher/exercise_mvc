@@ -1,28 +1,49 @@
 <?php
-/*
- *  Description: Display simple single digits of the current weather.
- *  Date:        02/06/2009
- *  
- *  Author:      Paul Archer <ptarcher@gmail.com>
+/**
+ * API Access functions for UserManagement.
  *
- * Copyright (C) 2009  Paul Archer
- * 
+ * PHP version 5
+ *
+ * @category  Bike
+ * @package   UserManagement
+ * @author    Paul Archer <ptarcher@gmail.com>
+ * @copyright 2009 Paul Archer
+ * @license   http://www.gnu.org/licenses/agpl-3.0.txt AGPL-3 .0
+ * @version   Release: 1.0
+ * @link      http://paul.archer.tw
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
-
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
-
+ *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-class Module_UserManagement_Module extends Core_Module 
+/**
+ * API Access functions for UserManagement.
+ *
+ * @category Bike
+ * @package  UserManagement
+ * @author   Paul Archer <ptarcher@gmail.com>
+ * @license  http://www.gnu.org/licenses/agpl-3.0.txt AGPL-3 .0
+ * @link     http://paul.archer.tw
+ */
+
+class Module_UserManagement_Module extends Core_Module
 {
+    /**
+     * Get the Modules details.
+     *
+     * @return Array of the description fields
+     */
     public function getInformation()
     {
         return array(
@@ -33,6 +54,11 @@ class Module_UserManagement_Module extends Core_Module
                 );
     }
 
+    /**
+     * Get the callback hooks.
+     *
+     * @return Array of callbacks
+     */
     function getListHooksRegistered()
     {
         $hooks = array(
@@ -41,6 +67,11 @@ class Module_UserManagement_Module extends Core_Module
         return $hooks;
     }
 
+    /**
+     * Call back hook to add menu entries.
+     *
+     * @return null
+     */
     function addMenu()
     {
         Core_Menu_AddMenu('User', 'Bikes', 
