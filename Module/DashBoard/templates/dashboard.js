@@ -64,6 +64,7 @@ function updatePlans(d)
                 volume:    [],
                 intensity: []
             };
+
             var content = "";
             var today   = new Date();
 
@@ -162,8 +163,10 @@ function updatePlans(d)
             for (var i in daily_plans) {
                 var d = new Date(parseInt(daily_plans[i].epoch));
                 var s = new Date(parseInt(daily_plans[i].session_epoch));
+
                 var monday_offset = ((d.getDay() + 7) - 1) % 7;
-                var len = days[monday_offset].sessions.length;
+                var len           = days[monday_offset].sessions.length;
+
                 days[monday_offset].sessions[len] = {
                     date:      d.toString('HH:mm'),
                     time:      d.toString('HH:mm'),
