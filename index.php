@@ -1,11 +1,11 @@
 <?php
-/*
- *  Description: Display simple single digits of the current weather.
- *  Date:        02/06/2009
- *  
- *  Author:      Paul Archer <ptarcher@gmail.com>
+/**
+ * Setup for the bike website
  *
- * Copyright (C) 2009  Paul Archer
+ * PHP version 5
+ *  
+ * @author    Paul Archer <ptarcher@gmail.com>
+ * @copyright 2009 Paul Archer
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -24,22 +24,20 @@
 /* Set up the include path */
 @ini_set('magic_quotes_runtime', 0);
 define('DOCUMENT_ROOT', dirname(__FILE__)=='/'?'':dirname(__FILE__));
-if(!defined('USER_PATH'))
-{
+if (!defined('USER_PATH')) {
     define('USER_PATH', DOCUMENT_ROOT);
 }
-if(!defined('INCLUDE_PATH'))
-{
+if (!defined('INCLUDE_PATH')) {
     define('INCLUDE_PATH', DOCUMENT_ROOT);
 }
 
 $incPath = get_include_path();
 set_include_path('libraries' . PATH_SEPARATOR . $incPath);
 
-require_once(INCLUDE_PATH.'/Core/testMinimumPhpVersion.php');
+require_once INCLUDE_PATH.'/Core/testMinimumPhpVersion.php';
 
 /* Zend Autoloader */
-require_once(INCLUDE_PATH.'/libraries/Zend/Loader/Autoloader.php');
+require_once INCLUDE_PATH.'/libraries/Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->registerNamespace('Core_');
 $autoloader->registerNamespace('Module_');
