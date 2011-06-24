@@ -156,7 +156,7 @@ class Module_Sessions_API extends Core_ModuleAPI
         $db = Zend_Registry::get('db');
 
         $i = 0;
-        $max_inserts = 9999;
+        $max_inserts = 100;
 
         for ($rows = 0; $rows < count($records); $rows += $max_inserts) {
             $values = array();
